@@ -9,49 +9,58 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->loadingData = [
-            'loadData' => [
-                'title' => 'VietCad',
-                'head' => [
-                    'css' => [
+        if($this->uri->segment(1)=='admin'){
+            $this->loadingData = [
+                'data' => [
+                    'title' => 'VietCad',
+                    'head' => [
+                        'css' => [
 //                        'bootstrap/dist/css/bootstrap.min.css',
-                        'css/animate.css',
-                        'css/style.css',
-                        'css/colors/blue-dark.css',
-                        'bower_components/morrisjs/morris.css',
-                        'bower_components/toast-master/css/jquery.toast.css',
-                        'bower_components/sidebar-nav/dist/sidebar-nav.min.css'
+                            'css/animate.css',
+                            'css/style.css',
+                            'css/colors/blue-dark.css',
+                            'bower_components/morrisjs/morris.css',
+                            'bower_components/toast-master/css/jquery.toast.css',
+                            'bower_components/sidebar-nav/dist/sidebar-nav.min.css'
 
+                        ],
+                        'js' => []
                     ],
-                    'js' => []
-                ],
-                'foot' => [
-                    'js' => [
-                        'bower_components/sidebar-nav/dist/sidebar-nav.min.js',
-                        'js/jquery.slimscroll.js',
-                        'js/waves.js',
-                        'bower_components/waypoints/lib/jquery.waypoints.js',
-                        'bower_components/counterup/jquery.counterup.min.js',
-                        'bower_components/raphael/raphael-min.js',
-                        'bower_components/morrisjs/morris.js',
-                        'js/custom.min.js',
-                        'js/dashboard1.js',
-                        'bower_components/toast-master/js/jquery.toast.js'
+                    'foot' => [
+                        'js' => [
+                            'bower_components/sidebar-nav/dist/sidebar-nav.min.js',
+                            'js/jquery.slimscroll.js',
+                            'js/waves.js',
+                            'bower_components/waypoints/lib/jquery.waypoints.js',
+                            'bower_components/counterup/jquery.counterup.min.js',
+                            'bower_components/raphael/raphael-min.js',
+                            'js/custom.min.js',
+                            'bower_components/toast-master/js/jquery.toast.js',
+                            'js/bootbox.min.js'
+                        ]
                     ]
                 ]
-            ]
-        ];
-    }
-    public function redirectLogin(){
-        $controller = $this->uri->segment(1);
-        if(isset($controller) != 'login'){
-            if(!$this->checkLogin()){
-                redirect('admin/login');
+            ];
+            if(!strpos($this->router->fetch_class(),'Post')){
+                $this->loadingData['data']['lev_nav']= $this->getMenuAdmin($this->getCurrentUserGroupId());
             }
-        }
-    }
-    protected function checkLogin(){
+            if(!$this->isLoggedIn() && $this->router->fetch_class() !='login'){
+                redirect('admin/login','index');
+            }
+        }else{
 
-        return true;
+        }
+
+    }
+    protected function isLoggedIn(){
+        $user = $this->session->userdata('currentUser');
+        return isset($user);
+    }
+    protected function getMenuAdmin($userGroupId){
+        $this->load->model('M_admin_menu');
+        return $this->M_admin_menu->getMenuAdmin($userGroupId);
+    }
+    protected function getCurrentUserGroupId(){
+        return $this->session->userdata('currentUser')['user_group_id'];
     }
 }

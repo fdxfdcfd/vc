@@ -16,8 +16,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </ul>
         <ul class="nav navbar-top-links navbar-right pull-right">
             <li>
+                <a class="profile-pic" href="<?php echo base_url('admin/login/logoutPost');?>">
+                    <b class="hidden-xs">Đăng xuất</b>
+                </a>
+            </li>
+            <li>
                 <a class="profile-pic" href="#">
-                    <img src="<?php echo base_url('public/');?>images/users/varun.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">Steave</b> </a>
+                    <img src="<?php echo base_url('public/');?>images/users/varun.jpg" alt="user-img" width="36" class="img-circle">
+                    <b class="hidden-xs"><?php echo $this->session->userdata('currentUser')['name']?></b>
+                </a>
             </li>
         </ul>
     </div>

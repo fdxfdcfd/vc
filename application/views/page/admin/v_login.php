@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html>
 <head>
     <meta charset="UTF-8">
-    <title><?=$loadData['title']?></title>
+    <title><?=$data['title']?></title>
     <link href="<?php echo base_url('public/');?>css/style_login.css" rel="stylesheet">
 </head>
 
@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div id="formContent">
         <!-- Tabs Titles -->
         <h2 class="active"> Sign In </h2>
-        <h2 class="inactive underlineHover">Sign Up </h2>
+<!--        <h2 class="inactive underlineHover">Sign Up </h2>-->
 
         <!-- Icon -->
         <div class="fadeIn first">
@@ -22,9 +22,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
 
         <!-- Login Form -->
-        <form>
-            <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-            <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+        <form method="post" action="<?php echo base_url('admin/login/loginPost');?>">
+            <input type="text" id="login" class="fadeIn second" name="username" placeholder="login">
+            <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
             <input type="submit" class="fadeIn fourth" value="Log In">
         </form>
 
