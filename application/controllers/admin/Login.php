@@ -28,12 +28,14 @@ class Login extends MY_Controller
                 if ($user) {
                     $data = [
                         'currentUser'=>[
+                        'user_id'=>$user->user_id,
                         'username' => $user->username,
                         'email' => $user->email,
                         'firstname' => $user->firstname,
                         'lastname' => $user->lastname,
                         'name'=>$user->firstname ." ". $user->lastname,
                         'user_group_id' => $user->user_group_id,
+                        'user_img'=>$user->user_img,
                         'logged_in' => true
                     ]];
                     $this->session->set_userdata($data);

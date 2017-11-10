@@ -42,7 +42,7 @@ class MY_Controller extends CI_Controller
                 ]
             ];
             if(!strpos($this->router->fetch_class(),'Post')){
-                $this->loadingData['data']['lev_nav']= $this->getMenuAdmin($this->getCurrentUserGroupId());
+                $this->loadingData['data']['lev_nav']= $this->getMenuAdmin($this->getCurrentUserData()['user_group_id']);
             }
             if(!$this->isLoggedIn() && $this->router->fetch_class() !='login'){
                 redirect('admin/login','index');
@@ -60,7 +60,10 @@ class MY_Controller extends CI_Controller
         $this->load->model('M_admin_menu');
         return $this->M_admin_menu->getMenuAdmin($userGroupId);
     }
-    protected function getCurrentUserGroupId(){
-        return $this->session->userdata('currentUser')['user_group_id'];
+    public function getCurrentUserData(){
+        return $this->session->userdata('currentUser');
+    }
+    public function setCurrentUserData($data = array()){
+        return $this->session->set_userdata('currentUser',$data);
     }
 }

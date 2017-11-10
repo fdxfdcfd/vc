@@ -142,7 +142,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <td><span class="text-success">$64</span></td>
                     </tr>
                     </tbody>
-                </table> <a href="#">Check all the sales</a> </div>
+                </table>  </div>
         </div>
     </div>
 </div>

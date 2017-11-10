@@ -7,13 +7,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="white-box">
             <h3 class="box-title">Recent sales
                 <div class="col-md-2 col-sm-4 col-xs-12 pull-right">
-                    <select class="form-control pull-right row b-none">
-                        <option>March 2016</option>
-                        <option>April 2016</option>
-                        <option>May 2016</option>
-                        <option>June 2016</option>
-                        <option>July 2016</option>
-                    </select>
+<!--                    <select class="form-control pull-right row b-none">-->
+<!--                        <option>March 2016</option>-->
+<!--                        <option>April 2016</option>-->
+<!--                        <option>May 2016</option>-->
+<!--                        <option>June 2016</option>-->
+<!--                        <option>July 2016</option>-->
+<!--                    </select>-->
+                    <a class="btn btn-success" href="<?php  echo base_url('admin/user/create')?>">Thêm User</a>
                 </div>
             </h3>
             <div class="table-responsive">
@@ -24,6 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <th>Firstname</th>
                         <th>Lastname</th>
                         <th>Email</th>
+                        <th>Active</th>
                         <th>User Group</th>
                         <th>Action</th>
                     </tr>
@@ -34,7 +36,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     ?>
                     <tr>
                         <?php foreach ($value as $k=>$v):?>
-                        <td><?php echo $v;?></td>
+                            <?php
+                            if ($k == 'is_active'){
+                                if($v){
+                                    echo "<td><span class='btn btn-success'>Active</span></td>";
+                                }else{
+                                    echo "<td><span class='btn btn-danger'>Inactive</span></td>";
+                                }
+
+                            }else{
+                                echo "<td>$v</td>";
+                            }
+                            ?>
                         <?php endforeach; ?>
                         <td>
                             <a href="<?php echo base_url("admin/user/edit/id/").$value['user_id']?>" class="btn btn-info" role="button">Edit</a>
@@ -43,7 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </tr>
                     <?php endforeach;?>
                     </tbody>
-                </table> <a href="#">Check all the sales</a> </div>
+                </table></div>
         </div>
     </div>
     <script>

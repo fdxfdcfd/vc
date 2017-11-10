@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </li>
             <li>
                 <a class="profile-pic" href="#">
-                    <img src="<?php echo base_url('public/');?>images/users/varun.jpg" alt="user-img" width="36" class="img-circle">
+                    <img src="<?php echo base_url('public/images/users/').$this->session->userdata('currentUser')['user_img'];?>" alt="user-img" width="36" class="img-circle">
                     <b class="hidden-xs"><?php echo $this->session->userdata('currentUser')['name']?></b>
                 </a>
             </li>
