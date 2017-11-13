@@ -12,13 +12,7 @@ if(isset($product['product_img'])){
 <div class="row">
     <div class="col-md-4 col-xs-12">
         <div class="white-box">
-            <div class="user-bg"><img width="100%" alt="user" src="<?php echo base_url('public/images/users/').$product_img;?>">
-                <div class="overlay-box">
-                    <div class="user-content">
-                        <a href="javascript:void(0)"><img src="<?php echo base_url('public/images/users/').$product_img;?>"
-                                                          class="thumb-lg img-circle" alt="img"></a>
-                        </div>
-                </div>
+            <div class="user-bg"><img width="100%" height="100%" alt="user" src="<?php echo base_url('public/images/users/').$product_img;?>">
             </div>
 <!--            <div class="user-btm-box">-->
 <!--                <div class="col-md-4 col-sm-4 text-center">-->
@@ -74,27 +68,9 @@ if(isset($product['product_img'])){
                 <div class="col-md-12">
                     <?php
                     $input = array(
-                        'name' => 'lastname',
-                        'id' => 'lastname',
-                        'value' => isset($product['lastname']) ? $product['lastname'] : '',
-                        'maxlength' => '100',
-                        'size' => '50',
-                        'class' => 'form-control form-control-line',
-                        'required'=>'required'
-                    );
-                    echo form_input($input);
-                    ?>
-                </div>
-            </div>
-            <?php if(strpos($data['url'],'create')) :?>
-            <div class="form-group">
-                <label class="col-md-12">Username</label>
-                <div class="col-md-12">
-                    <?php
-                    $input = array(
-                        'name' => 'username',
-                        'id' => 'username',
-                        'value' => isset($product['username']) ? $product['username'] : '',
+                        'name' => 'price',
+                        'id' => 'price',
+                        'value' => isset($product['price']) ? $product['price'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'class' => 'form-control form-control-line',
@@ -105,35 +81,15 @@ if(isset($product['product_img'])){
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-12">Password</label>
+                <label class="col-md-12">SKU</label>
                 <div class="col-md-12">
                     <?php
                     $input = array(
-                        'name' => 'password',
-                        'id' => 'Password',
-                        'value' => isset($product['password']) ? $product['password'] : '',
+                        'name' => 'sku',
+                        'id' => 'sku',
+                        'value' => isset($product['sku']) ? $product['sku'] : '',
                         'maxlength' => '100',
                         'size' => '50',
-                        'class' => 'form-control form-control-line',
-                        'required'=>'required',
-                        'type'=>'password'
-                    );
-                    echo form_input($input);
-                    ?>
-                </div>
-            </div>
-            <?php endif; ?>
-            <div class="form-group">
-                <label class="col-md-12">Email</label>
-                <div class="col-md-12">
-                    <?php
-                    $input = array(
-                        'name' => 'email',
-                        'id' => 'email',
-                        'value' => isset($product['email']) ? $product['email'] : '',
-                        'maxlength' => '100',
-                        'size' => '50',
-                        'type' => 'email',
                         'class' => 'form-control form-control-line',
                         'required'=>'required'
                     );
@@ -142,23 +98,40 @@ if(isset($product['product_img'])){
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-12">User Group</label>
+                <label class="col-md-12">Số lượng</label>
+                <div class="col-md-12">
+                    <?php
+                    $input = array(
+                        'name' => 'qty',
+                        'id' => 'qty',
+                        'value' => isset($product['qty']) ? $product['qty'] : '',
+                        'maxlength' => '100',
+                        'size' => '50',
+                        'class' => 'form-control form-control-line',
+                        'required'=>'required'
+                    );
+                    echo form_input($input);
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-12">Category</label>
                 <div class="col-sm-12">
                     <?php
-                    $options =$data['user_group'];
-
-                    echo form_dropdown('user_group_id', $options, isset($product['user_group_id']) ? $product['user_group_id'] : '', 'class="form-control form-control-line" id="user_group_id" required')
+                    $options =$data['categories'];
+                    echo form_multiselect('categories[]', $options, isset($product['product_category_ids']) ? explode(',',$product['product_category_ids']) : '', 'class="form-control form-control-line" id="user_group_id" required')
                     ?>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-12">Active</label>
+                <label class="col-md-12">Status</label>
                 <div class="col-md-12 text-left">
                     <?php
                     $input = array(
-                        'name' => 'is_active',
+                        'name' => 'is_instock',
                         'id' => 'Active',
-                        'value' => isset($product['password']) ? $product['password'] : '',
+                        'value' => isset($product['is_instock']) ? $product['is_instock'] : '',
+                        'checked' => isset($product['is_instock']) ? $product['is_instock'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'class' => 'form-control form-control-line pull-left',
@@ -193,7 +166,7 @@ if(isset($product['product_img'])){
 
             <div class="form-group">
                 <div class="col-sm-12">
-                    <button class="btn btn-success">Update Profile</button>
+                    <button class="btn btn-success">Update Product</button>
                 </div>
             </div>
             </form>

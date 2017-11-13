@@ -160,7 +160,8 @@ if(isset($user_img)){
                     $input = array(
                         'name' => 'is_active',
                         'id' => 'Active',
-                        'value' => isset($user['password']) ? $user['password'] : '',
+                        'value' => isset($user['is_active']) ? $user['is_active'] : '',
+                        'checked' => isset($user['is_active']) ? $user['is_active'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'class' => 'form-control form-control-line pull-left',

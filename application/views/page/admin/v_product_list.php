@@ -41,7 +41,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <td><?php echo $value['price']?></td>
                         <td><?php echo $value['sku']?></td>
                         <td><?php echo $value['qty']?></td>
-                        <td><?php echo $value['is_instock']?></td>
+                        <td><?php
+                            if($value['is_instock'])
+                            {
+                                echo "<span class='label label-success'>In Stock</span>";
+                            }else{
+                                echo "<span class='label label-danger'>In Stock</span>";
+                            }
+                            ?></td>
                         <td>
                             <a href="<?php echo base_url("admin/product/edit/id/").$value['product_id']?>" class="btn btn-info" role="button">Edit</a>
                             <a href="<?php echo base_url("admin/product/deletePost/id/").$value['product_id']?>" class="btn btn-danger delete_user" role="button">Delete</a>
