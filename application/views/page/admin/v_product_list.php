@@ -22,39 +22,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Active</th>
-                        <th>User Group</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>SKU</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php
-                    foreach ($users as $key=> $value):
+                    if($products):
+                    foreach ($products as $key=> $value):
                     ?>
                     <tr>
-                        <?php foreach ($value as $k=>$v):?>
-                            <?php
-                            if ($k == 'is_active'){
-                                if($v){
-                                    echo "<td><span class='btn btn-success'>Active</span></td>";
-                                }else{
-                                    echo "<td><span class='btn btn-danger'>Inactive</span></td>";
-                                }
-
-                            }else{
-                                echo "<td>$v</td>";
-                            }
-                            ?>
-                        <?php endforeach; ?>
+                        <td><?php echo $value['product_id']?></td>
+                        <td><?php echo $value['product_name']?></td>
+                        <td><?php echo $value['price']?></td>
+                        <td><?php echo $value['sku']?></td>
+                        <td><?php echo $value['qty']?></td>
+                        <td><?php echo $value['is_instock']?></td>
                         <td>
-                            <a href="<?php echo base_url("admin/user/edit/id/").$value['user_id']?>" class="btn btn-info" role="button">Edit</a>
-                            <a href="<?php echo base_url("admin/user/deletePost/id/").$value['user_id']?>" class="btn btn-danger delete_user" role="button">Delete</a>
+                            <a href="<?php echo base_url("admin/product/edit/id/").$value['product_id']?>" class="btn btn-info" role="button">Edit</a>
+                            <a href="<?php echo base_url("admin/product/deletePost/id/").$value['product_id']?>" class="btn btn-danger delete_user" role="button">Delete</a>
                         </td>
                     </tr>
-                    <?php endforeach;?>
+                    <?php
+                    endforeach;
+                    endif;
+                    ?>
                     </tbody>
                 </table></div>
         </div>

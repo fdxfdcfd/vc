@@ -1,38 +1,36 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$user = $data['user'];
-if(isset($user_img)){
-    $user_img= $user_img;
+$product = $data['product'];
+if(isset($product['product_img'])){
+    $product_img= $product['product_img'];
 }else{
-    $user_img= 'default-user-image.png';
+    $product_img= 'default-user-image.png';
 }
-
 ?>
 
 <!-- .row -->
 <div class="row">
     <div class="col-md-4 col-xs-12">
         <div class="white-box">
-            <div class="user-bg"><img width="100%" alt="user" src="<?php echo base_url('public/images/users/').$user_img;?>">
+            <div class="user-bg"><img width="100%" alt="user" src="<?php echo base_url('public/images/users/').$product_img;?>">
                 <div class="overlay-box">
                     <div class="user-content">
-                        <a href="javascript:void(0)"><img src="<?php echo base_url('public/images/users/').$user_img;?>"
+                        <a href="javascript:void(0)"><img src="<?php echo base_url('public/images/users/').$product_img;?>"
                                                           class="thumb-lg img-circle" alt="img"></a>
-                        <h4 class="text-white">User Name</h4>
-                        <h5 class="text-white">info@myadmin.com</h5></div>
+                        </div>
                 </div>
             </div>
-            <div class="user-btm-box">
-                <div class="col-md-4 col-sm-4 text-center">
-                    <p class="text-purple"><i class="ti-facebook"></i></p>
-                    <h1>258</h1></div>
-                <div class="col-md-4 col-sm-4 text-center">
-                    <p class="text-blue"><i class="ti-twitter"></i></p>
-                    <h1>125</h1></div>
-                <div class="col-md-4 col-sm-4 text-center">
-                    <p class="text-danger"><i class="ti-dribbble"></i></p>
-                    <h1>556</h1></div>
-            </div>
+<!--            <div class="user-btm-box">-->
+<!--                <div class="col-md-4 col-sm-4 text-center">-->
+<!--                    <p class="text-purple"><i class="fa fa-facebook-square icon-3x"></i></p>-->
+<!--                    <h1>258</h1></div>-->
+<!--                <div class="col-md-4 col-sm-4 text-center">-->
+<!--                    <p class="text-blue"><i class="ti-twitter"></i></p>-->
+<!--                    <h1>125</h1></div>-->
+<!--                <div class="col-md-4 col-sm-4 text-center">-->
+<!--                    <p class="text-danger"><i class="ti-dribbble"></i></p>-->
+<!--                    <h1>556</h1></div>-->
+<!--            </div>-->
         </div>
     </div>
     <div class="col-md-8 col-xs-12">
@@ -51,17 +49,17 @@ if(isset($user_img)){
 
             <?php
             $formAttr = ['class' => 'form-horizontal form-material', 'id' => 'user-form'];
-            $hidden = array('user_id' => isset($user['user_id']) ? $user['user_id'] : '');
+            $hidden = array('user_id' => isset($product['product_id']) ? $product['product_id'] : '');
             echo form_open_multipart($data['url'], $formAttr, $hidden);
             ?>
             <div class="form-group">
-                <label class="col-md-12">Tên</label>
+                <label class="col-md-12">Tên sản phẩm</label>
                 <div class="col-md-12">
                     <?php
                     $input = array(
-                        'name' => 'firstname',
+                        'name' => 'product_name',
                         'id' => 'firstname',
-                        'value' => isset($user['firstname']) ? $user['firstname'] : '',
+                        'value' => isset($product['product_name']) ? $product['product_name'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'class' => 'form-control form-control-line',
@@ -72,13 +70,13 @@ if(isset($user_img)){
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-12">Họ</label>
+                <label class="col-md-12">Giá</label>
                 <div class="col-md-12">
                     <?php
                     $input = array(
                         'name' => 'lastname',
                         'id' => 'lastname',
-                        'value' => isset($user['lastname']) ? $user['lastname'] : '',
+                        'value' => isset($product['lastname']) ? $product['lastname'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'class' => 'form-control form-control-line',
@@ -96,7 +94,7 @@ if(isset($user_img)){
                     $input = array(
                         'name' => 'username',
                         'id' => 'username',
-                        'value' => isset($user['username']) ? $user['username'] : '',
+                        'value' => isset($product['username']) ? $product['username'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'class' => 'form-control form-control-line',
@@ -113,7 +111,7 @@ if(isset($user_img)){
                     $input = array(
                         'name' => 'password',
                         'id' => 'Password',
-                        'value' => isset($user['password']) ? $user['password'] : '',
+                        'value' => isset($product['password']) ? $product['password'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'class' => 'form-control form-control-line',
@@ -132,7 +130,7 @@ if(isset($user_img)){
                     $input = array(
                         'name' => 'email',
                         'id' => 'email',
-                        'value' => isset($user['email']) ? $user['email'] : '',
+                        'value' => isset($product['email']) ? $product['email'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'type' => 'email',
@@ -149,7 +147,7 @@ if(isset($user_img)){
                     <?php
                     $options =$data['user_group'];
 
-                    echo form_dropdown('user_group_id', $options, isset($user['user_group_id']) ? $user['user_group_id'] : '', 'class="form-control form-control-line" id="user_group_id" required')
+                    echo form_dropdown('user_group_id', $options, isset($product['user_group_id']) ? $product['user_group_id'] : '', 'class="form-control form-control-line" id="user_group_id" required')
                     ?>
                 </div>
             </div>
@@ -160,7 +158,7 @@ if(isset($user_img)){
                     $input = array(
                         'name' => 'is_active',
                         'id' => 'Active',
-                        'value' => isset($user['password']) ? $user['password'] : '',
+                        'value' => isset($product['password']) ? $product['password'] : '',
                         'maxlength' => '100',
                         'size' => '50',
                         'class' => 'form-control form-control-line pull-left',
@@ -174,8 +172,8 @@ if(isset($user_img)){
             <div class="form-group">
                 <label class="col-sm-12">Hình</label>
                 <div class="col-sm-12">
-                    <img style="width: 150px;" id="user_img_preview" src="<?php echo base_url('public/images/users/').$user_img;?>" alt="" />
-                    <input onchange="readURL(this);" type="file" name="user_img" id="user_img" accept="image/x-png,image/gif,image/jpeg" value="<?php echo base_url('public/images/users/').$user_img;?>" />
+                    <img style="width: 150px;" id="user_img_preview" src="<?php echo base_url('public/images/users/').$product_img;?>" alt="" />
+                    <input onchange="readURL(this);" type="file" name="user_img" id="user_img" accept="image/x-png,image/gif,image/jpeg" value="<?php echo base_url('public/images/users/').$product_img;?>" />
                 </div>
             </div>
             <script>

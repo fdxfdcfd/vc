@@ -37,9 +37,10 @@ class User extends MY_Controller
                 $this->loadingData['data']['breadcrumb'] = [
                     ['Home', base_url('admin/dashboard/index')],
                     ['Quản lý thành viên', base_url('admin/user/userList')],
-                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id') . $id],
+                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id/') . $id],
 
                 ];
+                $this->loadingData['data']['url']= base_url('admin/user/edit/id/').$id;
                 $user = $this->M_admin_user->as_array()->get($id);
                 $this->loadingData['data']['user'] = $user;
 
@@ -81,16 +82,6 @@ class User extends MY_Controller
                     ),
                 )
             );
-            if (empty($_FILES['user_img']['name'])) {
-                $config[] = array(
-                    'field' => 'user_img',
-                    'label' => 'Hình đại diện',
-                    'rules' => 'required',
-                    'errors' => array(
-                        'required' => 'Bạn cần Chọn %s.',
-                    ),
-                );
-            }
             $this->form_validation->set_rules($config);
 
             if ($this->form_validation->run() == FALSE) {
@@ -99,9 +90,10 @@ class User extends MY_Controller
                 $this->loadingData['data']['breadcrumb'] = [
                     ['Home', base_url('admin/dashboard/index')],
                     ['Quản lý thành viên', base_url('admin/user/userList')],
-                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id') . $id],
+                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id/') . $id],
 
                 ];
+                $this->loadingData['data']['url']= base_url('admin/user/edit/id/').$id;
                 $user = $this->input->post();
                 $user['user_img'] = $_FILES['user_img']['tmp_name'];
                 $this->loadingData['data']['user'] = $user;
@@ -114,13 +106,27 @@ class User extends MY_Controller
             } else {
                 $data = $this->input->post();
                 $user_id = $data['user_id'];
-                //upload img
-                $resultUpload=$this->uploadImg('user_img');
-                if ($resultUpload['result']) {
-                    $imgData = array('upload_data' => $this->upload->data());
-                    $data['user_img'] = $imgData['upload_data']['file_name'];
+                $defaultImg=false;
+                if(is_uploaded_file($_FILES['user_img']['tmp_name'])){
+                    //upload img
+                    $resultUpload=$this->uploadImg('user_img');
+                }else{
+                    $defaultImg=true;
+                    $resultUpload['result']=false;
+                }
+                if ($resultUpload['result'] || $defaultImg) {
                     $oldImg = $this->M_admin_user->get($user_id)->user_img;
-                    if (isset($oldImg)) {
+                    if($defaultImg){
+                        if(isset($oldImg)){
+                            $data['user_img']=$oldImg;
+                        }else
+                        $data['user_img'] = 'default-user-image.png';
+                    }else{
+                        $imgData = array('upload_data' => $this->upload->data());
+                        $data['user_img'] = $imgData['upload_data']['file_name'];
+                    }
+
+                    if ($data['user_img'] != $oldImg) {
                         unlink('public/images/users/' . $oldImg);
                     }
                     unset($data['user_id']);
@@ -137,9 +143,10 @@ class User extends MY_Controller
                     $this->loadingData['data']['breadcrumb'] = [
                         ['Home',base_url('admin/dashboard/index')],
                         ['Quản lý thành viên',base_url('admin/user/userList')],
-                        ['Chỉnh sửa Thông tin thành viên',base_url('admin/user/edit/id').$id],
+                        ['Chỉnh sửa Thông tin thành viên',base_url('admin/user/edit/id//').$id],
 
                     ];
+                    $this->loadingData['data']['url']= base_url('admin/user/edit/id//').$id;
                     $user= $this->input->post();
                     $user['user_img']= $_FILES['user_img']['tmp_name'];
                     $this->loadingData['data']['user'] = $user;
@@ -166,7 +173,7 @@ class User extends MY_Controller
                     ['Thêm thành viên', base_url('admin/user/create')],
                 ];
                 $this->loadingData['data']['user'] = [];
-
+            $this->loadingData['data']['url']= base_url('admin/user/create');
                 $this->load->model('M_user_group');
                 $userGroup = $this->M_user_group->as_dropdown('user_group_name')->get_all();
                 $this->loadingData['data']['user_group'] = $userGroup;
@@ -203,16 +210,6 @@ class User extends MY_Controller
                     ),
                 )
             );
-            if (empty($_FILES['user_img']['name'])) {
-                $config[] = array(
-                    'field' => 'user_img',
-                    'label' => 'Hình đại diện',
-                    'rules' => 'required',
-                    'errors' => array(
-                        'required' => 'Bạn cần Chọn %s.',
-                    ),
-                );
-            }
             $this->form_validation->set_rules($config);
 
             if ($this->form_validation->run() == FALSE) {
@@ -222,10 +219,10 @@ class User extends MY_Controller
                 $this->loadingData['data']['breadcrumb'] = [
                     ['Home', base_url('admin/dashboard/index')],
                     ['Quản lý thành viên', base_url('admin/user/userList')],
-                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id') . $id],
+                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id/') . $id],
 
                 ];
-
+                $this->loadingData['data']['url']= base_url('admin/user/create');
                 $user['user_img'] = $_FILES['user_img']['tmp_name'];
                 $this->loadingData['data']['user'] = $user;
 
@@ -236,23 +233,25 @@ class User extends MY_Controller
                 $this->template->load('template/master', 'page/admin/v_user_edit', $this->loadingData);
             } else {
                 $data = $this->input->post();
-                $user_id = $data['user_id'];
-                //upload img
-                $resultUpload=$this->uploadImg('user_img');
-                if ($resultUpload['result']) {
-                    $imgData = array('upload_data' => $this->upload->data());
-                    $data['user_img'] = $imgData['upload_data']['file_name'];
-                    $oldImg = $this->M_admin_user->get($user_id)->user_img;
-                    if (isset($oldImg)) {
-                        unlink('public/images/users/' . $oldImg);
+                $defaultImg=false;
+                if(is_uploaded_file($_FILES['user_img']['tmp_name'])){
+                    //upload img
+                    $resultUpload=$this->uploadImg('user_img');
+                }else{
+                    $defaultImg=true;
+                    $resultUpload['result']=false;
+                }
+                if ($resultUpload['result'] || $defaultImg) {
+                    if($defaultImg){
+                        $data['user_img'] = 'default-user-image.png';
+                    }else{
+                        $imgData = array('upload_data' => $this->upload->data());
+                        $data['user_img'] = $imgData['upload_data']['file_name'];
                     }
                     unset($data['user_id']);
-                    $this->M_admin_user->update($data, $user_id);
+                    $data['password']=md5($data['password']);
+                    $this->M_admin_user->insert($data);
                     $currentUser= $this->getCurrentUserData();
-                    if($user_id == $currentUser['user_id']){
-                        $currentUser['user_img']= $data['user_img'];
-                        $this->setCurrentUserData($currentUser);
-                    }
                     redirect('admin/user', 'userList');
                 }else{
                     $id = $this->uri->segment(5);
@@ -260,10 +259,11 @@ class User extends MY_Controller
                     $this->loadingData['data']['breadcrumb'] = [
                         ['Home',base_url('admin/dashboard/index')],
                         ['Quản lý thành viên',base_url('admin/user/userList')],
-                        ['Chỉnh sửa Thông tin thành viên',base_url('admin/user/edit/id').$id],
+                        ['Chỉnh sửa Thông tin thành viên',base_url('admin/user/edit/id/').$id],
 
                     ];
                     $user= $this->input->post();
+                    $this->loadingData['data']['url']= base_url('admin/user/create');
                     $user['user_img']= $_FILES['user_img']['tmp_name'];
                     $this->loadingData['data']['user'] = $user;
 

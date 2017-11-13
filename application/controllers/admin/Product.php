@@ -8,17 +8,19 @@ class Product extends MY_Controller
     {
         parent::__construct();
         $this->load->model('M_catalog_product');
+        $this->load->model('M_catalog_category');
     }
 
-    public function userList()
+    public function productList()
     {
-        $this->loadingData['data']['title'] = "Quản lý thành viên";
+        $this->loadingData['data']['title'] = "Quản lý Sản phẩm";
         $this->loadingData['data']['breadcrumb'] = [
             ['Home', base_url('admin/dashboard/index')],
-            ['Quản lý thành viên', base_url('admin/user/userList')]
+            ['Quản lý Sản phẩm', base_url('admin/product/productList')]
         ];
-        $this->loadingData['users'] = $this->M_admin_user->getAllUser();
-        $this->template->load('template/master', 'page/admin/v_user_list', $this->loadingData);
+        $this->loadingData['products'] = $this->M_catalog_product->as_array()->get_all();
+        $this->loadingData['categories'] = $this->M_catalog_category->as_array()->get_all();
+        $this->template->load('template/master', 'page/admin/v_product_list', $this->loadingData);
     }
 
     public function deletePost($field, $id)
@@ -32,21 +34,21 @@ class Product extends MY_Controller
         if (!$this->input->post()) {
             $id = $this->uri->segment(5);
             if (isset($id)) {
-                $this->loadingData['data']['title'] = "Chỉnh sửa Thông tin thành viên";
+                $this->loadingData['data']['title'] = "Quản lý Sản phẩm";
                 $this->loadingData['data']['breadcrumb'] = [
                     ['Home', base_url('admin/dashboard/index')],
-                    ['Quản lý thành viên', base_url('admin/user/userList')],
-                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id') . $id],
+                    ['Quản lý Sản phẩm', base_url('admin/product/productList')],
+                    ['Cập nhật Sản phẩm', base_url('admin/product/edit/id') . $id]
 
                 ];
-                $user = $this->M_admin_user->as_array()->get($id);
-                $this->loadingData['data']['user'] = $user;
+                $product = $this->M_catalog_product->as_array()->get($id);
+                $this->loadingData['data']['product'] = $product;
 
-                $this->load->model('M_user_group');
-                $userGroup = $this->M_user_group->as_dropdown('user_group_name')->get_all();
-                $this->loadingData['data']['user_group'] = $userGroup;
+                $categories = $this->M_catalog_category->as_dropdown('category_name')->get_all();
+                $this->loadingData['data']['categories'] = $categories;
+                $this->loadingData['data']['url']= 'admin/product/edit/id/'.$id;
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_user_edit', $this->loadingData);
+                $this->template->load('template/master', 'page/admin/v_product_edit', $this->loadingData);
             }
         } else {
             $this->load->helper(array('form'));
