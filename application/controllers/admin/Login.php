@@ -8,15 +8,14 @@ class Login extends MY_Controller
     {
         parent::__construct();
         $this->load->model('M_admin_user');
-        if($this->isLoggedIn() && $this->router->fetch_method()!='logoutPost'){
-            redirect('admin/dashboard','index');
+        if ($this->isLoggedIn() && $this->router->fetch_method() != 'logout') {
+            redirect('admin/dashboard', 'index');
         }
     }
 
     public function index()
     {
         $user = new M_admin_user();
-        var_dump($user->load(1));die;
         $this->data['title'] = "Login";
         $this->load->view('page/admin/v_login', $this->data);
     }
@@ -24,7 +23,7 @@ class Login extends MY_Controller
     public function login()
     {
         //check current load view or post
-        if($this->input->post()){
+        if ($this->input->post()) {
             // load form helper and validation library
             $this->load->helper('form');
             $this->load->library('form_validation');
@@ -41,42 +40,45 @@ class Login extends MY_Controller
 
             } else {
                 $dataLogin = $this->input->post();
-                if ($this->M_admin_user->authenticateUserLogin($dataLogin['username'], 'password')) {
+                if ($this->M_admin_user->authenticateUserLogin($dataLogin['username'], $dataLogin['password'])) {
 
-                    $user_id = $this->user_model->get_user_id_from_username($username);
-                    $user    = $this->user_model->get_user($user_id);
+                    $userData = $this->M_admin_user->getAdminUserByUsername($dataLogin['username']);
 
                     // set session user datas
-                    $_SESSION['user_id']      = (int)$user->id;
-                    $_SESSION['username']     = (string)$user->username;
-                    $_SESSION['logged_in']    = (bool)true;
-                    $_SESSION['is_confirmed'] = (bool)$user->is_confirmed;
-                    $_SESSION['is_admin']     = (bool)$user->is_admin;
+                    $data = [
+                        'currentUser' => [
+                            'user_id' => $userData->user_id,
+                            'username' => $userData->username,
+                            'email' => $userData->email,
+                            'firstname' => $userData->firstname,
+                            'lastname' => $userData->lastname,
+                            'name' => $userData->firstname . " " . $userData->lastname,
+                            'user_group_id' => $userData->user_group_id,
+                            'user_img' => $userData->user_img,
+                            'position' =>$userData->position,
+                            'logged_in' => true
+                        ]];
+                    $this->session->set_userdata($data);
 
                     // user login ok
-                    $this->load->view('header');
-                    $this->load->view('user/login/login_success', $data);
-                    $this->load->view('footer');
+                    redirect('/admin/dashboard', 'index');
 
                 } else {
-
                     // login failed
-                    $data->error = 'Wrong username or password.';
+                    $this->data['error'] = 'Wrong username or password.';
 
                     // send error to the view
-                    $this->load->view('header');
-                    $this->load->view('user/login/login', $data);
-                    $this->load->view('footer');
-
+                    $this->load->view('page/admin/v_login', $this->data);
                 }
-
             }
-        }else{ //redirect to index
-            redirect('admin/login','index');
-    }
+        } else { //redirect to index
+            redirect('admin/login', 'index');
+        }
 
     }
-    public function logoutPost(){
+
+    public function logout()
+    {
         $this->session->unset_userdata('currentUser');
         redirect('/admin/login', 'index');
     }

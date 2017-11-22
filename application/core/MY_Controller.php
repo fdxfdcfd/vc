@@ -10,6 +10,11 @@ class MY_Controller extends CI_Controller
     {
         parent::__construct();
         $this->data['title']= "VietCaD";
+        $this->data['head']= [];
+        $this->data['footer']= [];
+        $this->data['leftNav']= $this->getUserMenu();
+        $this->data['topNav']= [];
+        $this->data['botNav']= [];
     }
     protected function isLoggedIn(){
         $user = $this->session->userdata('currentUser');
@@ -19,10 +24,18 @@ class MY_Controller extends CI_Controller
         $this->load->model('M_admin_menu');
         return $this->M_admin_menu->getMenuAdmin($userGroupId);
     }
-    public function getCurrentUserData(){
+    public function getCurrentUserData($field = null){
+        if($field){
+            return  $this->session->userdata('currentUser')[$field];
+        }
         return $this->session->userdata('currentUser');
     }
     public function setCurrentUserData($data = array()){
         return $this->session->set_userdata('currentUser',$data);
+    }
+
+    public function getUserMenu(){
+        $this->load->model('M_admin_menu');
+        return $this->M_admin_menu->getMenuAdmin($this->getCurrentUserData('user_group_id'));
     }
 }

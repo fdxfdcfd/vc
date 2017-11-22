@@ -1,4 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<footer class="footer text-center"> 2017 &copy; Pixel Admin brought to you by wrappixel.com </footer>
+<div class="footer">
+    <div class="pull-right">
+<!--        10GB of <strong>250GB</strong> Free.-->
+    </div>
+    <div>
+        <strong>Copyright</strong> VietCad &copy; 2017
+    </div>
+</div>

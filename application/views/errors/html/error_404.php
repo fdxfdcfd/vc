@@ -7,56 +7,45 @@ if( ! isset($CI))
 $CI->load->helper('url');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
+
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
-    <title>Pixel Admin - Responsive Admin Dashboard Template build with Twitter Bootstrap</title>
-    <!-- Bootstrap Core CSS -->
-    <link href="<?php echo base_url('public/');?>bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- animation CSS -->
-    <link href="<?php echo base_url('public/');?>css/animate.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="<?php echo base_url('public/');?>css/style.css" rel="stylesheet">
-    <!-- color CSS -->
-    <link href="<?php echo base_url('public/');?>css/colors/blue.css" id="theme" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA | 404 Error</title>
+
+    <link href="<?php echo base_url('public/')?>css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url('public/')?>font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="<?php echo base_url('public/')?>css/animate.css" rel="stylesheet">
+    <link href="<?php echo base_url('public/')?>css/style.css" rel="stylesheet">
+
 </head>
 
-<body>
-<!-- Preloader -->
-<div class="preloader">
-    <div class="cssload-speeding-wheel"></div>
-</div>
-<section id="wrapper" class="error-page">
-    <div class="error-box">
-        <div class="error-body text-center">
-            <h1>404</h1>
-            <h3 class="text-uppercase">Page Not Found !</h3>
-            <p class="text-muted m-t-30 m-b-30">YOU SEEM TO BE TRYING TO FIND HIS WAY HOME</p>
-            <a href="<?php echo base_url()?>" class="btn btn-info btn-rounded waves-effect waves-light m-b-40">Back to home</a> </div>
-        <footer class="footer text-center">2017 © VietCad.</footer>
+<body class="gray-bg">
+
+
+<div class="middle-box text-center animated fadeInDown">
+    <h1>404</h1>
+    <h3 class="font-bold">Page Not Found</h3>
+
+    <div class="error-desc">
+        Sorry, but the page you are looking for has note been found. Try checking the URL for error, then hit the refresh button on your browser or try found something else in our app.
+        <form class="form-inline m-t" role="form" action="<?php echo base_url('admin/dashboard/index')?>">
+<!--            <div class="form-group">-->
+<!--                <input type="text" class="form-control" placeholder="Search for page">-->
+<!--            </div>-->
+            <button type="submit" class="btn btn-primary">Home</button>
+        </form>
     </div>
-</section>
-<!-- jQuery -->
-<script src="<?php echo base_url('public/');?>bower_components/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap Core JavaScript -->
-<script src="<?php echo base_url('public/');?>bootstrap/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-    $(function() {
-        $(".preloader").fadeOut();
-    });
-</script>
+</div>
+
+<!-- Mainly scripts -->
+<script src="<?php echo base_url('public/')?>js/jquery-3.1.1.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/bootstrap.min.js"></script>
+
 </body>
 
 </html>

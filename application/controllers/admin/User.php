@@ -13,13 +13,13 @@ class User extends MY_Controller
 
     public function userList()
     {
-        $this->loadingData['data']['title'] = "Quản lý thành viên";
-        $this->loadingData['data']['breadcrumb'] = [
-            ['Home', base_url('admin/dashboard/index')],
-            ['Quản lý thành viên', base_url('admin/user/userList')]
+        $this->data['title'] = "Quản lý thành viên";
+        $this->data['breadcrumb'] = [
+            'Home'=> base_url('admin/dashboard/index'),
+            'Quản lý thành viên'=> base_url('admin/user/userList')
         ];
-        $this->loadingData['users'] = $this->M_admin_user->getAllUser();
-        $this->template->load('template/master', 'page/admin/v_user_list', $this->loadingData);
+        $this->data['users'] = $this->M_admin_user->getAll();
+        $this->template->load('template/master', 'page/admin/v_user_list', $this->data);
     }
 
     public function deletePost($field, $id)

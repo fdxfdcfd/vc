@@ -1,29 +1,21 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<!-- Bootstrap Core JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.js"></script>
 
+
+    <!-- Mainly scripts -->
+    <script src="<?php echo base_url('public/')?>js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url('public/')?>js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="<?php echo base_url('public/')?>js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="<?php echo base_url('public/')?>js/inspinia.js"></script>
+    <script src="<?php echo base_url('public/')?>js/plugins/pace/pace.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.js"></script>
 <?php
-foreach ($foot['js'] as $js){
+foreach ($footer as $js){
     ?>
     <script src="<?php echo base_url('public/').$js;?>"></script>
     <?php
 }
 ?>
-<!--<script type="text/javascript">-->
-<!--    $(document).ready(function() {-->
-<!--        $.toast({-->
-<!--            heading: 'Welcome to Pixel admin',-->
-<!--            text: 'Use the predefined ones, or specify a custom position object.',-->
-<!--            position: 'top-right',-->
-<!--            loaderBg: '#ff6849',-->
-<!--            icon: 'info',-->
-<!--            hideAfter: 3500,-->
-<!--            stack: 6-->
-<!--        })-->
-<!--    });-->
-<!--</script>-->
-

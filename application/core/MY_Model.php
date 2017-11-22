@@ -13,19 +13,19 @@ class MY_Model extends CI_Model
      * entity_id column
      * @var string
      */
-    protected $_entityId="entity_id";
+    protected $_entityId = "entity_id";
 
     /**
      * created_at column
      * @var string
      */
-    protected $_createAtColumn= "created_at";
+    protected $_createAtColumn = "created_at";
 
     /**
      * updated_at column
      * @var string
      */
-    protected $_updatedAtColumn= "updated_at";
+    protected $_updatedAtColumn = "updated_at";
 
     /**
      * MY_Model constructor.
@@ -42,8 +42,9 @@ class MY_Model extends CI_Model
      * @param $entityId
      * @return mixed
      */
-    public function load($entityId){
-        $query= $this->db->get_where($this->_tableName, array($this->_entityId => $entityId));
+    public function load($entityId)
+    {
+        $query = $this->db->get_where($this->_tableName, array($this->_entityId => $entityId));
         return $query->row();
     }
 
@@ -52,7 +53,34 @@ class MY_Model extends CI_Model
      * @param $entityId
      * @return mixed
      */
-    public function delete($entityId){
+    public function delete($entityId)
+    {
         return $this->db->delete($this->_tableName, array($this->_entityId => $entityId));
+    }
+
+    public function getCollection($where = null, $join = null, $select = ['*'])
+    {
+        $this->db->select(implode(",", $select));
+        $this->db->from($this->_tableName);
+        if ($join) {
+            $this->db->join($join[0], $join[1]);
+        }
+        if ($where) {
+            foreach ($where as $key => $value) {
+//                if(isset($condition['type']) && $condition['type']=='or'){
+//                    unset($condition['type']);
+//                    $this->db->or_where($condition);
+//                }
+                if(is_array($value)){
+                    $this->db->where_in($key,$value);
+                }else{
+                    $this->db->where($key,$value);
+                }
+            }
+        }
+        return $this->db->get()->result();
+    }
+    public function getAll(){
+        return $this->db->get($this->_tableName)->result();
     }
 }
