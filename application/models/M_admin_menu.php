@@ -7,7 +7,7 @@ class M_admin_menu extends MY_Model
     {
         parent::__construct();
         $this->_tableName = 'admin_menu';
-        $this->_entityId = 'menu_id';
+        $this->_entityId = 'admin_menu_id';
     }
 
     public function getMenuAdmin($userGroupId){
@@ -17,7 +17,7 @@ class M_admin_menu extends MY_Model
         if ($allow && $allow->user_group_permission){
             $menu=$this->getCollection(
                 [
-                    'menu_id'=> explode(",",$allow->user_group_permission)
+                    'admin_menu_id'=> explode(",",$allow->user_group_permission)
                 ]
         );
         }

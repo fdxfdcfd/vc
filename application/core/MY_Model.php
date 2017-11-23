@@ -80,7 +80,18 @@ class MY_Model extends CI_Model
         }
         return $this->db->get()->result();
     }
-    public function getAll(){
+    public function getAll($type = null, $value = null){
+        if($type == 'array'){
+            return $this->db->get($this->_tableName)->result_array();
+        }
+        if($type == 'menu' && $value){
+            $result =  $this->db->get($this->_tableName)->result();
+            $arrResult= [];
+            foreach ($result as $r){
+                $arrResult[$r->{$this->_entityId}]= $r->{$value};
+            }
+            return $arrResult;
+        }
         return $this->db->get($this->_tableName)->result();
     }
 }

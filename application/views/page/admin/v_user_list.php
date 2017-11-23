@@ -66,7 +66,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 ?>
                                 <tr>
                                     <td>
-                                        <?=$user->user_id?>
+                                        <?=$user->admin_user_id?>
                                     </td>
                                     <td>
                                         <?=$user->firstname?>
@@ -90,8 +90,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <?=$user->user_group_id?>
                                     </td>
                                     <td>
-                                        <a href="<?php echo base_url("admin/user/edit/id/").$user->user_id?>" class="btn btn-info" role="button">Edit</a>
-                                        <a href2="<?php echo base_url("admin/user/deletePost/id/").$user->user_id?>" class="btn btn-danger" id = "delete_user" role="button">Delete</a>
+                                        <a href="<?php echo base_url("admin/user/edit/id/").$user->admin_user_id?>" class="btn btn-info" role="button">Edit</a>
+                                        <a href2="<?php echo base_url("admin/user/deletePost/id/").$user->admin_user_id?>" class="btn btn-danger" id = "delete_user" role="button">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach;?>

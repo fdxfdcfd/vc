@@ -33,22 +33,22 @@ class User extends MY_Controller
         if (!$this->input->post()) {
             $id = $this->uri->segment(5);
             if (isset($id)) {
-                $this->loadingData['data']['title'] = "Chỉnh sửa Thông tin thành viên";
-                $this->loadingData['data']['breadcrumb'] = [
-                    ['Home', base_url('admin/dashboard/index')],
-                    ['Quản lý thành viên', base_url('admin/user/userList')],
-                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id/') . $id],
+                $this->data['title'] = "Chỉnh sửa Thông tin thành viên";
+                $this->data['breadcrumb'] = [
+                    'Home'=> base_url('admin/dashboard/index'),
+                    'Quản lý thành viên'=> base_url('admin/user/userList'),
+                    'Chỉnh sửa Thông tin thành viên'=> base_url('admin/user/edit/id/') . $id,
 
                 ];
-                $this->loadingData['data']['url']= base_url('admin/user/edit/id/').$id;
-                $user = $this->M_admin_user->as_array()->get($id);
-                $this->loadingData['data']['user'] = $user;
+                $this->data['url']= base_url('admin/user/edit/id/').$id;
+                $user = $this->M_admin_user->load($id);
+                $this->data['user']= $user;
 
                 $this->load->model('M_user_group');
-                $userGroup = $this->M_user_group->as_dropdown('user_group_name')->get_all();
-                $this->loadingData['data']['user_group'] = $userGroup;
+                $userGroup = $this->M_user_group->getAll('menu','user_group_name');
+                $this->data['data']['user_group'] = $userGroup;
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_user_edit', $this->loadingData);
+                $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
             }else{
                 redirect('admin/user','dashboard');
             }

@@ -8,7 +8,7 @@ class Login extends MY_Controller
     {
         parent::__construct();
         $this->load->model('M_admin_user');
-        if ($this->isLoggedIn() && $this->router->fetch_method() != 'logout') {
+        if ($this->isLoggedIn() && !$this->input->post()) {
             redirect('admin/dashboard', 'index');
         }
     }
@@ -47,7 +47,7 @@ class Login extends MY_Controller
                     // set session user datas
                     $data = [
                         'currentUser' => [
-                            'user_id' => $userData->user_id,
+                            'admin_user_id' => $userData->admin_user_id,
                             'username' => $userData->username,
                             'email' => $userData->email,
                             'firstname' => $userData->firstname,

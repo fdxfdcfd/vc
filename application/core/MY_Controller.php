@@ -9,6 +9,10 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $currentController= $this->router->fetch_class();
+        if(!$this->getCurrentUserData('admin_user_id') && $currentController != 'login'){
+           redirect('admin/login','index');
+        }
         $this->data['title']= "VietCaD";
         $this->data['head']= [];
         $this->data['footer']= [];
@@ -17,8 +21,11 @@ class MY_Controller extends CI_Controller
         $this->data['botNav']= [];
     }
     protected function isLoggedIn(){
-        $user = $this->session->userdata('currentUser');
-        return isset($user);
+        if($this->getCurrentUserData('admin_user_id')){
+            return true;
+        }else{
+            return false;
+        }
     }
     protected function getMenuAdmin($userGroupId){
         $this->load->model('M_admin_menu');
@@ -26,7 +33,11 @@ class MY_Controller extends CI_Controller
     }
     public function getCurrentUserData($field = null){
         if($field){
-            return  $this->session->userdata('currentUser')[$field];
+            if(isset($this->session->userdata('currentUser')[$field])){
+                return $this->session->userdata('currentUser')[$field];
+            }else{
+                return false;
+            }
         }
         return $this->session->userdata('currentUser');
     }

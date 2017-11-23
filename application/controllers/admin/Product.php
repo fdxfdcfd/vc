@@ -9,18 +9,20 @@ class Product extends MY_Controller
         parent::__construct();
         $this->load->model('M_catalog_product');
         $this->load->model('M_catalog_category');
+        $this->load->model('M_catalog_branch');
     }
 
     public function productList()
     {
-        $this->loadingData['data']['title'] = "Quản lý Sản phẩm";
-        $this->loadingData['data']['breadcrumb'] = [
-            ['Home', base_url('admin/dashboard/index')],
-            ['Quản lý Sản phẩm', base_url('admin/product/productList')]
+        $this->data['title'] = "Quản lý Sản phẩm";
+        $this->data['breadcrumb'] = [
+            'Home' => base_url('admin/dashboard/index'),
+            'Quản lý Sản phẩm' => base_url('admin/product/productList')
         ];
-        $this->loadingData['products'] = $this->M_catalog_product->as_array()->get_all();
-        $this->loadingData['categories'] = $this->M_catalog_category->as_array()->get_all();
-        $this->template->load('template/master', 'page/admin/v_product_list', $this->loadingData);
+        $this->data['products'] = $this->M_catalog_product->getAll();
+        $this->data['categories'] = $this->M_catalog_category->getAll('menu','category_name');
+        $this->data['branchs'] = $this->M_catalog_branch->getAll('menu','branch_name');
+        $this->template->load('template/master', 'page/admin/v_product_list', $this->data);
     }
 
     public function deletePost($field, $id)
