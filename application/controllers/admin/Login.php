@@ -8,7 +8,8 @@ class Login extends MY_Controller
     {
         parent::__construct();
         $this->load->model('M_admin_user');
-        if ($this->isLoggedIn() && !$this->input->post()) {
+
+        if ($this->isLoggedIn() && !$this->router->fetch_class() == 'logout' ) {
             redirect('admin/dashboard', 'index');
         }
     }
