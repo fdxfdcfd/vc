@@ -14,8 +14,9 @@ class MY_Controller extends CI_Controller
            redirect('admin/login','index');
         }
         $this->data['title']= "VietCaD";
-        $this->data['head']= [];
-        $this->data['footer']= [];
+        $this->data['header']['css']= [];
+        $this->data['footer']['js']= [];
+        $this->data['footer']['script']= '';
         $this->data['leftNav']= $this->getUserMenu();
         $this->data['topNav']= [];
         $this->data['botNav']= [];

@@ -41,13 +41,33 @@ class User extends MY_Controller
 
                 ];
                 $this->data['url']= base_url('admin/user/edit/id/').$id;
-                $user = $this->M_admin_user->load($id);
+                $this->data['urlUpload']= base_url('admin/user/uploadImg/id/').$id;
+                $user = $this->M_admin_user->load($id,'array');
                 $this->data['user']= $user;
 
                 $this->load->model('M_user_group');
                 $userGroup = $this->M_user_group->getAll('menu','user_group_name');
-                $this->data['data']['user_group'] = $userGroup;
+                $this->data['user_group'] = $userGroup;
                 $this->load->helper('form');
+                $this->data['header']['css'][]='plugins/dropzone/dropzone.css';
+                $this->data['header']['css'][]='plugins/chosen/chosen.css';
+                $this->data['footer']['js'][]='plugins/chosen/chosen.jquery.js';
+                $this->data['footer']['js'][]='plugins/dropzone/dropzone.js';
+                $this->data['footer']['script']="
+                    Dropzone.options.dropzoneForm = {
+                    paramName: \"file\", // The name that will be used to transfer the file
+                    maxFilesize: 2, // MB
+                    acceptedFiles: 'image/*',
+                    maxFiles: 1,
+                    init: function() {
+                    this.on('success', function( file, resp ){
+                    alert(resp);
+                        });
+                      },
+                    dictDefaultMessage: \"<strong>Drop files here or click to upload. </strong><br> size must be < 2mb\"
+                    };
+                        $('.chosen-select').chosen({width: \"100%\"});
+                ";
                 $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
             }else{
                 redirect('admin/user','dashboard');
@@ -86,26 +106,46 @@ class User extends MY_Controller
 
             if ($this->form_validation->run() == FALSE) {
                 $id = $this->uri->segment(5);
-                $this->loadingData['data']['title'] = "Chỉnh sửa Thông tin thành viên";
-                $this->loadingData['data']['breadcrumb'] = [
-                    ['Home', base_url('admin/dashboard/index')],
-                    ['Quản lý thành viên', base_url('admin/user/userList')],
-                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id/') . $id],
+                $this->data['title'] = "Chỉnh sửa Thông tin thành viên";
+                $this->data['breadcrumb'] = [
+                    'Home'=> base_url('admin/dashboard/index'),
+                    'Quản lý thành viên'=> base_url('admin/user/userList'),
+                    'Chỉnh sửa Thông tin thành viên'=> base_url('admin/user/edit/id/') . $id,
 
                 ];
-                $this->loadingData['data']['url']= base_url('admin/user/edit/id/').$id;
+                $this->data['url']= base_url('admin/user/edit/id/').$id;
+                $this->data['urlUpload']= base_url('admin/user/uploadImg/id/').$id;
                 $user = $this->input->post();
                 $user['user_img'] = $_FILES['user_img']['tmp_name'];
-                $this->loadingData['data']['user'] = $user;
+                $this->data['user'] = $user;
 
                 $this->load->model('M_user_group');
-                $userGroup = $this->M_user_group->as_dropdown('user_group_name')->get_all();
-                $this->loadingData['data']['user_group'] = $userGroup;
+                $userGroup = $this->M_user_group->getAll('menu','user_group_name');
+                $this->data['user_group'] = $userGroup;
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_user_edit', $this->loadingData);
+                $this->data['header']['css'][]='plugins/dropzone/dropzone.css';
+                $this->data['header']['css'][]='plugins/chosen/chosen.css';
+                $this->data['footer']['js'][]='plugins/chosen/chosen.jquery.js';
+                $this->data['footer']['js'][]='plugins/dropzone/dropzone.js';
+                $this->data['footer']['script']="
+                    Dropzone.options.dropzoneForm = {
+                    paramName: \"user_img\", // The name that will be used to transfer the file
+                    maxFilesize: 2, // MB
+                    acceptedFiles: 'image/*',
+                    maxFiles: 1,
+                    init: function() {
+                    this.on('success', function( file, resp ){
+                    alert(resp);
+                        });
+                      },
+                    dictDefaultMessage: \"<strong>Drop files here or click to upload. </strong><br> size must be < 2mb\"
+                    };
+                        $('.chosen-select').chosen({width: \"100%\"});
+                ";
+                $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
             } else {
                 $data = $this->input->post();
-                $user_id = $data['user_id'];
+                $admin_user_id = $data['admin_user_id'];
                 $defaultImg=false;
                 if(is_uploaded_file($_FILES['user_img']['tmp_name'])){
                     //upload img
@@ -115,7 +155,7 @@ class User extends MY_Controller
                     $resultUpload['result']=false;
                 }
                 if ($resultUpload['result'] || $defaultImg) {
-                    $oldImg = $this->M_admin_user->get($user_id)->user_img;
+                    $oldImg = $this->M_admin_user->load($admin_user_id)->user_img;
                     if($defaultImg){
                         if(isset($oldImg)){
                             $data['user_img']=$oldImg;
@@ -129,34 +169,47 @@ class User extends MY_Controller
                     if ($data['user_img'] != $oldImg) {
                         unlink('public/images/users/' . $oldImg);
                     }
-                    unset($data['user_id']);
-                    $this->M_admin_user->update($data, $user_id);
+                    unset($data['admin_user_id']);
+                    $this->M_admin_user->update($data, $admin_user_id);
                     $currentUser= $this->getCurrentUserData();
-                    if($user_id == $currentUser['user_id']){
+                    if($admin_user_id == $currentUser['admin_user_id']){
                         $currentUser['user_img']= $data['user_img'];
                         $this->setCurrentUserData($currentUser);
                     }
                     redirect('admin/user', 'userList');
                 }else{
                     $id = $this->uri->segment(5);
-                    $this->loadingData['data']['title']="Chỉnh sửa Thông tin thành viên";
-                    $this->loadingData['data']['breadcrumb'] = [
-                        ['Home',base_url('admin/dashboard/index')],
-                        ['Quản lý thành viên',base_url('admin/user/userList')],
-                        ['Chỉnh sửa Thông tin thành viên',base_url('admin/user/edit/id//').$id],
+                    $this->data['title'] = "Chỉnh sửa Thông tin thành viên";
+                    $this->data['breadcrumb'] = [
+                        'Home'=> base_url('admin/dashboard/index'),
+                        'Quản lý thành viên'=> base_url('admin/user/userList'),
+                        'Chỉnh sửa Thông tin thành viên'=> base_url('admin/user/edit/id/') . $id,
 
                     ];
-                    $this->loadingData['data']['url']= base_url('admin/user/edit/id//').$id;
-                    $user= $this->input->post();
-                    $user['user_img']= $_FILES['user_img']['tmp_name'];
-                    $this->loadingData['data']['user'] = $user;
+                    $this->data['url']= base_url('admin/user/edit/id/').$id;
+                    $user = $this->input->post();
+                    $user['user_img'] = $_FILES['user_img']['tmp_name'];
+                    $this->data['user'] = $user;
 
                     $this->load->model('M_user_group');
-                    $userGroup= $this->M_user_group->as_dropdown('user_group_name')->get_all();
-                    $this->loadingData['data']['user_group'] = $userGroup;
-                    $this->loadingData['data']['upload_error'] =$resultUpload['message'];
+                    $userGroup = $this->M_user_group->getAll('menu','user_group_name');
+                    $this->data['user_group'] = $userGroup;
+                    $this->data['upload_error'] =$resultUpload['message'];
                     $this->load->helper('form');
-                    return $this->template->load('template/master', 'page/admin/v_user_edit',$this->loadingData);
+                    $this->data['header']['css'][]='plugins/dropzone/dropzone.css';
+                    $this->data['header']['css'][]='plugins/chosen/chosen.css';
+                    $this->data['footer']['js'][]='plugins/chosen/chosen.jquery.js';
+                    $this->data['footer']['js'][]='plugins/dropzone/dropzone.js';
+                    $this->data['footer']['script']="
+                    Dropzone.options.dropzoneForm = {
+                    paramName: \"file\", // The name that will be used to transfer the file
+                    maxFilesize: 2, // MB
+                    dictDefaultMessage: \"<strong>Drop files here or click to upload. </strong><br> size must be < 2mb\"
+                    };
+                        $('.chosen-select').chosen({width: \"100%\"});
+                ";
+                    $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
+
                 }
             }
         }
@@ -214,7 +267,7 @@ class User extends MY_Controller
 
             if ($this->form_validation->run() == FALSE) {
                 $user = $this->input->post();
-                $id = $user['user_id'];
+                $id = $user['admin_user_id'];
                 $this->loadingData['data']['title'] = "Chỉnh sửa Thông tin thành viên";
                 $this->loadingData['data']['breadcrumb'] = [
                     ['Home', base_url('admin/dashboard/index')],
@@ -248,7 +301,7 @@ class User extends MY_Controller
                         $imgData = array('upload_data' => $this->upload->data());
                         $data['user_img'] = $imgData['upload_data']['file_name'];
                     }
-                    unset($data['user_id']);
+                    unset($data['admin_user_id']);
                     $data['password']=md5($data['password']);
                     $this->M_admin_user->insert($data);
                     $currentUser= $this->getCurrentUserData();
@@ -279,22 +332,30 @@ class User extends MY_Controller
 
     }
 
-    public function uploadImg($fieldname)
+
+    public function uploadImg()
     {
+        $fieldname='file';
+        $id =   $id = $this->uri->segment(5);
+        $user = new M_admin_user();
+        $user->load($id);
         $this->load->library('upload');
         //upload img
-        $config['upload_path'] = './public/images/users';
+        $config['upload_path'] = './public/img/users';
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = 2048000;
         $config['max_width'] = 1024;
         $config['max_height'] = 768;
         $config['encrypt_name'] = TRUE;
-
         $this->upload->initialize($config);
-
         if ($this->upload->do_upload($fieldname)) {
-            return ['result' => true, 'message' => 'success'];
+            $upload= $this->upload->data();
+            var_dump($user->getData());
+            $user->setUserImg($upload['file_name']);
+            var_dump($user->getData());die;
+            $user->save();
         } else {
+            var_dump($this->upload->display_errors());
             return ['result' => false, 'message' => $this->upload->display_errors()];
         }
     }

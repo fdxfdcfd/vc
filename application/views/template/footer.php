@@ -9,3 +9,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!--<!-- Custom and plugin javascript -->-->
 <script src="<?php echo base_url('public/') ?>js/inspinia.js"></script>
 <script src="<?php echo base_url('public/') ?>js/plugins/pace/pace.min.js"></script>
+<?php foreach($js as $j):?>
+    <script src="<?php echo base_url('public/js/').$j ?>"></script>
+<?php endforeach;?>
+<script>
+    <?php echo $script;?>
+</script>

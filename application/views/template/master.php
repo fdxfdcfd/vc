@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!DOCTYPE html>
 <html>
 
-<?php $this->load->view('template/header',$head)?>
+<?php $this->load->view('template/header',$header)?>
 
 <body class="">
 

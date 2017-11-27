@@ -21,5 +21,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link href="<?php echo base_url('public/')?>css/animate.css" rel="stylesheet">
     <link href="<?php echo base_url('public/')?>css/style.css" rel="stylesheet">
     <script src="<?php echo base_url('public/')?>js/jquery-3.1.1.min.js"></script>
+    <?php foreach($css as $c):?>
+        <link href="<?php echo base_url('public/css/').$c?>" rel="stylesheet">
+    <?php endforeach;?>
 
 </head>

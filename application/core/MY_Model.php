@@ -27,6 +27,8 @@ class MY_Model extends CI_Model
      */
     protected $_updatedAtColumn = "updated_at";
 
+    protected $_data;
+
     /**
      * MY_Model constructor.
      */
@@ -34,7 +36,22 @@ class MY_Model extends CI_Model
     {
         parent::__construct();
         $this->load->database();
-        //result_array();
+    }
+
+    private function getData(){
+        return $this->_data;
+    }
+    private function setData($data){
+        return $this->_data=$data;
+    }
+
+    public function save(){
+        if($this->_data[$this->_entityId]){
+            $this->db->where($this->_entityId, $this->_data[$this->_entityId]);
+            return  $this->db->update($this->_tableName, $this->_data);
+        }else{
+            return $this->db->insert($this->_tableName, $this->_data);
+        }
     }
 
     /**
@@ -42,10 +59,16 @@ class MY_Model extends CI_Model
      * @param $entityId
      * @return mixed
      */
-    public function load($entityId)
+    public function load($entityId, $type= 'object')
     {
         $query = $this->db->get_where($this->_tableName, array($this->_entityId => $entityId));
-        return $query->row();
+        $this->setData( $query->row_array());
+        if($type == 'object'){
+            return $query->row();
+        }else{
+            return $query->row_array();
+        }
+
     }
 
     /**
@@ -80,6 +103,7 @@ class MY_Model extends CI_Model
         }
         return $this->db->get()->result();
     }
+
     public function getAll($type = null, $value = null){
         if($type == 'array'){
             return $this->db->get($this->_tableName)->result_array();
@@ -93,5 +117,84 @@ class MY_Model extends CI_Model
             return $arrResult;
         }
         return $this->db->get($this->_tableName)->result();
+    }
+
+
+    protected function camelToSnake($input) {
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+        return implode('_', $ret);
+    }
+
+    protected function snakeToCamel($input, $capitalizeFirstCharacter = true){
+        $str = lcfirst(implode('', array_map('ucfirst', explode('_', $input))));
+        if ($capitalizeFirstCharacter) {
+            $str[0] = strtoupper($str[0]);
+        }
+        return $str;
+    }
+
+    public function __call($name, $arguments)
+    {
+        $allFunc= $this->getAllGS();
+
+        if(!(strpos($name, 'get')=== false )){
+            echo $this->camelToSnake($name);die;
+            return $this->{$this->camelToSnake($name)};
+        }
+        if(!(strpos($name, 'set')=== false )){
+            echo $this->camelToSnake($name);die;
+            return $this->{$this->camelToSnake($name)};
+        }
+//        if($name='setData'){
+//            $this->{$name}($arguments);
+//            $this->syncDataToObject();
+//        }elseif(in_array($name,$allFunc)){
+//            $this->syncObjectToData();
+//        }
+    }
+
+    protected function syncDataToObject(){
+        $allVar= $this->getAllVar();
+        foreach ($allVar as $key=>$value){
+            $this->{'set'.$this->snakeToCamel($key)}($this->_data[$key]);
+        }
+    }
+    protected function syncObjectToData(){
+        $allVar= $this->getAllVar();
+        foreach ($allVar as $key=>$value){
+            $k= substr($key,1);
+            $this->_data[$k]=$this->{'get'.$this->snakeToCamel($key)}();
+        }
+        var_dump($this->_data);die;
+    }
+    protected function getAllVar(){
+        $allVar= get_object_vars($this);
+        unset($allVar['_tableName']);
+        unset($allVar['_entityId']);
+        unset($allVar['_createAtColumn']);
+        unset($allVar['_updatedAtColumn']);
+        unset($allVar['_data']);
+        return $allVar;
+    }
+
+    protected function getAllGS(){
+        $allVar= get_object_vars($this);
+        unset($allVar['_tableName']);
+        unset($allVar['_entityId']);
+        unset($allVar['_createAtColumn']);
+        unset($allVar['_updatedAtColumn']);
+        unset($allVar['_data']);
+        $allFunc=[];
+        foreach ($allVar as $key=>$value){
+            $allFunc[] ='get'.$this->snakeToCamel($key);
+        }
+        foreach ($allVar as $key=>$value){
+            $allFunc[] ='set'.$this->snakeToCamel($key);
+        }
+        return $allFunc;
     }
 }
