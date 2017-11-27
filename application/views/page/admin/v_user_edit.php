@@ -40,9 +40,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="ibox-content">
                 <div class="row">
                     <h3 class="m-t-none m-b">Thông tin cơ bản.</h3>
+                    <?php if(validation_errors()):?>
                     <div class="alert alert-danger">
-                        <?php echo form_error(); ?>
+                        <?php echo validation_errors(); ?>
                     </div>
+                    <?php endif;?>
                     <form role="form" action="<?= $url ?>" method="post" enctype="multipart/form-data"
                           id="userForm">
                         <div class="">
@@ -91,18 +93,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                            value="<?php echo isset($user['position']) ? $user['position'] : '' ?>">
                                 </div>
                                 <div class="form-group">
-                                        <label>Is Active</label>
-                                        <div class="form-control switch" style="border:none;">
-                                            <div class="onoffswitch">
-                                                <input type="checkbox" <?php if ($user['is_active']) echo 'checked'; ?>
-                                                       class="onoffswitch-checkbox" id="is_active">
-                                                <label class="onoffswitch-label" for="example1">
-                                                    <span class="onoffswitch-inner"></span>
-                                                    <span class="onoffswitch-switch"></span>
-                                                </label>
-                                            </div>
-                                        </div>
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" checked="<?php echo $user['is_active'] ?  'true' : 'false' ?>" class="onoffswitch-checkbox" name="is_active" id="is_active" value="1">
+                                        <label class="onoffswitch-label" for="is_active">
+                                            <span class="onoffswitch-inner"></span>
+                                            <span class="onoffswitch-switch"></span>
+                                        </label>
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
                                     <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit">
                                         <strong>Submit</strong></button>

@@ -59,11 +59,6 @@ class User extends MY_Controller
                     maxFilesize: 2, // MB
                     acceptedFiles: 'image/*',
                     maxFiles: 1,
-                    init: function() {
-                    this.on('success', function( file, resp ){
-                    alert(resp);
-                        });
-                      },
                     dictDefaultMessage: \"<strong>Drop files here or click to upload. </strong><br> size must be < 2mb\"
                     };
                         $('.chosen-select').chosen({width: \"100%\"});
@@ -116,9 +111,8 @@ class User extends MY_Controller
                 $this->data['url']= base_url('admin/user/edit/id/').$id;
                 $this->data['urlUpload']= base_url('admin/user/uploadImg/id/').$id;
                 $user = $this->input->post();
-                $user['user_img'] = $_FILES['user_img']['tmp_name'];
+//                $user['user_img'] = $_FILES['user_img']['tmp_name'];
                 $this->data['user'] = $user;
-
                 $this->load->model('M_user_group');
                 $userGroup = $this->M_user_group->getAll('menu','user_group_name');
                 $this->data['user_group'] = $userGroup;
@@ -132,12 +126,7 @@ class User extends MY_Controller
                     paramName: \"user_img\", // The name that will be used to transfer the file
                     maxFilesize: 2, // MB
                     acceptedFiles: 'image/*',
-                    maxFiles: 1,
-                    init: function() {
-                    this.on('success', function( file, resp ){
-                    alert(resp);
-                        });
-                      },
+                    maxFiles: 4,
                     dictDefaultMessage: \"<strong>Drop files here or click to upload. </strong><br> size must be < 2mb\"
                     };
                         $('.chosen-select').chosen({width: \"100%\"});
@@ -146,74 +135,15 @@ class User extends MY_Controller
             } else {
                 $data = $this->input->post();
                 $admin_user_id = $data['admin_user_id'];
-                $defaultImg=false;
-                if(is_uploaded_file($_FILES['user_img']['tmp_name'])){
-                    //upload img
-                    $resultUpload=$this->uploadImg('user_img');
-                }else{
-                    $defaultImg=true;
-                    $resultUpload['result']=false;
+                if($admin_user_id){
+                    $user= new M_admin_user();
+                    $user->load($admin_user_id);
+                    $user->setData($data);
+                    $user->save();
                 }
-                if ($resultUpload['result'] || $defaultImg) {
-                    $oldImg = $this->M_admin_user->load($admin_user_id)->user_img;
-                    if($defaultImg){
-                        if(isset($oldImg)){
-                            $data['user_img']=$oldImg;
-                        }else
-                        $data['user_img'] = 'default-user-image.png';
-                    }else{
-                        $imgData = array('upload_data' => $this->upload->data());
-                        $data['user_img'] = $imgData['upload_data']['file_name'];
-                    }
-
-                    if ($data['user_img'] != $oldImg) {
-                        unlink('public/images/users/' . $oldImg);
-                    }
-                    unset($data['admin_user_id']);
-                    $this->M_admin_user->update($data, $admin_user_id);
-                    $currentUser= $this->getCurrentUserData();
-                    if($admin_user_id == $currentUser['admin_user_id']){
-                        $currentUser['user_img']= $data['user_img'];
-                        $this->setCurrentUserData($currentUser);
-                    }
-                    redirect('admin/user', 'userList');
-                }else{
-                    $id = $this->uri->segment(5);
-                    $this->data['title'] = "Chỉnh sửa Thông tin thành viên";
-                    $this->data['breadcrumb'] = [
-                        'Home'=> base_url('admin/dashboard/index'),
-                        'Quản lý thành viên'=> base_url('admin/user/userList'),
-                        'Chỉnh sửa Thông tin thành viên'=> base_url('admin/user/edit/id/') . $id,
-
-                    ];
-                    $this->data['url']= base_url('admin/user/edit/id/').$id;
-                    $user = $this->input->post();
-                    $user['user_img'] = $_FILES['user_img']['tmp_name'];
-                    $this->data['user'] = $user;
-
-                    $this->load->model('M_user_group');
-                    $userGroup = $this->M_user_group->getAll('menu','user_group_name');
-                    $this->data['user_group'] = $userGroup;
-                    $this->data['upload_error'] =$resultUpload['message'];
-                    $this->load->helper('form');
-                    $this->data['header']['css'][]='plugins/dropzone/dropzone.css';
-                    $this->data['header']['css'][]='plugins/chosen/chosen.css';
-                    $this->data['footer']['js'][]='plugins/chosen/chosen.jquery.js';
-                    $this->data['footer']['js'][]='plugins/dropzone/dropzone.js';
-                    $this->data['footer']['script']="
-                    Dropzone.options.dropzoneForm = {
-                    paramName: \"file\", // The name that will be used to transfer the file
-                    maxFilesize: 2, // MB
-                    dictDefaultMessage: \"<strong>Drop files here or click to upload. </strong><br> size must be < 2mb\"
-                    };
-                        $('.chosen-select').chosen({width: \"100%\"});
-                ";
-                    $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
-
-                }
+                redirect('admin/user', 'userList');
             }
         }
-
     }
 
     public function create()
@@ -335,10 +265,8 @@ class User extends MY_Controller
 
     public function uploadImg()
     {
+        $sessioUserImage= $this->session->userdata('user_edit_img');
         $fieldname='file';
-        $id =   $id = $this->uri->segment(5);
-        $user = new M_admin_user();
-        $user->load($id);
         $this->load->library('upload');
         //upload img
         $config['upload_path'] = './public/img/users';
@@ -350,12 +278,11 @@ class User extends MY_Controller
         $this->upload->initialize($config);
         if ($this->upload->do_upload($fieldname)) {
             $upload= $this->upload->data();
-            var_dump($user->getData());
-            $user->setUserImg($upload['file_name']);
-            var_dump($user->getData());die;
-            $user->save();
+            if($sessioUserImage && is_file('public/img/users/' . $sessioUserImage)){
+                unlink('public/img/users/' . $sessioUserImage);
+            }
+            $this->session->set_userdata('user_edit_img',$upload['file_name']);
         } else {
-            var_dump($this->upload->display_errors());
             return ['result' => false, 'message' => $this->upload->display_errors()];
         }
     }

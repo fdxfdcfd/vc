@@ -38,10 +38,20 @@ class MY_Model extends CI_Model
         $this->load->database();
     }
 
-    private function getData(){
+    private function getData($field = null){
+        if($field){
+            return $this->_data['_'.$field];
+        }
         return $this->_data;
     }
     private function setData($data){
+        foreach ($data as $key=>$value) {
+            $this->_data[$key] = $value;
+        }
+        return true;
+    }
+
+    private function addData($data){
         return $this->_data=$data;
     }
 
@@ -140,27 +150,26 @@ class MY_Model extends CI_Model
     public function __call($name, $arguments)
     {
         $allFunc= $this->getAllGS();
-
         if(!(strpos($name, 'get')=== false )){
-            echo $this->camelToSnake($name);die;
-            return $this->{$this->camelToSnake($name)};
+            return $this->{substr($this->camelToSnake($name),3)};
         }
         if(!(strpos($name, 'set')=== false )){
-            echo $this->camelToSnake($name);die;
-            return $this->{$this->camelToSnake($name)};
+            if($name == 'setData'){
+                $this->setData($arguments[0]);
+                $this->syncDataToObject();
+                return true;
+            }else{
+                $this->{'_'.substr($this->camelToSnake($name),3)} = $arguments[0] ;
+                $this->syncObjectToData();
+                return true;
+            }
         }
-//        if($name='setData'){
-//            $this->{$name}($arguments);
-//            $this->syncDataToObject();
-//        }elseif(in_array($name,$allFunc)){
-//            $this->syncObjectToData();
-//        }
     }
 
     protected function syncDataToObject(){
         $allVar= $this->getAllVar();
         foreach ($allVar as $key=>$value){
-            $this->{'set'.$this->snakeToCamel($key)}($this->_data[$key]);
+            $this->{$key}= $this->_data[substr($key,1)];
         }
     }
     protected function syncObjectToData(){
@@ -169,7 +178,6 @@ class MY_Model extends CI_Model
             $k= substr($key,1);
             $this->_data[$k]=$this->{'get'.$this->snakeToCamel($key)}();
         }
-        var_dump($this->_data);die;
     }
     protected function getAllVar(){
         $allVar= get_object_vars($this);
