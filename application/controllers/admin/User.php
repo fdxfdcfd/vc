@@ -8,17 +8,40 @@ class User extends MY_Controller
     {
         parent::__construct();
         $this->load->model('M_admin_user');
+        $this->load->library('pagination');
         $this->loadingData['data']['foot']['js'][]="js/admin_user_form.js";
     }
 
     public function userList()
     {
+        // init params
+        $user = new M_admin_user();
+        $params = array();
+        $limit_per_page = 1;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(3) : 0;
+        $total_records = $user->getTotal();
+        if ($total_records > 0)
+        {
+            $params["results"] = $user->getCurrentPageRecords($limit_per_page, $start_index);
+
+            $config['base_url'] = base_url() . 'admin/user/userlist/';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 4;
+
+            $this->pagination->initialize($config);
+
+            // build paging links
+            $this->data['link'] = $this->pagination->create_links();
+        }
+
+
         $this->data['title'] = "Quản lý thành viên";
         $this->data['breadcrumb'] = [
             'Home'=> base_url('admin/dashboard/index'),
             'Quản lý thành viên'=> base_url('admin/user/userList')
         ];
-        $this->data['users'] = $this->M_admin_user->getAll();
+        $this->data['users'] = $user->getAll(null,null, $limit_per_page, $start_index);
         $this->template->load('template/master', 'page/admin/v_user_list', $this->data);
     }
 
@@ -58,7 +81,7 @@ class User extends MY_Controller
                     paramName: \"file\", // The name that will be used to transfer the file
                     maxFilesize: 2, // MB
                     acceptedFiles: 'image/*',
-                    maxFiles: 1,
+                    maxFiles: 4,
                     dictDefaultMessage: \"<strong>Drop files here or click to upload. </strong><br> size must be < 2mb\"
                     };
                         $('.chosen-select').chosen({width: \"100%\"});
@@ -286,6 +309,4 @@ class User extends MY_Controller
             return ['result' => false, 'message' => $this->upload->display_errors()];
         }
     }
-
-
 }

@@ -94,7 +94,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <a href2="<?php echo base_url("admin/user/deletePost/id/").$user->admin_user_id?>" class="btn btn-danger" id = "delete_user" role="button">Delete</a>
                                     </td>
                                 </tr>
+
                             <?php endforeach;?>
+<!--                            <tr>-->
+<!--                                <td colspan="7" class="footable-visible">-->
+<!--                                    <ul class="pagination pull-right"><li class="footable-page-arrow disabled"><a data-page="first" href="#first">«</a></li><li class="footable-page-arrow disabled"><a data-page="prev" href="#prev">‹</a></li><li class="footable-page active"><a data-page="0" href="#">1</a></li><li class="footable-page"><a data-page="1" href="#">2</a></li><li class="footable-page"><a data-page="2" href="#">3</a></li><li class="footable-page-arrow"><a data-page="next" href="#next">›</a></li><li class="footable-page-arrow"><a data-page="last" href="#last">»</a></li></ul>-->
+<!--                                </td>-->
+<!--                            </tr>-->
                             </tbody>
                             <tfoot>
                             <tr>
@@ -108,6 +114,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </tr>
                             </tfoot>
                         </table>
+                        <?php echo $link?>
                     </div>
 
                 </div>

@@ -17,7 +17,9 @@ class MY_Controller extends CI_Controller
         $this->data['header']['css']= [];
         $this->data['footer']['js']= [];
         $this->data['footer']['script']= '';
-        $this->data['leftNav']= $this->getUserMenu();
+        if($currentController != 'login') {
+            $this->data['leftNav'] = $this->getUserMenu();
+        }
         $this->data['topNav']= [];
         $this->data['botNav']= [];
     }

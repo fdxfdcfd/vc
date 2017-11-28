@@ -71,14 +71,18 @@ class MY_Model extends CI_Model
      */
     public function load($entityId, $type= 'object')
     {
-        $query = $this->db->get_where($this->_tableName, array($this->_entityId => $entityId));
-        $this->setData( $query->row_array());
-        if($type == 'object'){
-            return $query->row();
-        }else{
-            return $query->row_array();
+        if($entityId){
+            $query = $this->db->get_where($this->_tableName, array($this->_entityId => $entityId));
+            if($query->num_rows()){
+                $this->setData($query->row_array());
+            }
+            if($type == 'object'){
+                return $query->row();
+            }else{
+                return $query->row_array();
+            }
         }
-
+        return false;
     }
 
     /**
@@ -114,7 +118,7 @@ class MY_Model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function getAll($type = null, $value = null){
+    public function getAll($type = null, $value = null, $limit = 10 , $start = 0){
         if($type == 'array'){
             return $this->db->get($this->_tableName)->result_array();
         }
@@ -127,6 +131,25 @@ class MY_Model extends CI_Model
             return $arrResult;
         }
         return $this->db->get($this->_tableName)->result();
+    }
+    public function getTotal($type = null, $value = null){
+        return $this->db->get($this->_tableName)->num_rows();
+    }
+
+    public function getCurrentPageRecords($limit, $start)
+    {
+        $this->db->limit($limit, $start);
+        $query = $this->db->get($this->_tableName);
+
+        if ($query->num_rows() > 0)
+        {
+            foreach ($query->result() as $row)
+            {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return false;
     }
 
 
