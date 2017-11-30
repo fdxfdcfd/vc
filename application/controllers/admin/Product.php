@@ -10,16 +10,71 @@ class Product extends MY_Controller
         $this->load->model('M_catalog_product');
         $this->load->model('M_catalog_category');
         $this->load->model('M_catalog_branch');
+        $this->load->library('pagination');
     }
 
     public function productList()
     {
+        // init params
+        $product = new M_catalog_product();
+        $params = array();
+        $limit_per_page = 15;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $total_records = $product->getTotal();
+
+        if ($total_records > 0)
+        {
+            $config['num_links'] = 2;
+            $config['full_tag_open'] = '<ul class="pagination pull-right">';
+            $config['full_tag_close'] = '</ul>';
+
+            $config['first_link'] = '«';
+            $config['first_tag_open'] = ' <li class="footable-page-arrow">';
+            $config['first_tag_close'] = '</li>';
+
+            $config['last_link'] = '»';
+            $config['last_tag_open'] = ' <li class="footable-page-arrow">';
+            $config['last_tag_close'] = '</li>';
+
+            $config['next_link'] = '›';
+            $config['next_tag_open'] = '<li class="footable-page-arrow">';
+            $config['next_tag_close'] = '</li>';
+
+            $config['prev_link'] = '‹';
+            $config['prev_tag_open'] = '<li class="footable-page-arrow">';
+            $config['prev_tag_close'] = '</li>';
+
+            $config['cur_tag_open'] = ' <li class="footable-page active"><a>';
+            $config['cur_tag_close'] = '</a></li>';
+
+
+            $config['num_tag_open'] = '<li class="footable-page">';
+            $config['num_tag_close'] = '</li>';
+
+
+            $config['base_url'] = base_url() . 'admin/product/productlist/';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 4;
+
+            $this->pagination->initialize($config);
+
+            // build paging links
+            $this->data['link'] = $this->pagination->create_links();
+        }
+
         $this->data['title'] = "Quản lý Sản phẩm";
         $this->data['breadcrumb'] = [
             'Home' => base_url('admin/dashboard/index'),
             'Quản lý Sản phẩm' => base_url('admin/product/productList')
         ];
-        $this->data['products'] = $this->M_catalog_product->getAll();
+//        $this->data['footer']['js'][]= 'plugins/footable/footable.all.min.js';
+//        $this->data['header']['css'][]= 'plugins/footable/footable.core.css';
+//        $this->data['footer']['script']= '$(document).ready(function() {
+//            $(\'.footable\').footable();
+//        });
+//        ';
+        $this->data['products'] = $product->getCurrentPageRecords($limit_per_page, $start_index);
         $this->data['categories'] = $this->M_catalog_category->getAll('menu','category_name');
         $this->data['branchs'] = $this->M_catalog_branch->getAll('menu','branch_name');
         $this->template->load('template/master', 'page/admin/v_product_list', $this->data);
@@ -36,21 +91,41 @@ class Product extends MY_Controller
         if (!$this->input->post()) {
             $id = $this->uri->segment(5);
             if (isset($id)) {
-                $this->loadingData['data']['title'] = "Quản lý Sản phẩm";
-                $this->loadingData['data']['breadcrumb'] = [
-                    ['Home', base_url('admin/dashboard/index')],
-                    ['Quản lý Sản phẩm', base_url('admin/product/productList')],
-                    ['Cập nhật Sản phẩm', base_url('admin/product/edit/id') . $id]
+                $this->data['title'] = "Quản lý Sản phẩm";
+                $this->data['breadcrumb'] = [
+                    'Home'=> base_url('admin/dashboard/index'),
+                    'Quản lý Sản phẩm'=> base_url('admin/product/productList'),
+                    'Cập nhật Sản phẩm'=> base_url('admin/product/edit/id') . $id
 
                 ];
-                $product = $this->M_catalog_product->as_array()->get($id);
-                $this->loadingData['data']['product'] = $product;
+                $product = new M_catalog_product();
+                $product->load($id);
+                $this->data['product'] = $product;
 
-                $categories = $this->M_catalog_category->as_dropdown('category_name')->get_all();
-                $this->loadingData['data']['categories'] = $categories;
-                $this->loadingData['data']['url']= 'admin/product/edit/id/'.$id;
+                $categories = $this->M_catalog_category->getAll();
+                $this->data['categories'] = $categories;
+                $this->data['header']['css'][]='plugins/summernote/summernote.css';
+                $this->data['header']['css'][]='plugins/summernote/summernote-bs3.css';
+                $this->data['header']['css'][]='plugins/datapicker/datepicker3.css';
+                $this->data['footer']['js'][]='plugins/summernote/summernote.min.js';
+                $this->data['footer']['js'][]='plugins/datapicker/bootstrap-datepicker.js';
+                $this->data['footer']['script']=' $(document).ready(function(){
+                    $(\'.summernote\').summernote();
+            
+                    $(\'.input-group.date\').datepicker({
+                        todayBtn: "linked",
+                        keyboardNavigation: false,
+                        forceParse: false,
+                        calendarWeeks: true,
+                        autoclose: true
+                    });
+            
+                });';
+                $this->data['url']= 'admin/product/edit/id/'.$id;
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_product_edit', $this->loadingData);
+                $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
+            }else{
+                show_404();
             }
         } else {
             $this->load->helper(array('form'));

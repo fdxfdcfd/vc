@@ -18,11 +18,41 @@ class User extends MY_Controller
         $user = new M_admin_user();
         $params = array();
         $limit_per_page = 1;
-        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(3) : 0;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $total_records = $user->getTotal();
+
         if ($total_records > 0)
         {
             $params["results"] = $user->getCurrentPageRecords($limit_per_page, $start_index);
+
+
+            $config['num_links'] = 2;
+            $config['full_tag_open'] = '<ul class="pagination pull-right">';
+            $config['full_tag_close'] = '</ul>';
+
+            $config['first_link'] = '«';
+            $config['first_tag_open'] = ' <li class="footable-page-arrow">';
+            $config['first_tag_close'] = '</li>';
+
+            $config['last_link'] = '»';
+            $config['last_tag_open'] = ' <li class="footable-page-arrow">';
+            $config['last_tag_close'] = '</li>';
+
+            $config['next_link'] = '›';
+            $config['next_tag_open'] = '<li class="footable-page-arrow">';
+            $config['next_tag_close'] = '</li>';
+
+            $config['prev_link'] = '‹';
+            $config['prev_tag_open'] = '<li class="footable-page-arrow">';
+            $config['prev_tag_close'] = '</li>';
+
+            $config['cur_tag_open'] = ' <li class="footable-page active"><a>';
+            $config['cur_tag_close'] = '</a></li>';
+
+
+            $config['num_tag_open'] = '<li class="footable-page">';
+            $config['num_tag_close'] = '</li>';
+
 
             $config['base_url'] = base_url() . 'admin/user/userlist/';
             $config['total_rows'] = $total_records;
@@ -41,7 +71,8 @@ class User extends MY_Controller
             'Home'=> base_url('admin/dashboard/index'),
             'Quản lý thành viên'=> base_url('admin/user/userList')
         ];
-        $this->data['users'] = $user->getAll(null,null, $limit_per_page, $start_index);
+//        $this->data['users'] = $user->getCollection(null,null, '*',$limit_per_page, $start_index);
+        $this->data['users'] = $user->getCurrentPageRecords($limit_per_page, $start_index);
         $this->template->load('template/master', 'page/admin/v_user_list', $this->data);
     }
 
@@ -88,7 +119,7 @@ class User extends MY_Controller
                 ";
                 $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
             }else{
-                redirect('admin/user','dashboard');
+                show_404();
             }
         } else {
             $this->load->helper(array('form'));

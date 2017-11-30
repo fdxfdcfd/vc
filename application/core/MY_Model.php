@@ -95,10 +95,12 @@ class MY_Model extends CI_Model
         return $this->db->delete($this->_tableName, array($this->_entityId => $entityId));
     }
 
-    public function getCollection($where = null, $join = null, $select = ['*'], $limit = 1 , $start = 1)
+    public function getCollection($where = null, $join = null, $select = '*', $limit = null , $start = 0)
     {
-        $this->db->limit($limit, $start);
-        $this->db->select(implode(",", $select));
+        if($limit){
+            $this->db->limit($limit, $start);
+        }
+        $this->db->select($select);
         $this->db->from($this->_tableName);
         if ($join) {
             $this->db->join($join[0], $join[1]);
@@ -116,11 +118,11 @@ class MY_Model extends CI_Model
                 }
             }
         }
+
         return $this->db->get()->result();
     }
 
-    public function getAll($type = null, $value = null, $limit = 1 , $start = 0){
-        $this->db->limit($limit, $start);
+    public function getAll($type = null, $value = null){
         if($type == 'array'){
             return $this->db->get($this->_tableName)->result_array();
         }
