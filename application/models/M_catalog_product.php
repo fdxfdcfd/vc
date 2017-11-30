@@ -3,6 +3,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_catalog_product extends MY_Model
 {
+    protected $_entity_id = null;
+    protected $_product_name = null;
+    protected $_product_category_ids = null;
+    protected $_content = null;
+    protected $_price = null;
+    protected $_branch = null;
+    protected $_product_type = null;
+    protected $_qty = null;
+    protected $_is_instock = null;
+    protected $_created_at = null;
+    protected $_updated_at = null;
+    protected $_sku = null;
+
     public function __construct()
     {
         parent::__construct();

@@ -92,12 +92,12 @@ class User extends MY_Controller
                     'Home'=> base_url('admin/dashboard/index'),
                     'Quản lý thành viên'=> base_url('admin/user/userList'),
                     'Chỉnh sửa Thông tin thành viên'=> base_url('admin/user/edit/id/') . $id,
-
                 ];
                 $this->data['url']= base_url('admin/user/edit/id/').$id;
                 $this->data['urlUpload']= base_url('admin/user/uploadImg/id/').$id;
-                $user = $this->M_admin_user->load($id,'array');
-                $this->data['user']= $user;
+                $user = new M_admin_user();
+                $user->load($id,'array');
+                $this->data['user']= $user->getData();
 
                 $this->load->model('M_user_group');
                 $userGroup = $this->M_user_group->getAll('menu','user_group_name');

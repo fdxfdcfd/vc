@@ -75,6 +75,7 @@ class MY_Model extends CI_Model
             $query = $this->db->get_where($this->_tableName, array($this->_entityId => $entityId));
             if($query->num_rows()){
                 $this->setData($query->row_array());
+                $this->syncDataToObject();
             }
             if($type == 'object'){
                 return $query->row();

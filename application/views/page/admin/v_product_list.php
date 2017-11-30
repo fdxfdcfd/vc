@@ -131,7 +131,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="9" class="footable-visible">
+                            <td colspan="8" class="footable-visible">
                                 <?php echo $link;?>
                             </td>
                         </tr>
