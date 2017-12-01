@@ -47,8 +47,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <th>Firstname</th>
                                 <th>Lastname</th>
                                 <th>Email</th>
-                                <th>Active</th>
                                 <th>User Group</th>
+                                <th>Active</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -70,22 +70,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <?= $user->email ?>
                                     </td>
                                     <td>
+                                        <span class="badge"><?= $user_group[$user->user_group_id] ?></span>
+                                    </td>
+                                    <td>
                                         <?php
                                         if ($user->is_active) {
-                                            echo "<span class='btn btn-success'>Active</span>";
+                                            echo "<span class='label label-success'>Active</span>";
                                         } else {
-                                            echo "<span class='btn btn-danger'>Inactive</span>";
+                                            echo "<span class='label label-danger'>Inactive</span>";
                                         }
                                         ?>
                                     </td>
                                     <td>
-                                        <?= $user->user_group_id ?>
-                                    </td>
-                                    <td>
                                         <a href="<?php echo base_url("admin/user/edit/id/") . $user->admin_user_id ?>"
-                                           class="btn btn-info" role="button">Edit</a>
+                                           class="btn btn-xs btn-info" role="button">Edit</a>
                                         <a href2="<?php echo base_url("admin/user/deletePost/id/") . $user->admin_user_id ?>"
-                                           class="btn btn-danger" id="delete_user" role="button">Delete</a>
+                                           class="btn btn-xs btn-danger" id="delete_user" role="button">Delete</a>
                                     </td>
                                 </tr>
 
@@ -102,8 +102,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <th>Firstname</th>
                                 <th>Lastname</th>
                                 <th>Email</th>
-                                <th>Active</th>
                                 <th>User Group</th>
+                                <th>Active</th>
                                 <th>Action</th>
                             </tr>
                             </tfoot>

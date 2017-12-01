@@ -9,8 +9,8 @@ class M_admin_user extends MY_Model
     protected $_email = null;
     protected $_username = null;
     protected $_password = null;
-    protected $_created = null;
-    protected $_modified = null;
+    protected $_created_at = null;
+    protected $_updated_at = null;
     protected $_logdate = null;
     protected $_lognum = null;
     protected $_is_active = null;

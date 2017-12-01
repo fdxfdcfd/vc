@@ -34,6 +34,7 @@ $sku= set_value('sku') == false ? $product->getSku() : set_value('sku');
 <div class="wrapper wrapper-content animated fadeInRight ecommerce">
     <div class="row">
         <div class="col-lg-12">
+            <form action="">
             <div class="tabs-container">
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#tab-1"> Product info</a></li>
@@ -248,6 +249,7 @@ $sku= set_value('sku') == false ? $product->getSku() : set_value('sku');
                     </div>
                 </div>
             </div>
+            </form>
         </div>
     </div>
 

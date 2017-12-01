@@ -74,7 +74,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="font-normal">User group</label>
-                                    <select data-placeholder="Choose user group" class="chosen-select">
+                                    <select data-placeholder="Choose user group" class="chosen-select" name="user_group_id">
                                         <?php foreach ($user_group as $key => $value): ?>
                                             <?php
                                             $user_group_id = isset($user['user_group_id']) ? $user['user_group_id'] : '';

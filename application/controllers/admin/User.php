@@ -17,15 +17,12 @@ class User extends MY_Controller
         // init params
         $user = new M_admin_user();
         $params = array();
-        $limit_per_page = 1;
+        $limit_per_page = 10;
         $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $total_records = $user->getTotal();
 
         if ($total_records > 0)
         {
-            $params["results"] = $user->getCurrentPageRecords($limit_per_page, $start_index);
-
-
             $config['num_links'] = 2;
             $config['full_tag_open'] = '<ul class="pagination pull-right">';
             $config['full_tag_close'] = '</ul>';
@@ -67,18 +64,22 @@ class User extends MY_Controller
 
 
         $this->data['title'] = "Quản lý thành viên";
+        $this->data['footer']['js'][]= 'plugins/bootbox/bootbox.min.js';
         $this->data['breadcrumb'] = [
             'Home'=> base_url('admin/dashboard/index'),
             'Quản lý thành viên'=> base_url('admin/user/userList')
         ];
-//        $this->data['users'] = $user->getCollection(null,null, '*',$limit_per_page, $start_index);
-        $this->data['users'] = $user->getCurrentPageRecords($limit_per_page, $start_index);
+        $userGroup = $this->M_user_group->getAll('menu','user_group_name');
+        $this->data['user_group'] = $userGroup;
+        $this->data['users'] = $user->getCollection(null,null,'*',$limit_per_page, $start_index);
         $this->template->load('template/master', 'page/admin/v_user_list', $this->data);
     }
 
     public function deletePost($field, $id)
     {
-        $this->M_admin_user->delete($id);
+        $user = new M_admin_user();
+        $user->load($id);
+        $user->delete();
         redirect('admin/user/', 'userList');
     }
 
@@ -98,6 +99,9 @@ class User extends MY_Controller
                 $user = new M_admin_user();
                 $user->load($id,'array');
                 $this->data['user']= $user->getData();
+                if ($user->getData('user_img')) {
+                    $this->session->set_userdata('user_edit_img', $user->getData('user_img'));
+                }
 
                 $this->load->model('M_user_group');
                 $userGroup = $this->M_user_group->getAll('menu','user_group_name');
@@ -165,7 +169,6 @@ class User extends MY_Controller
                 $this->data['url']= base_url('admin/user/edit/id/').$id;
                 $this->data['urlUpload']= base_url('admin/user/uploadImg/id/').$id;
                 $user = $this->input->post();
-//                $user['user_img'] = $_FILES['user_img']['tmp_name'];
                 $this->data['user'] = $user;
                 $this->load->model('M_user_group');
                 $userGroup = $this->M_user_group->getAll('menu','user_group_name');
@@ -192,6 +195,9 @@ class User extends MY_Controller
                 if($admin_user_id){
                     $user= new M_admin_user();
                     $user->load($admin_user_id);
+                    if($sessioUserImage= $this->session->userdata('user_edit_img')){
+                    $user->setUserImg($sessioUserImage);
+                    }
                     $user->setData($data);
                     $user->save();
                 }
@@ -336,8 +342,9 @@ class User extends MY_Controller
                 unlink('public/img/users/' . $sessioUserImage);
             }
             $this->session->set_userdata('user_edit_img',$upload['file_name']);
+            echo 'Done';
         } else {
-            return ['result' => false, 'message' => $this->upload->display_errors()];
+            echo $this->upload->display_errors();
         }
     }
 }

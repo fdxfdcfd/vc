@@ -38,24 +38,17 @@ class MY_Model extends CI_Model
         $this->load->database();
     }
 
-    private function getData($field = null){
-        if($field){
-            return $this->_data['_'.$field];
-        }
-        return $this->_data;
-    }
-    private function setData($data){
-        foreach ($data as $key=>$value) {
-            $this->_data[$key] = $value;
-        }
-        return true;
-    }
-
-    private function addData($data){
-        return $this->_data=$data;
-    }
 
     public function save(){
+        //add created at + updated at
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $now = date('m/d/Y h:i:s a', time());
+        if($this->_data[$this->_entityId]){
+            $this->_data[$this->_updatedAtColumn]=$now;
+        }else{
+            $this->_data[$this->_updatedAtColumn]=$now;
+            $this->_data[$this->_createAtColumn]=$now;
+        }
         if($this->_data[$this->_entityId]){
             $this->db->where($this->_entityId, $this->_data[$this->_entityId]);
             return  $this->db->update($this->_tableName, $this->_data);
@@ -87,13 +80,14 @@ class MY_Model extends CI_Model
     }
 
     /**
-     * delete object by id
-     * @param $entityId
-     * @return mixed
+     * @return bool
      */
-    public function delete($entityId)
+    public function delete()
     {
-        return $this->db->delete($this->_tableName, array($this->_entityId => $entityId));
+        if($id = $this->{'_'.$this->_entityId}){
+            return $this->db->delete($this->_tableName, array($this->_entityId => $id));
+        }
+        return false;
     }
 
     public function getCollection($where = null, $join = null, $select = '*', $limit = null , $start = 0)
@@ -179,6 +173,14 @@ class MY_Model extends CI_Model
     {
         $allFunc= $this->getAllGS();
         if(!(strpos($name, 'get')=== false )){
+            if($name == 'getData'){
+                if(isset($arguments[0])){
+                    return$this->getData($arguments[0]);
+                }else{
+                    return$this->getData();
+                }
+
+            }else
             return $this->{substr($this->camelToSnake($name),3)};
         }
         if(!(strpos($name, 'set')=== false )){
@@ -187,11 +189,27 @@ class MY_Model extends CI_Model
                 $this->syncDataToObject();
                 return true;
             }else{
-                $this->{'_'.substr($this->camelToSnake($name),3)} = $arguments[0] ;
+                $this->{substr($this->camelToSnake($name),3)} = $arguments[0] ;
                 $this->syncObjectToData();
                 return true;
             }
         }
+    }
+
+    private function getData($field = null){
+        if($field){
+            if(isset($this->_data[$field])){
+                return $this->_data[$field];
+            }
+           return false;
+        }
+        return $this->_data;
+    }
+    private function setData($data){
+        foreach ($data as $key=>$value) {
+            $this->_data[$key] = $value;
+        }
+        return true;
     }
 
     protected function syncDataToObject(){
@@ -204,7 +222,7 @@ class MY_Model extends CI_Model
         $allVar= $this->getAllVar();
         foreach ($allVar as $key=>$value){
             $k= substr($key,1);
-            $this->_data[$k]=$this->{'get'.$this->snakeToCamel($key)}();
+            $this->_data[$k]=$this->{$key};
         }
     }
     protected function getAllVar(){
