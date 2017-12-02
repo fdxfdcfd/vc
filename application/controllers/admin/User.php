@@ -18,7 +18,7 @@ class User extends MY_Controller
         $user = new M_admin_user();
         $params = array();
         $limit_per_page = 10;
-        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
         $total_records = $user->getTotal();
 
         if ($total_records > 0)
@@ -55,6 +55,7 @@ class User extends MY_Controller
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 4;
+            $config['use_page_numbers'] = TRUE;
 
             $this->pagination->initialize($config);
 
@@ -71,6 +72,7 @@ class User extends MY_Controller
         ];
         $userGroup = $this->M_user_group->getAll('menu','user_group_name');
         $this->data['user_group'] = $userGroup;
+        $start_index = ($start_index-1) * $limit_per_page;
         $this->data['users'] = $user->getCollection(null,null,'*',$limit_per_page, $start_index);
         $this->template->load('template/master', 'page/admin/v_user_list', $this->data);
     }
@@ -80,6 +82,7 @@ class User extends MY_Controller
         $user = new M_admin_user();
         $user->load($id);
         $user->delete();
+        $this->addSuccessMessage('Delete User successful.');
         redirect('admin/user/', 'userList');
     }
 

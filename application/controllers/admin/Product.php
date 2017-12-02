@@ -9,21 +9,31 @@ class Product extends MY_Controller
         parent::__construct();
         $this->load->model('M_catalog_product');
         $this->load->model('M_catalog_category');
-        $this->load->model('M_catalog_branch');
         $this->load->library('pagination');
     }
 
     public function productList()
     {
+        $dataSearch = [];
+        $params = '';
+        if ($this->input->get()) {
+            $dataSearch = $this->input->get();
+            $params = $_SERVER['QUERY_STRING'];
+        }
         // init params
         $product = new M_catalog_product();
         $params = array();
-        $limit_per_page = 15;
-        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
-        $total_records = $product->getTotal();
+        $limit_per_page = 5;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
 
-        if ($total_records > 0)
-        {
+        $where = $this->generateWhere($dataSearch);
+        $total_records =$product->getCollectionCount($where, null, '*');
+        if($start_index > ($total_records/$limit_per_page) ){
+            $start_index = 1;
+        }
+        $this->data['products'] = $product->getCollection($where, null, '*', $limit_per_page,  ($start_index - 1) * $limit_per_page);
+        $this->data['link']= '';
+        if ($total_records > 0) {
             $config['num_links'] = 2;
             $config['full_tag_open'] = '<ul class="pagination pull-right">';
             $config['full_tag_close'] = '</ul>';
@@ -55,6 +65,7 @@ class Product extends MY_Controller
             $config['base_url'] = base_url() . 'admin/product/productlist/';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
+            $config['use_page_numbers'] = TRUE;
             $config["uri_segment"] = 4;
 
             $this->pagination->initialize($config);
@@ -68,22 +79,47 @@ class Product extends MY_Controller
             'Home' => base_url('admin/dashboard/index'),
             'Quản lý Sản phẩm' => base_url('admin/product/productList')
         ];
-//        $this->data['footer']['js'][]= 'plugins/footable/footable.all.min.js';
-//        $this->data['header']['css'][]= 'plugins/footable/footable.core.css';
-//        $this->data['footer']['script']= '$(document).ready(function() {
-//            $(\'.footable\').footable();
-//        });
-//        ';
-        $this->data['products'] = $product->getCurrentPageRecords($limit_per_page, $start_index);
-        $this->data['categories'] = $this->M_catalog_category->getAll('menu','category_name');
-        $this->data['branchs'] = $this->M_catalog_branch->getAll('menu','branch_name');
+        $this->data['footer']['js'][] = 'plugins/bootbox/bootbox.min.js';
+
+        $categoris = new M_catalog_category();
+        $this->load->helper('form');
+        $this->data['dataSearch'] = $dataSearch;
+        $this->data['params'] = $params;
+        $this->data['categories'] = $categoris->getAll('menu', 'category_name');
         $this->template->load('template/master', 'page/admin/v_product_list', $this->data);
     }
 
     public function deletePost($field, $id)
     {
-        $this->M_admin_user->delete($id);
-        redirect('admin/user/', 'userList');
+        $product = new M_catalog_product();
+        $product->load(1);
+        if ($product->getEntityId()) {
+            $product->delete();
+            $this->addSuccessMessage('Delete Product successful.');
+            redirect('admin/user/', 'userList');
+        }
+    }
+
+    protected function generateWhere($paramSearch = [])
+    {
+        $where = [];
+        foreach ($paramSearch as $key => $value) {
+            if (trim($value) != '') {
+                if ($key =='product_category_ids') {
+                    $val = explode(',',$value);
+                    foreach ($val as $v){
+                        $where[] = [
+                            'like' => [$key, $v]
+                        ];
+                    }
+                } else {
+                    $where[] = [
+                        'like' => [$key, $value]
+                    ];
+                }
+            }
+        }
+        return $where;
     }
 
     public function edit()
@@ -93,9 +129,9 @@ class Product extends MY_Controller
             if (isset($id)) {
                 $this->data['title'] = "Quản lý Sản phẩm";
                 $this->data['breadcrumb'] = [
-                    'Home'=> base_url('admin/dashboard/index'),
-                    'Quản lý Sản phẩm'=> base_url('admin/product/productList'),
-                    'Cập nhật Sản phẩm'=> base_url('admin/product/edit/id') . $id
+                    'Home' => base_url('admin/dashboard/index'),
+                    'Quản lý Sản phẩm' => base_url('admin/product/productList'),
+                    'Cập nhật Sản phẩm' => base_url('admin/product/edit/id') . $id
 
                 ];
                 $product = new M_catalog_product();
@@ -104,12 +140,12 @@ class Product extends MY_Controller
 
                 $categories = $this->M_catalog_category->getAll();
                 $this->data['categories'] = $categories;
-                $this->data['header']['css'][]='plugins/summernote/summernote.css';
-                $this->data['header']['css'][]='plugins/summernote/summernote-bs3.css';
-                $this->data['header']['css'][]='plugins/datapicker/datepicker3.css';
-                $this->data['footer']['js'][]='plugins/summernote/summernote.min.js';
-                $this->data['footer']['js'][]='plugins/datapicker/bootstrap-datepicker.js';
-                $this->data['footer']['script']=' $(document).ready(function(){
+                $this->data['header']['css'][] = 'plugins/summernote/summernote.css';
+                $this->data['header']['css'][] = 'plugins/summernote/summernote-bs3.css';
+                $this->data['header']['css'][] = 'plugins/datapicker/datepicker3.css';
+                $this->data['footer']['js'][] = 'plugins/summernote/summernote.min.js';
+                $this->data['footer']['js'][] = 'plugins/datapicker/bootstrap-datepicker.js';
+                $this->data['footer']['script'] = ' $(document).ready(function(){
                     $(\'.summernote\').summernote();
             
                     $(\'.input-group.date\').datepicker({
@@ -121,10 +157,10 @@ class Product extends MY_Controller
                     });
             
                 });';
-                $this->data['url']= 'admin/product/edit/id/'.$id;
+                $this->data['url'] = 'admin/product/edit/id/' . $id;
                 $this->load->helper('form');
                 $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
-            }else{
+            } else {
                 show_404();
             }
         } else {
@@ -191,7 +227,7 @@ class Product extends MY_Controller
                 $data = $this->input->post();
                 $user_id = $data['user_id'];
                 //upload img
-                $resultUpload=$this->uploadImg('user_img');
+                $resultUpload = $this->uploadImg('user_img');
                 if ($resultUpload['result']) {
                     $imgData = array('upload_data' => $this->upload->data());
                     $data['user_img'] = $imgData['upload_data']['file_name'];
@@ -201,31 +237,31 @@ class Product extends MY_Controller
                     }
                     unset($data['user_id']);
                     $this->M_admin_user->update($data, $user_id);
-                    $currentUser= $this->getCurrentUserData();
-                    if($user_id == $currentUser['user_id']){
-                        $currentUser['user_img']= $data['user_img'];
+                    $currentUser = $this->getCurrentUserData();
+                    if ($user_id == $currentUser['user_id']) {
+                        $currentUser['user_img'] = $data['user_img'];
                         $this->setCurrentUserData($currentUser);
                     }
                     redirect('admin/user', 'userList');
-                }else{
+                } else {
                     $id = $this->uri->segment(5);
-                    $this->loadingData['data']['title']="Chỉnh sửa Thông tin thành viên";
+                    $this->loadingData['data']['title'] = "Chỉnh sửa Thông tin thành viên";
                     $this->loadingData['data']['breadcrumb'] = [
-                        ['Home',base_url('admin/dashboard/index')],
-                        ['Quản lý thành viên',base_url('admin/user/userList')],
-                        ['Chỉnh sửa Thông tin thành viên',base_url('admin/user/edit/id').$id],
+                        ['Home', base_url('admin/dashboard/index')],
+                        ['Quản lý thành viên', base_url('admin/user/userList')],
+                        ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id') . $id],
 
                     ];
-                    $user= $this->input->post();
-                    $user['user_img']= $_FILES['user_img']['tmp_name'];
+                    $user = $this->input->post();
+                    $user['user_img'] = $_FILES['user_img']['tmp_name'];
                     $this->loadingData['data']['user'] = $user;
 
                     $this->load->model('M_user_group');
-                    $userGroup= $this->M_user_group->as_dropdown('user_group_name')->get_all();
+                    $userGroup = $this->M_user_group->as_dropdown('user_group_name')->get_all();
                     $this->loadingData['data']['user_group'] = $userGroup;
-                    $this->loadingData['data']['upload_error'] =$resultUpload['message'];
+                    $this->loadingData['data']['upload_error'] = $resultUpload['message'];
                     $this->load->helper('form');
-                    return $this->template->load('template/master', 'page/admin/v_user_edit',$this->loadingData);
+                    return $this->template->load('template/master', 'page/admin/v_user_edit', $this->loadingData);
                 }
             }
         }

@@ -1,5 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$product_name = isset($dataSearch['product_name']) ? $dataSearch['product_name'] : '';
+$price = isset($dataSearch['price']) ? $dataSearch['price'] : '';
+$qty = isset($dataSearch['qty']) ? $dataSearch['qty'] : '';
+$is_instock = isset($dataSearch['is_instock']) ? $dataSearch['is_instock'] : '';
+$product_category_ids = isset($dataSearch['product_category_ids']) ? $dataSearch['product_category_ids'] : '';
+$is_active = isset($dataSearch['is_active']) ? $dataSearch['is_active'] : '';
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -25,35 +31,61 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox-content m-b-sm border-bottom">
         <div class="row">
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="control-label" for="product_name">Product Name</label>
-                    <input type="text" id="product_name" name="product_name" value="" placeholder="Product Name"
-                           class="form-control">
+            <form action="" class="form">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="product_name">Product Name</label>
+                        <input type="text" id="product_name" name="product_name" placeholder="Product Name"
+                               class="form-control" value="<?= $product_name ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label class="control-label" for="price">Price</label>
-                    <input type="text" id="price" name="price" value="" placeholder="Price" class="form-control">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="control-label" for="price">Price</label>
+                        <input type="text" id="price" name="price" placeholder="Price" class="form-control"  value="<?= $price ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label class="control-label" for="quantity">Quantity</label>
-                    <input type="text" id="quantity" name="quantity" value="" placeholder="Quantity"
-                           class="form-control">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="control-label" for="qty">Quantity</label>
+                        <input type="text" id="qty" name="qty"  value="<?= $qty ?>" placeholder="Quantity"
+                               class="form-control">
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label class="control-label" for="status">Status</label>
-                    <select name="status" id="status" class="form-control">
-                        <option value="1" selected>Enabled</option>
-                        <option value="0">Disabled</option>
-                    </select>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="is_instock">Stock</label>
+                        <select name="is_instock" id="is_instock" class="form-control">
+                            <option value="1" selected>In Stock</option>
+                            <option value="0">Out of Stock</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="categories">Category</label>
+                        <select name="product_category_ids" id="categories" class="form-control">
+                            <option value="1" selected>Enabled</option>
+                            <option value="0">Disabled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="is_active">Status</label>
+                        <select name="is_active" id="is_active" class="form-control">
+                            <option value="1" selected>Enabled</option>
+                            <option value="0">Disabled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="submit">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <button id="submit" type="submit" class="btn btn-info align-bottom form-control">Search</button>
+                    </div>
+                </div>
+            </form>
         </div>
 
     </div>
@@ -62,16 +94,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="ibox">
                 <div class="ibox-content">
 
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                    <table class="footable table table-stripped toggle-arrow-tiny table-hover" data-page-size="15">
                         <thead>
                         <tr>
                             <th data-toggle="true">Id</th>
                             <th>SKU</th>
                             <th>Product Name</th>
                             <th>Category</th>
-                            <th>Branch</th>
-                            <th>Status</th>
                             <th>Qty</th>
+                            <th>Stock status</th>
+                            <th>Status</th>
+
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -100,11 +133,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     ?>
                                 </td>
                                 <td>
-                                    <?php
-                                    if (isset($branchs[$product->branch])) {
-                                        echo "<span class=\"badge\">$branchs[$category]</span>";
-                                    }
-                                    ?>
+                                    <?= $product->qty ?>
                                 </td>
                                 <td>
                                     <?php
@@ -116,14 +145,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     ?>
                                 </td>
                                 <td>
-                                    <?= $product->qty ?>
+                                    <?php
+                                    if ($product->is_active) {
+                                        echo "<span class='label label-primary'>Active</span>";
+                                    } else {
+                                        echo "<span class='label label-danger'>In Active</span>";
+                                    }
+                                    ?>
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                    <a href="<?php echo base_url("admin/product/edit/id/") . $product->entity_id ?>"
-                                       class="btn-white btn btn-xs btn-info" role="button">Edit</a>
-                                    <a href2="<?php echo base_url("admin/product/deletePost/id/") . $product->entity_id ?>"
-                                       class="btn-white btn btn-xs btn-danger" id="delete_user" role="button">Delete</a>
+                                        <a href="<?php echo base_url("admin/product/edit/id/") . $product->entity_id ?>"
+                                           class="btn-white btn btn-xs btn-info" role="button">Edit</a>
+                                        <a href2="<?php echo base_url("admin/product/deletePost/id/") . $product->entity_id ?>"
+                                           class="btn-white btn btn-xs btn-danger" id="delete_user"
+                                           role="button">Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -132,7 +168,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <tfoot>
                         <tr>
                             <td colspan="8" class="footable-visible">
-                                <?php echo $link;?>
+                                <?php echo $link; ?>
                             </td>
                         </tr>
                         </tfoot>

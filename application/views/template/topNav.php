@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <li>
                         <div class="dropdown-messages-box">
                             <a href="profile.html" class="pull-left">
-                                <img alt="image" class="img-circle" src="img/a7.jpg">
+                                <img alt="image" class="img-circle" src="<?php echo base_url('public/')?>img/a7.jpg">
                             </a>
                             <div class="media-body">
                                 <small class="pull-right">46h ago</small>
@@ -36,7 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <li>
                         <div class="dropdown-messages-box">
                             <a href="profile.html" class="pull-left">
-                                <img alt="image" class="img-circle" src="img/a4.jpg">
+                                <img alt="image" class="img-circle" src="<?php echo base_url('public/')?>img/a4.jpg">
                             </a>
                             <div class="media-body ">
                                 <small class="pull-right text-navy">5h ago</small>

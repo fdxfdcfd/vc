@@ -90,6 +90,14 @@ class MY_Model extends CI_Model
         return false;
     }
 
+    /**
+     * @param null $where
+     * @param null $join
+     * @param string $select
+     * @param null $limit
+     * @param int $start
+     * @return mixed
+     */
     public function getCollection($where = null, $join = null, $select = '*', $limit = null , $start = 0)
     {
         if($limit){
@@ -101,22 +109,63 @@ class MY_Model extends CI_Model
             $this->db->join($join[0], $join[1]);
         }
         if ($where) {
-            foreach ($where as $key => $value) {
-//                if(isset($condition['type']) && $condition['type']=='or'){
-//                    unset($condition['type']);
-//                    $this->db->or_where($condition);
-//                }
-                if(is_array($value)){
-                    $this->db->where_in($key,$value);
-                }else{
-                    $this->db->where($key,$value);
+            foreach ($where as $w) {
+                $key = key($w);
+                $value= $w[$key];
+                if($key==='eq')
+                {
+                    $this->db->where($value[0],$value[1]);
+                }
+                if($key === 'in'){
+                    $this->db->where_in($value[0],$value[1]); // $value[1]= array()
+                }
+                if($key === 'nin'){
+                    $this->db->where_not_in($value[0],$value[1]); // $value[1]= array()
+                }
+                if($key === 'neq'){
+                    $this->db->where($value[0].' != ',$value[1]); // $value[1]= array()
+                }
+                if($key === 'like'){
+                    $this->db->like($value[0],$value[1]); // $value[1]= array()
                 }
             }
         }
-
-        return $this->db->get()->result();
+        return  $this->db->get()->result();
     }
-
+    public function getCollectionCount($where = null, $join = null, $select = '*', $limit = null , $start = 0)
+    {
+        if($limit){
+            $this->db->limit($limit, $start);
+        }
+        $this->db->select($select);
+        $this->db->from($this->_tableName);
+        if ($join) {
+            $this->db->join($join[0], $join[1]);
+        }
+        if ($where) {
+            foreach ($where as $w) {
+                $key = key($w);
+                $value= $w[$key];
+                if($key==='eq')
+                {
+                    $this->db->where($value[0],$value[1]);
+                }
+                if($key === 'in'){
+                    $this->db->where_in($value[0],$value[1]); // $value[1]= array()
+                }
+                if($key === 'nin'){
+                    $this->db->where_not_in($value[0],$value[1]); // $value[1]= array()
+                }
+                if($key === 'neq'){
+                    $this->db->where($value[0].' != ',$value[1]); // $value[1]= array()
+                }
+                if($key === 'like'){
+                    $this->db->like($value[0],$value[1]); // $value[1]= array()
+                }
+            }
+        }
+        return  $this->db->get()->num_rows();
+    }
     public function getAll($type = null, $value = null){
         if($type == 'array'){
             return $this->db->get($this->_tableName)->result_array();
@@ -133,22 +182,6 @@ class MY_Model extends CI_Model
     }
     public function getTotal($type = null, $value = null){
         return $this->db->get($this->_tableName)->num_rows();
-    }
-
-    public function getCurrentPageRecords($limit, $start)
-    {
-        $this->db->limit($limit, $start);
-        $query = $this->db->get($this->_tableName);
-
-        if ($query->num_rows() > 0)
-        {
-            foreach ($query->result() as $row)
-            {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return false;
     }
 
 
