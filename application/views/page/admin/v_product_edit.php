@@ -8,6 +8,7 @@ $price = set_value('price') == false ? $product->getPrice() : set_value('price')
 $product_type = set_value('product_type') == false ? $product->getProductType() : set_value('product_type');
 $qty = set_value('qty') == false ? $product->getQty() : set_value('qty');
 $is_instock = set_value('is_instock') == false ? $product->getIsInstock() : set_value('is_instock');
+$is_active = set_value('$is_active') == false ? $product->getIsActive() : set_value('$is_active');
 $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
 
 ?>
@@ -39,7 +40,8 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#tab-1"> Product info</a></li>
                         <li class=""><a data-toggle="tab" href="#tab-2"> Data</a></li>
-                        <li class=""><a data-toggle="tab" href="#tab-3"> Images</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-3"> Category</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-4"> Images</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="tab-1" class="tab-pane active">
@@ -48,33 +50,24 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                                     <div class="form-group"><label class="col-sm-2 control-label">Name:</label>
                                         <div class="col-sm-10"><input type="text" class="form-control"
                                                                       placeholder="Product name" name="product_name"
-                                                                      value="" size="50"></div>
+                                                                      id="product_name"
+                                                                      value="<?= $product_name ?>" size="50"></div>
                                     </div>
                                     <div class="form-group"><label class="col-sm-2 control-label">Price:</label>
-                                        <div class="col-sm-10"><input type="text" class="form-control"
-                                                                      placeholder="$160.00"></div>
+                                        <div class="col-sm-10"><input type="text" class="form-control" name="price"
+                                                                      id="price"
+                                                                      placeholder="price" value="<?= $price ?>"></div>
                                     </div>
                                     <div class="form-group"><label class="col-sm-2 control-label">Description:</label>
                                         <div class="col-sm-10">
                                             <div class="summernote">
-                                                <h3>Lorem Ipsum is simply</h3>
-                                                dummy text of the printing and typesetting industry. <strong>Lorem Ipsum
-                                                    has been the industry's</strong> standard dummy text ever since the
-                                                1500s,
-                                                when an unknown printer took a galley of type and scrambled it to make a
-                                                type specimen book. It has survived not only five centuries, but also
-                                                the leap into electronic
-                                                when an unknown printer took a galley of type and scrambled it to make a
-                                                type specimen book. It has survived not only five centuries, but also
-                                                the leap into electronic
-                                                typesetting, remaining essentially unchanged. It was popularised in the
-                                                1960s with the release of Letraset sheets containing Lorem Ipsum
-                                                passages, and more recently with
-                                                <br/>
-
+                                                <?= $content ?>
                                             </div>
                                         </div>
                                     </div>
+                                    <textarea style="display: none" name="content" id="content" cols="30" rows="10">
+                                    <?= $content ?>
+                                    </textarea>
                                     <div class="form-group"><label class="col-sm-2 control-label">Meta Tag
                                             Title:</label>
                                         <div class="col-sm-10"><input type="text" class="form-control"
@@ -98,53 +91,106 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                             <div class="panel-body">
 
                                 <fieldset class="form-horizontal">
-                                    <div class="form-group"><label class="col-sm-2 control-label">ID:</label>
+                                    <div class="form-group"><label class="col-sm-2 control-label">SKU:</label>
                                         <div class="col-sm-10"><input type="text" class="form-control"
-                                                                      placeholder="543"></div>
+                                                                      placeholder="SKU" value="<?= $sku ?>"></div>
                                     </div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Model:</label>
-                                        <div class="col-sm-10"><input type="text" class="form-control"
-                                                                      placeholder="..."></div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">QTY:</label>
+                                        <div class="col-sm-10"><input type="number" class="form-control"
+                                                                      placeholder="qty" value="<?= $qty ?>"></div>
                                     </div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Location:</label>
-                                        <div class="col-sm-10"><input type="text" class="form-control"
-                                                                      placeholder="location"></div>
-                                    </div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Tax Class:</label>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Is In Stock:</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control">
-                                                <option>option 1</option>
-                                                <option>option 2</option>
-                                            </select>
+                                            <input type="checkbox"
+                                                   class="i-checks" <?php if ($is_instock) echo 'checked' ?>>
                                         </div>
                                     </div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Quantity:</label>
-                                        <div class="col-sm-10"><input type="text" class="form-control"
-                                                                      placeholder="Quantity"></div>
-                                    </div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Minimum
-                                            quantity:</label>
-                                        <div class="col-sm-10"><input type="text" class="form-control" placeholder="2">
-                                        </div>
-                                    </div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Sort order:</label>
-                                        <div class="col-sm-10"><input type="text" class="form-control" placeholder="0">
-                                        </div>
-                                    </div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Status:</label>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Enable:</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control">
-                                                <option>option 1</option>
-                                                <option>option 2</option>
-                                            </select>
+                                            <input type="checkbox"
+                                                   class="i-checks" <?php if ($is_active) echo 'checked' ?>>
                                         </div>
                                     </div>
+                                    <!--                                    <div class="form-group"><label class="col-sm-2 control-label">Tax Class:</label>-->
+                                    <!--                                        <div class="col-sm-10">-->
+                                    <!--                                            <select class="form-control">-->
+                                    <!--                                                <option>option 1</option>-->
+                                    <!--                                                <option>option 2</option>-->
+                                    <!--                                            </select>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+                                    <!--                                    <div class="form-group"><label class="col-sm-2 control-label">Quantity:</label>-->
+                                    <!--                                        <div class="col-sm-10"><input type="text" class="form-control"-->
+                                    <!--                                                                      placeholder="Quantity"></div>-->
+                                    <!--                                    </div>-->
+                                    <!--                                    <div class="form-group"><label class="col-sm-2 control-label">Minimum-->
+                                    <!--                                            quantity:</label>-->
+                                    <!--                                        <div class="col-sm-10"><input type="text" class="form-control" placeholder="2">-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+                                    <!--                                    <div class="form-group"><label class="col-sm-2 control-label">Sort order:</label>-->
+                                    <!--                                        <div class="col-sm-10"><input type="text" class="form-control" placeholder="0">-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+                                    <!--                                    <div class="form-group"><label class="col-sm-2 control-label">Status:</label>-->
+                                    <!--                                        <div class="col-sm-10">-->
+                                    <!--                                            <select class="form-control">-->
+                                    <!--                                                <option>option 1</option>-->
+                                    <!--                                                <option>option 2</option>-->
+                                    <!--                                            </select>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
                                 </fieldset>
 
 
                             </div>
                         </div>
                         <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <fieldset class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Search Category:</label>
+                                            <div class="col-sm-10">
+                                                <input id="search_category" type="text" class="form-control"
+                                                       placeholder="category name" value=""></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-4">
+                                                <input type="hidden" name="product_category_ids"
+                                                       id="product_category_ids" value="<?= $product_category_ids ?>">
+                                                <div id="category_tree">
+                                                </div>
+
+                                            </div>
+                                            <div class="col-sm-4"></div>
+
+                                        </div>
+
+                                        <!--                                    <div class="col-sm-9">-->
+                                        <!--                                        <div class="panel panel-default">-->
+                                        <!--                                            <div class="panel-heading">Category Info</div>-->
+                                        <!--                                            <div class="panel-body">-->
+                                        <!--                                                <div class="form-group"><label class="col-sm-2 control-label">Name:</label>-->
+                                        <!--                                                    <div class="col-sm-10"><input type="text" class="form-control"-->
+                                        <!--                                                                                  placeholder="Product name" name="product_name"-->
+                                        <!--                                                                                  id="product_name"-->
+                                        <!--                                                                                  value="-->
+                                        <? //= $product_name ?><!--" size="50"></div>-->
+                                        <!--                                                </div>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <!--                                    </div>-->
+                                </div>
+                                </fieldset>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-4" class="tab-pane">
                             <div class="panel-body">
 
                                 <div class="table-responsive">

@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Product extends MY_Controller
 {
 
+
     public function __construct()
     {
         parent::__construct();
@@ -23,16 +24,16 @@ class Product extends MY_Controller
         // init params
         $product = new M_catalog_product();
         $params = array();
-        $limit_per_page = 5;
+        $limit_per_page = 15;
         $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
 
         $where = $this->generateWhere($dataSearch);
-        $total_records =$product->getCollectionCount($where, null, '*');
-        if($start_index > ($total_records/$limit_per_page) ){
+        $total_records = $product->getCollectionCount($where, null, '*');
+        if ($start_index > ($total_records / $limit_per_page)) {
             $start_index = 1;
         }
-        $this->data['products'] = $product->getCollection($where, null, '*', $limit_per_page,  ($start_index - 1) * $limit_per_page);
-        $this->data['link']= '';
+        $this->data['products'] = $product->getCollection($where, null, '*', $limit_per_page, ($start_index - 1) * $limit_per_page);
+        $this->data['link'] = '';
         if ($total_records > 0) {
             $config['num_links'] = 2;
             $config['full_tag_open'] = '<ul class="pagination pull-right">';
@@ -92,7 +93,7 @@ class Product extends MY_Controller
     public function deletePost($field, $id)
     {
         $product = new M_catalog_product();
-        $product->load(1);
+        $product->load($id);
         if ($product->getEntityId()) {
             $product->delete();
             $this->addSuccessMessage('Delete Product successful.');
@@ -105,9 +106,9 @@ class Product extends MY_Controller
         $where = [];
         foreach ($paramSearch as $key => $value) {
             if (trim($value) != '') {
-                if ($key =='product_category_ids') {
-                    $val = explode(',',$value);
-                    foreach ($val as $v){
+                if ($key == 'product_category_ids') {
+                    $val = explode(',', $value);
+                    foreach ($val as $v) {
                         $where[] = [
                             'like' => [$key, $v]
                         ];
@@ -138,16 +139,29 @@ class Product extends MY_Controller
                 $product->load($id);
                 $this->data['product'] = $product;
 
-                $categories = $this->M_catalog_category->getAll();
-                $this->data['categories'] = $categories;
+                $category = new M_catalog_category();
+                $treeCategory = $category->getCategoryTree();
+                $this->data['categories'] =  $category->getAll();
+                $this->data['treeCategories'] =  $treeCategory;
                 $this->data['header']['css'][] = 'plugins/summernote/summernote.css';
                 $this->data['header']['css'][] = 'plugins/summernote/summernote-bs3.css';
                 $this->data['header']['css'][] = 'plugins/datapicker/datepicker3.css';
+                $this->data['header']['css'][] = 'plugins/iCheck/custom.css';
+                $this->data['header']['css'][] = 'plugins/jsTree/style.min.css';
                 $this->data['footer']['js'][] = 'plugins/summernote/summernote.min.js';
                 $this->data['footer']['js'][] = 'plugins/datapicker/bootstrap-datepicker.js';
+                $this->data['footer']['js'][] = 'plugins/iCheck/icheck.min.js';
+                $this->data['footer']['js'][] = 'plugins/jsTree/jstree.min.js';
                 $this->data['footer']['script'] = ' $(document).ready(function(){
-                    $(\'.summernote\').summernote();
-            
+                
+                    //summer note
+                    $(\'.summernote\').summernote({
+                    minHeight: 300  
+                    });
+                    $(".summernote").on("summernote.blur", function (e) {
+                        $("#content").val($(\'.summernote\').summernote(\'code\'));
+                    });
+                    //datepiker
                     $(\'.input-group.date\').datepicker({
                         todayBtn: "linked",
                         keyboardNavigation: false,
@@ -155,8 +169,58 @@ class Product extends MY_Controller
                         calendarWeeks: true,
                         autoclose: true
                     });
-            
-                });';
+                    //icheck
+                    $(\'.i-checks\').iCheck({
+                        checkboxClass: \'icheckbox_square-green\',
+                        radioClass: \'iradio_square-green\',
+                    });
+                    
+                    $(\'#category_tree\').jstree({
+                     "core" : {
+                        "themes" : {
+                          "variant" : "large"
+                        },
+                        "data" : '.$treeCategory.' 
+                      },
+                      "checkbox" : {
+                          "keep_selected_style" : false
+                      },
+                      "plugins" : [ "search","checkbox" ,"wholerow", "sort"]
+                      });
+                      
+                       var to = false;
+                       
+                      $(\'#search_category\').keyup(function () {
+                        if(to) { clearTimeout(to); }
+                        to = setTimeout(function () {
+                          var v = $(\'#search_category\').val();
+                          $(\'#category_tree\').jstree(true).search(v);
+                        }, 250);
+                      });
+                       $(\'#category_tree\').on(\'changed.jstree\', function (e, data) {
+                            var i, j, r = [];
+                            nodesOnSelectedPath = [...data.selected.reduce(function (acc, nodeId) {
+                                var node = data.instance.get_node(nodeId);
+                                return new Set([...acc, ...node.parents, node.id]);
+                            }, new Set)];
+                            for (var key in nodesOnSelectedPath) {
+                                if (nodesOnSelectedPath[key] == "#") {
+                                    nodesOnSelectedPath.splice(key, 1);
+                                }
+                                nodesOnSelectedPath[key] = nodesOnSelectedPath[key].substring(4);
+                            }
+                            $("#product_category_ids").val(nodesOnSelectedPath.join(","));
+                            });
+                            
+                       $(\'#category_tree\').on("loaded.jstree", function (event, data) {
+                        var categories = $("#product_category_ids").val();
+                        console.log(categories);
+                        $.each(categories.split(","),function(i,val){
+                        $(\'#category_tree\').jstree(\'select_node\', "#cat_"+val);
+                        });
+                        });
+                       
+                    });';
                 $this->data['url'] = 'admin/product/edit/id/' . $id;
                 $this->load->helper('form');
                 $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
@@ -267,6 +331,7 @@ class Product extends MY_Controller
         }
 
     }
+
 
     public function uploadImg($fieldname)
     {
