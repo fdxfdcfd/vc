@@ -49,6 +49,7 @@ class MY_Model extends CI_Model
             $this->_data[$this->_updatedAtColumn]=$now;
             $this->_data[$this->_createAtColumn]=$now;
         }
+        $this->checkDataBeforeSave();
         if($this->_data[$this->_entityId]){
             $this->db->where($this->_entityId, $this->_data[$this->_entityId]);
             return  $this->db->update($this->_tableName, $this->_data);
@@ -283,5 +284,13 @@ class MY_Model extends CI_Model
             $allFunc[] ='set'.$this->snakeToCamel($key);
         }
         return $allFunc;
+    }
+    protected function checkDataBeforeSave(){
+        $allVar= get_object_vars($this);
+        foreach ($this->_data as $key=>$value){
+            if(!isset($allVar["_$key"])){
+                unset($this->_data[$key]);
+            }
+        }
     }
 }

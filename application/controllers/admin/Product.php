@@ -10,6 +10,7 @@ class Product extends MY_Controller
         parent::__construct();
         $this->load->model('M_catalog_product');
         $this->load->model('M_catalog_category');
+        $this->load->model('M_product_img');
         $this->load->library('pagination');
     }
 
@@ -90,7 +91,7 @@ class Product extends MY_Controller
         $this->template->load('template/master', 'page/admin/v_product_list', $this->data);
     }
 
-    public function deletePost($field, $id)
+    public function deletePost($id)
     {
         $product = new M_catalog_product();
         $product->load($id);
@@ -126,102 +127,40 @@ class Product extends MY_Controller
     public function edit()
     {
         if (!$this->input->post()) {
-            $id = $this->uri->segment(5);
+            $id = $this->uri->segment(4);
             if (isset($id)) {
                 $this->data['title'] = "Quản lý Sản phẩm";
                 $this->data['breadcrumb'] = [
                     'Home' => base_url('admin/dashboard/index'),
                     'Quản lý Sản phẩm' => base_url('admin/product/productList'),
-                    'Cập nhật Sản phẩm' => base_url('admin/product/edit/id') . $id
+                    'Cập nhật Sản phẩm' => base_url('admin/product/edit/id/') . $id
 
                 ];
                 $product = new M_catalog_product();
                 $product->load($id);
+                $this->session->set_userdata('currentProduct',  serialize($product));
                 $this->data['product'] = $product;
 
                 $category = new M_catalog_category();
                 $treeCategory = $category->getCategoryTree();
                 $this->data['categories'] =  $category->getAll();
                 $this->data['treeCategories'] =  $treeCategory;
-                $this->data['header']['css'][] = 'plugins/summernote/summernote.css';
-                $this->data['header']['css'][] = 'plugins/summernote/summernote-bs3.css';
-                $this->data['header']['css'][] = 'plugins/datapicker/datepicker3.css';
-                $this->data['header']['css'][] = 'plugins/iCheck/custom.css';
-                $this->data['header']['css'][] = 'plugins/jsTree/style.min.css';
-                $this->data['footer']['js'][] = 'plugins/summernote/summernote.min.js';
-                $this->data['footer']['js'][] = 'plugins/datapicker/bootstrap-datepicker.js';
-                $this->data['footer']['js'][] = 'plugins/iCheck/icheck.min.js';
-                $this->data['footer']['js'][] = 'plugins/jsTree/jstree.min.js';
-                $this->data['footer']['script'] = ' $(document).ready(function(){
-                
-                    //summer note
-                    $(\'.summernote\').summernote({
-                    minHeight: 300  
-                    });
-                    $(".summernote").on("summernote.blur", function (e) {
-                        $("#content").val($(\'.summernote\').summernote(\'code\'));
-                    });
-                    //datepiker
-                    $(\'.input-group.date\').datepicker({
-                        todayBtn: "linked",
-                        keyboardNavigation: false,
-                        forceParse: false,
-                        calendarWeeks: true,
-                        autoclose: true
-                    });
-                    //icheck
-                    $(\'.i-checks\').iCheck({
-                        checkboxClass: \'icheckbox_square-green\',
-                        radioClass: \'iradio_square-green\',
-                    });
-                    
-                    $(\'#category_tree\').jstree({
-                     "core" : {
-                        "themes" : {
-                          "variant" : "large"
-                        },
-                        "data" : '.$treeCategory.' 
-                      },
-                      "checkbox" : {
-                          "keep_selected_style" : false
-                      },
-                      "plugins" : [ "search","checkbox" ,"wholerow", "sort"]
-                      });
-                      
-                       var to = false;
-                       
-                      $(\'#search_category\').keyup(function () {
-                        if(to) { clearTimeout(to); }
-                        to = setTimeout(function () {
-                          var v = $(\'#search_category\').val();
-                          $(\'#category_tree\').jstree(true).search(v);
-                        }, 250);
-                      });
-                       $(\'#category_tree\').on(\'changed.jstree\', function (e, data) {
-                            var i, j, r = [];
-                            nodesOnSelectedPath = [...data.selected.reduce(function (acc, nodeId) {
-                                var node = data.instance.get_node(nodeId);
-                                return new Set([...acc, ...node.parents, node.id]);
-                            }, new Set)];
-                            for (var key in nodesOnSelectedPath) {
-                                if (nodesOnSelectedPath[key] == "#") {
-                                    nodesOnSelectedPath.splice(key, 1);
-                                }
-                                nodesOnSelectedPath[key] = nodesOnSelectedPath[key].substring(4);
-                            }
-                            $("#product_category_ids").val(nodesOnSelectedPath.join(","));
-                            });
-                            
-                       $(\'#category_tree\').on("loaded.jstree", function (event, data) {
-                        var categories = $("#product_category_ids").val();
-                        console.log(categories);
-                        $.each(categories.split(","),function(i,val){
-                        $(\'#category_tree\').jstree(\'select_node\', "#cat_"+val);
-                        });
-                        });
-                       
-                    });';
+                $this->data['css'][] = 'plugins/summernote/summernote.css';
+                $this->data['css'][] = 'plugins/summernote/summernote-bs3.css';
+                $this->data['css'][] = 'plugins/datapicker/datepicker3.css';
+                $this->data['css'][] = 'plugins/iCheck/custom.css';
+                $this->data['css'][] = 'plugins/jsTree/style.min.css';
+                $this->data['js'][] = 'plugins/summernote/summernote.min.js';
+                $this->data['js'][] = 'plugins/datapicker/bootstrap-datepicker.js';
+                $this->data['js'][] = 'plugins/iCheck/icheck.min.js';
+                $this->data['js'][] = 'plugins/jsTree/jstree.min.js';
+                $this->data['css'][] = 'plugins/dropzone/dropzone.css';
+                $this->data['js'][] = 'plugins/dropzone/dropzone.js';
                 $this->data['url'] = 'admin/product/edit/id/' . $id;
+                $productImg = new M_product_img();
+                $imgs=$productImg->loadByProductId($id);
+                $this->session->set_userdata('product_edit_img',  serialize($imgs));
+                $this->data['product_imgs']= $imgs;
                 $this->load->helper('form');
                 $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
             } else {
@@ -233,123 +172,110 @@ class Product extends MY_Controller
 
             $config = array(
                 array(
-                    'field' => 'firstname',
-                    'label' => 'Tên',
+                    'field' => 'product_name',
+                    'label' => 'Tên sản phẩm',
                     'rules' => 'required',
                     'errors' => array(
                         'required' => 'Bạn cần nhập %s.',
                     ),
                 ),
-                array(
-                    'field' => 'lastname',
-                    'label' => 'Họ',
-                    'rules' => 'required',
-                    'errors' => array(
-                        'required' => 'Bạn cần nhập %s.',
-                    ),
-                ),
-                array(
-                    'field' => 'email',
-                    'label' => 'Email',
-                    'rules' => 'required',
-                    'errors' => array(
-                        'required' => 'Bạn cần nhập %s.',
-                    ),
-                )
+//                array(
+//                    'field' => 'lastname',
+//                    'label' => 'Họ',
+//                    'rules' => 'required',
+//                    'errors' => array(
+//                        'required' => 'Bạn cần nhập %s.',
+//                    ),
+//                ),
+//                array(
+//                    'field' => 'email',
+//                    'label' => 'Email',
+//                    'rules' => 'required',
+//                    'errors' => array(
+//                        'required' => 'Bạn cần nhập %s.',
+//                    ),
+//                )
             );
-            if (empty($_FILES['user_img']['name'])) {
-                $config[] = array(
-                    'field' => 'user_img',
-                    'label' => 'Hình đại diện',
-                    'rules' => 'required',
-                    'errors' => array(
-                        'required' => 'Bạn cần Chọn %s.',
-                    ),
-                );
-            }
             $this->form_validation->set_rules($config);
 
             if ($this->form_validation->run() == FALSE) {
-                $id = $this->uri->segment(5);
-                $this->loadingData['data']['title'] = "Chỉnh sửa Thông tin thành viên";
-                $this->loadingData['data']['breadcrumb'] = [
-                    ['Home', base_url('admin/dashboard/index')],
-                    ['Quản lý thành viên', base_url('admin/user/userList')],
-                    ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id') . $id],
+                $this->addErrorMessage('You must fill all field required.');
+                $id = $this->uri->segment(4);
+                $this->data['title'] = "Quản lý Sản phẩm";
+                $this->data['breadcrumb'] = [
+                    'Home' => base_url('admin/dashboard/index'),
+                    'Quản lý Sản phẩm' => base_url('admin/product/productList'),
+                    'Cập nhật Sản phẩm' => base_url('admin/product/edit/id/') . $id
 
                 ];
-                $user = $this->input->post();
-                $user['user_img'] = $_FILES['user_img']['tmp_name'];
-                $this->loadingData['data']['user'] = $user;
+                $this->data['product'] = $this->input->post();
+                $category = new M_catalog_category();
+                $treeCategory = $category->getCategoryTree();
+                $this->data['categories'] =  $category->getAll();
+                $this->data['treeCategories'] =  $treeCategory;
+                $this->data['css'][] = 'plugins/summernote/summernote.css';
+                $this->data['css'][] = 'plugins/summernote/summernote-bs3.css';
+                $this->data['css'][] = 'plugins/datapicker/datepicker3.css';
+                $this->data['css'][] = 'plugins/iCheck/custom.css';
+                $this->data['css'][] = 'plugins/jsTree/style.min.css';
+                $this->data['js'][] = 'plugins/summernote/summernote.min.js';
+                $this->data['js'][] = 'plugins/datapicker/bootstrap-datepicker.js';
+                $this->data['js'][] = 'plugins/iCheck/icheck.min.js';
+                $this->data['js'][] = 'plugins/jsTree/jstree.min.js';
+                $this->data['css'][] = 'plugins/dropzone/dropzone.css';
+                $this->data['js'][] = 'plugins/dropzone/dropzone.js';
+                $this->data['url'] = 'admin/product/edit/id/' . $id;
 
-                $this->load->model('M_user_group');
-                $userGroup = $this->M_user_group->as_dropdown('user_group_name')->get_all();
-                $this->loadingData['data']['user_group'] = $userGroup;
+                $this->data['product_imgs']= unserialize($this->session->userdata('product_edit_img'));
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_user_edit', $this->loadingData);
+                $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
             } else {
                 $data = $this->input->post();
-                $user_id = $data['user_id'];
-                //upload img
-                $resultUpload = $this->uploadImg('user_img');
-                if ($resultUpload['result']) {
-                    $imgData = array('upload_data' => $this->upload->data());
-                    $data['user_img'] = $imgData['upload_data']['file_name'];
-                    $oldImg = $this->M_admin_user->get($user_id)->user_img;
-                    if (isset($oldImg)) {
-                        unlink('public/images/users/' . $oldImg);
-                    }
-                    unset($data['user_id']);
-                    $this->M_admin_user->update($data, $user_id);
-                    $currentUser = $this->getCurrentUserData();
-                    if ($user_id == $currentUser['user_id']) {
-                        $currentUser['user_img'] = $data['user_img'];
-                        $this->setCurrentUserData($currentUser);
-                    }
-                    redirect('admin/user', 'userList');
-                } else {
-                    $id = $this->uri->segment(5);
-                    $this->loadingData['data']['title'] = "Chỉnh sửa Thông tin thành viên";
-                    $this->loadingData['data']['breadcrumb'] = [
-                        ['Home', base_url('admin/dashboard/index')],
-                        ['Quản lý thành viên', base_url('admin/user/userList')],
-                        ['Chỉnh sửa Thông tin thành viên', base_url('admin/user/edit/id') . $id],
-
-                    ];
-                    $user = $this->input->post();
-                    $user['user_img'] = $_FILES['user_img']['tmp_name'];
-                    $this->loadingData['data']['user'] = $user;
-
-                    $this->load->model('M_user_group');
-                    $userGroup = $this->M_user_group->as_dropdown('user_group_name')->get_all();
-                    $this->loadingData['data']['user_group'] = $userGroup;
-                    $this->loadingData['data']['upload_error'] = $resultUpload['message'];
-                    $this->load->helper('form');
-                    return $this->template->load('template/master', 'page/admin/v_user_edit', $this->loadingData);
-                }
+                $product_id = $data['entity_id'];
+//                $unlink = $this->session->userdata('unlink_user_edit_img');
+//                foreach ($unlink as $link) {
+//                    if( is_file($link)){
+//                        unlink($link);
+//                    }
+//                }
+//                $this->session->set_userdata('unlink_user_edit_img',[]);
+                $product = new M_catalog_product();
+                $product->load($product_id);
+//                if ($sessioUserImage = $this->session->userdata('user_edit_img')) {
+//                    $user->setUserImg($sessioUserImage);
+//                }
+                $product->setData($data);
+                $product->save();
+                redirect('admin/product', 'productList');
             }
         }
 
     }
 
 
-    public function uploadImg($fieldname)
+    public function uploadImg()
     {
+        $sessionproductImage = unserialize($this->session->userdata('product_edit_img'));
+        $fieldname = 'file';
         $this->load->library('upload');
         //upload img
-        $config['upload_path'] = './public/images/users';
+        $config['upload_path'] = './public/img/gallery';
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = 2048000;
         $config['max_width'] = 1024;
         $config['max_height'] = 768;
         $config['encrypt_name'] = TRUE;
-
         $this->upload->initialize($config);
-
         if ($this->upload->do_upload($fieldname)) {
-            return ['result' => true, 'message' => 'success'];
+            $upload = $this->upload->data();
+            $img = new stdClass();
+            $img->product_id = 0;
+            $img->product_img_name = $upload['file_name'];
+            $sessionproductImage[]= $img;
+            $this->session->set_userdata('product_edit_img', serialize($sessionproductImage));
+            echo $upload['file_name'];
         } else {
-            return ['result' => false, 'message' => $this->upload->display_errors()];
+            echo $this->upload->display_errors();
         }
     }
 

@@ -27,8 +27,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5></h5>
                     <div class="ibox-tools">
+                        <a class="btn btn-info" style="color: white" href="<?php echo base_url('admin/user/create/')?>">Create User</a>
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
                         </a>

@@ -155,9 +155,9 @@ $is_active = isset($dataSearch['is_active']) ? $dataSearch['is_active'] : '';
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="<?php echo base_url("admin/product/edit/id/") . $product->entity_id ?>"
+                                        <a href="<?php echo base_url("admin/product/edit/") . $product->entity_id ?>"
                                            class="btn-white btn btn-xs btn-info" role="button">Edit</a>
-                                        <a href2="<?php echo base_url("admin/product/deletePost/id/") . $product->entity_id ?>"
+                                        <a href2="<?php echo base_url("admin/product/deletePost/") . $product->entity_id ?>"
                                            class="btn-white btn btn-xs btn-danger" id="delete_user"
                                            role="button">Delete</a>
                                     </div>

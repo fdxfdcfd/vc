@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <li>
                         <div class="dropdown-messages-box">
                             <a href="profile.html" class="pull-left">
-                                <img alt="image" class="img-circle" src="img/profile.jpg">
+                                <img alt="image" class="img-circle" src="<?=base_url('public/')?>img/profile.jpg">
                             </a>
                             <div class="media-body ">
                                 <small class="pull-right">23h ago</small>

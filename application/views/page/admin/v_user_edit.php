@@ -94,14 +94,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                                 <div class="form-group">
                                     <div class="onoffswitch">
-                                        <input type="checkbox" checked="<?php echo $user['is_active'] ?  'true' : 'false' ?>" class="onoffswitch-checkbox" name="is_active" id="is_active" value="1">
+                                        <input type="checkbox" checked="<?php echo isset($user['is_active']) && $user['is_active'] ?  'true' : 'false' ?>" class="onoffswitch-checkbox" name="is_active" id="is_active" value="1">
                                         <label class="onoffswitch-label" for="is_active">
                                             <span class="onoffswitch-inner"></span>
                                             <span class="onoffswitch-switch"></span>
                                         </label>
                                     </div>
                                 </div>
-
+                                <?php if(!isset($user['admin_user_id'])):?>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" placeholder="password" name="password" id="password" class="form-control"
+                                           value="">
+                                </div>
+                                <?php endif;?>
                                 <div class="form-group">
                                     <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit">
                                         <strong>Submit</strong></button>
@@ -111,7 +117,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="clearfix"></div>
                     </form>
 
-                    <form role="form" action="<?= $urlUpload ?>" method="post" enctype="multipart/form-data"
+                    <form role="form" action="<?=base_url('admin/user/uploadImg')?>" method="post" enctype="multipart/form-data"
                           class="dropzone"
                           id="dropzoneForm">
                         <div class="row">
