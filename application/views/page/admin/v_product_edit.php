@@ -113,14 +113,14 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Is In Stock:</label>
                                         <div class="col-sm-10">
-                                            <input type="checkbox" name="is_instock" id="is_instock"
+                                            <input type="checkbox" name="is_instock" id="is_instock" value="1"
                                                    class="i-checks" <?php if ($is_instock) echo 'checked' ?>>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Enable:</label>
                                         <div class="col-sm-10">
-                                            <input type="checkbox" name="is_active" id="is_active"
+                                            <input type="checkbox" name="is_active" id="is_active" value="1"
                                                    class="i-checks" <?php if ($is_active) echo 'checked' ?>>
                                         </div>
                                     </div>

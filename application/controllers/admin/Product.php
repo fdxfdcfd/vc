@@ -231,6 +231,12 @@ class Product extends MY_Controller
                 $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
             } else {
                 $data = $this->input->post();
+                if(!isset($data['is_instock'])){
+                    $data['is_instock']=0;
+                }
+                if(!isset($data['is_active'])){
+                    $data['is_active']=0;
+                }
                 $product_id = $data['entity_id'];
 //                $unlink = $this->session->userdata('unlink_user_edit_img');
 //                foreach ($unlink as $link) {

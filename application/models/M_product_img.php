@@ -13,7 +13,7 @@ class M_product_img extends MY_Model
     public function __construct()
     {
         parent::__construct();
-        $this->_tableName = 'product_img';
+        $this->_tableName = 'catalog_product_img';
         $this->_entityId = 'product_img_id';
     }
 
