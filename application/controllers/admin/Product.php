@@ -159,7 +159,7 @@ class Product extends MY_Controller
                 $this->data['url'] = 'admin/product/edit/id/' . $id;
                 $productImg = new M_product_img();
                 $imgs=$productImg->loadByProductId($id);
-                $this->session->set_userdata('product_edit_img',  serialize($imgs));
+                //$this->session->set_userdata('product_edit_img',  serialize($imgs));
                 $this->data['product_imgs']= $imgs;
                 $this->load->helper('form');
                 $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
@@ -247,11 +247,15 @@ class Product extends MY_Controller
 //                $this->session->set_userdata('unlink_user_edit_img',[]);
                 $product = new M_catalog_product();
                 $product->load($product_id);
-//                if ($sessioUserImage = $this->session->userdata('user_edit_img')) {
-//                    $user->setUserImg($sessioUserImage);
-//                }
+
                 $product->setData($data);
                 $product->save();
+                if ($sessionproductImage =unserialize($this->session->userdata('product_edit_img'))) {
+                    foreach ($sessionproductImage as $img){
+                        $product->saveProductImg($img->product_img_name);
+                    }
+                }
+                $this->session->unset_userdata('product_edit_img');
                 redirect('admin/product', 'productList');
             }
         }
@@ -267,22 +271,26 @@ class Product extends MY_Controller
         //upload img
         $config['upload_path'] = './public/img/gallery';
         $config['allowed_types'] = 'gif|jpg|png';
-        $config['max_size'] = 2048000;
-        $config['max_width'] = 1024;
-        $config['max_height'] = 768;
+        $config['max_size'] = 20480000;
         $config['encrypt_name'] = TRUE;
         $this->upload->initialize($config);
         if ($this->upload->do_upload($fieldname)) {
             $upload = $this->upload->data();
             $img = new stdClass();
-            $img->product_id = 0;
             $img->product_img_name = $upload['file_name'];
             $sessionproductImage[]= $img;
             $this->session->set_userdata('product_edit_img', serialize($sessionproductImage));
-            echo $upload['file_name'];
+            $result= ['code'=>1, 'message'=>$upload['file_name'] ];
+            echo json_encode($result);
         } else {
-            echo $this->upload->display_errors();
+            $result= ['code'=>0, 'message'=>$this->upload->display_errors() ];
+            echo json_encode($result);
         }
+    }
+
+    public function deleteImg(){
+        $result=['result'=>1, 'message'=>'Success'];
+        echo json_encode($result);
     }
 
 

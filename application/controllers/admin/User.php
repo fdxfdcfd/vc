@@ -203,6 +203,7 @@ class User extends MY_Controller
                     }
                     $user->setData($data);
                     $user->save();
+                    $this->session->unset_userdata('user_edit_img');
                 }
                 redirect('admin/user', 'userList');
             }

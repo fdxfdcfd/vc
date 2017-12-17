@@ -54,7 +54,9 @@ class MY_Model extends CI_Model
             $this->db->where($this->_entityId, $this->_data[$this->_entityId]);
             return  $this->db->update($this->_tableName, $this->_data);
         }else{
-            return $this->db->insert($this->_tableName, $this->_data);
+            $result = $this->db->insert($this->_tableName, $this->_data);
+            $this->_entityId= $this->db->insert_id();
+            return $result;
         }
     }
 

@@ -213,9 +213,6 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                                             <th>
                                                 Image url
                                             </th>
-                                            <!--                                            <th>-->
-                                            <!--                                                Sort order-->
-                                            <!--                                            </th>-->
                                             <th>
                                                 Actions
                                             </th>
@@ -232,11 +229,8 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                                                     <input type="text" class="form-control" disabled
                                                            value="<?= base_url('public/') ?>img/gallery/<?= $img->product_img_name ?>">
                                                 </td>
-                                                <!--                                            <td>-->
-                                                <!--                                                <input type="text" class="form-control" value="1">-->
-                                                <!--                                            </td>-->
                                                 <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i></button>
+                                                    <button  type="button"  data-img="<?=$img->entity_id?>" class="btn btn-white deleteImg"><i class="fa fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -341,29 +335,36 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
         var myDropzone = new Dropzone("#cc-dropzone",
             {
                 paramName: "file",
-                maxFilesize: 2,
+                maxFilesize: 10,
                 acceptedFiles: 'image/*',
                 maxFiles: 4,
                 dictDefaultMessage: "<strong>Drop files here or click to upload. </strong><br> size must be < 2mb"
             });
         $("#cc-dropzone").addClass("dropzone");
         myDropzone.on("success", function (file, response) {
-            $img_url = public_url + 'img/gallery/' + response;
-            $('#product_img tr:last').after('' +
-                '<tr>' +
-                '<td>' +
-                '<img class="img-lg" ' +
-                'src="' + $img_url + '"' +
-                '</td>' +
-                '<td>' +
-                '<input type="text" class="form-control" disabled ' +
-                'value="' + $img_url + '">' +
-                '</td>' +
-                '<td>' +
-                '<button class="btn btn-white"><i class="fa fa-trash"></i></button>' +
-                '</td>' +
-                '</tr>' +
-                '');
+            var data = JSON.parse(response);
+            if(data.code= 1){
+                $img_url = public_url + 'img/gallery/' + data.message;
+                $('#product_img tr:last').after('' +
+                    '<tr>' +
+                    '<td>' +
+                    '<img class="img-lg" ' +
+                    'src="' + $img_url + '"' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" class="form-control" disabled ' +
+                    'value="' + $img_url + '">' +
+                    '</td>' +
+                    '<td>' +
+                    '<button  type="button" data-img="-1" class="btn btn-white deleteImg"><i class="fa fa-trash"></i></button>' +
+                    '</td>' +
+                    '</tr>' +
+                    '');
+                toastr['success']('Upload image succesful', 'Success');
+            }else{
+                toastr['error']('Something wrong. Can\'t remove this image', 'Error');
+            }
+
         });
         myDropzone.on("error", function (file) {
             alert("Error. Please refresh and try again.");
@@ -378,4 +379,32 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
             }
         });
     });
+    $('.deleteImg').click(function () {
+        var id = $(this).attr('data-img');
+        var element =  $(this)[0].parentNode.parentNode;
+        console.log(element);
+        alert(id);
+        if(id != -1){
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>" + "admin/product/deleteImg",
+                dataType: 'json',
+                data: {img_id: id},
+                success: function(res){
+                    if(res.result == 1){
+                        toastr['success']('Delete Image successful', 'Success');
+                        element.remove();
+                    }else{
+                        toastr['error']('Something wrong. Can\'t remove this image', 'Error');
+                    }
+                }
+            });
+        }
+        else{
+            toastr['success']('Delete Image successful', 'Success');
+            console.log(element);
+            element.remove();
+        }
+    });
+
 </script>
