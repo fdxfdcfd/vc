@@ -55,7 +55,7 @@ class MY_Model extends CI_Model
             return  $this->db->update($this->_tableName, $this->_data);
         }else{
             $result = $this->db->insert($this->_tableName, $this->_data);
-            $this->_entityId= $this->db->insert_id();
+            $this->_entity_id= $this->db->insert_id();
             return $result;
         }
     }

@@ -43,8 +43,8 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
 <div class="wrapper wrapper-content animated fadeInRight ecommerce">
     <div class="row">
         <div class="col-lg-12">
-            <form id="form-product" action="<?=base_url('admin/product/edit/').$entity_id?>" method="post">
-                <input type="hidden" name="entity_id" id="entity_id" value="<?=$entity_id?>">
+            <form id="form-product" action="<?= $url ?>" method="post">
+                <input type="hidden" name="entity_id" id="entity_id" value="<?= $entity_id ?>">
                 <div class="tabs-container">
                     <button class="btn btn-info pull-right" type="submit">Save product</button>
                     <ul class="nav nav-tabs">
@@ -102,13 +102,14 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
 
                                 <fieldset class="form-horizontal">
                                     <div class="form-group"><label class="col-sm-2 control-label">SKU:</label>
-                                        <div class="col-sm-10"><input type="text" class="form-control" name="sku" id="sku"
+                                        <div class="col-sm-10"><input type="text" class="form-control" name="sku"
+                                                                      id="sku"
                                                                       placeholder="SKU" value="<?= $sku ?>"></div>
                                     </div>
                                     <div class="form-group"><label class="col-sm-2 control-label">QTY:</label>
                                         <div class="col-sm-10">
                                             <input type="number" class="form-control"
-                                                                      placeholder="qty" name="qty" id="qty" value="<?= $qty ?>"></div>
+                                                   placeholder="qty" name="qty" id="qty" value="<?= $qty ?>"></div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Is In Stock:</label>
@@ -230,7 +231,11 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                                                            value="<?= base_url('public/') ?>img/gallery/<?= $img->product_img_name ?>">
                                                 </td>
                                                 <td>
-                                                    <button  type="button"  data-img="<?=$img->entity_id?>" class="btn btn-white deleteImg"><i class="fa fa-trash"></i></button>
+                                                    <button type="button" onclick="deleteImg(this)"
+                                                            data-img-name="<?= $img->product_img_name ?>"
+                                                            data-img="<?= $img->product_img_id ?>"
+                                                            class="btn btn-white deleteImg"><i class="fa fa-trash"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -343,7 +348,7 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
         $("#cc-dropzone").addClass("dropzone");
         myDropzone.on("success", function (file, response) {
             var data = JSON.parse(response);
-            if(data.code= 1){
+            if (data.code = 1) {
                 $img_url = public_url + 'img/gallery/' + data.message;
                 $('#product_img tr:last').after('' +
                     '<tr>' +
@@ -356,12 +361,12 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                     'value="' + $img_url + '">' +
                     '</td>' +
                     '<td>' +
-                    '<button  type="button" data-img="-1" class="btn btn-white deleteImg"><i class="fa fa-trash"></i></button>' +
+                    '<button  type="button" data-img="-1" data-img-name="' + data.message + '" class="btn btn-white deleteImg" onclick="deleteImg(this)"><i class="fa fa-trash"></i></button>' +
                     '</td>' +
                     '</tr>' +
                     '');
                 toastr['success']('Upload image succesful', 'Success');
-            }else{
+            } else {
                 toastr['error']('Something wrong. Can\'t remove this image', 'Error');
             }
 
@@ -379,32 +384,25 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
             }
         });
     });
-    $('.deleteImg').click(function () {
-        var id = $(this).attr('data-img');
-        var element =  $(this)[0].parentNode.parentNode;
-        console.log(element);
-        alert(id);
-        if(id != -1){
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url(); ?>" + "admin/product/deleteImg",
-                dataType: 'json',
-                data: {img_id: id},
-                success: function(res){
-                    if(res.result == 1){
-                        toastr['success']('Delete Image successful', 'Success');
-                        element.remove();
-                    }else{
-                        toastr['error']('Something wrong. Can\'t remove this image', 'Error');
-                    }
+
+    function deleteImg(e) {
+        var id = $(e).attr('data-img');
+        var name = $(e).attr('data-img-name');
+        var element = e.parentNode.parentNode;
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>" + "admin/product/deleteImg",
+            dataType: 'json',
+            data: {img_id: id, img_name: name},
+            success: function (res) {
+                if (res.result == 1) {
+                    toastr['success']('Delete Image successful', 'Success');
+                    element.remove();
+                } else {
+                    toastr['error']('Something wrong. Can\'t remove this image', 'Error');
                 }
-            });
-        }
-        else{
-            toastr['success']('Delete Image successful', 'Success');
-            console.log(element);
-            element.remove();
-        }
-    });
+            }
+        });
+    }
 
 </script>

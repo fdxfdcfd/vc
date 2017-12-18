@@ -24,10 +24,9 @@ $is_active = isset($dataSearch['is_active']) ? $dataSearch['is_active'] : '';
         </ol>
     </div>
     <div class="col-lg-2">
-
+        <a class="btn btn-info" style="color: white; margin-top:40px" href="<?php echo base_url('admin/product/create/')?>">Create Product</a>
     </div>
 </div>
-
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox-content m-b-sm border-bottom">
         <div class="row">
@@ -93,7 +92,6 @@ $is_active = isset($dataSearch['is_active']) ? $dataSearch['is_active'] : '';
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-content">
-
                     <table class="footable table table-stripped toggle-arrow-tiny table-hover" data-page-size="15">
                         <thead>
                         <tr>

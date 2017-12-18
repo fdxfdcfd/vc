@@ -16,23 +16,11 @@ class M_catalog_product extends MY_Model
     protected $_sku = null;
     protected $_is_active = null;
 
-
     public function __construct()
     {
         parent::__construct();
         $this->_tableName = "catalog_product";
         $this->_entityId = "entity_id";
-    }
-    public function saveProductImg($imgName){
-        $tableImg= 'catalog_product_img';
-        $data = array(
-            'product_id' => $this->getEntityId() ,
-            'product_img_name' => $imgName
-        );
-        $this->db->insert($tableImg, $data);
-    }
-    public function deleteProductImg($productId,$imgName){
-
     }
 
 }
