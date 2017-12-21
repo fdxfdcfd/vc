@@ -447,4 +447,15 @@ class Product extends MY_Controller
     }
 
 
+    public function loadRelatedProduct(){
+        $sessionRelatedProduct = unserialize($this->session->userdata('related_product_add'));
+//        $sessionDeleteRelatedProduct = unserialize($this->session->userdata('related_product_delete'));
+        $this->session->set_userdata('related_product_add', serialize($sessionRelatedProduct));
+
+        $params= $this->input->post();
+        $result = ['code'=>1,'message'=>'success'];
+        echo json_encode($result);
+    }
+
+
 }

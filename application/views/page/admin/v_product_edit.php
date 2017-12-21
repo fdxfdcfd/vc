@@ -52,6 +52,7 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                         <li class=""><a data-toggle="tab" href="#tab-2"> Data</a></li>
                         <li class=""><a data-toggle="tab" href="#tab-3"> Category</a></li>
                         <li class=""><a data-toggle="tab" href="#tab-4"> Images</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-5"> Related Product</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="tab-1" class="tab-pane active">
@@ -245,6 +246,84 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
 
                             </div>
                         </div>
+                        <div id="tab-5" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div class="row">
+<!--                                                        <div class="col-sm-5 m-b-xs">-->
+<!--                                                            <select class="input-sm form-control input-s-sm inline">-->
+<!--                                                                <option value="0">Option 1</option>-->
+<!--                                                                <option value="1">Option 2</option>-->
+<!--                                                                <option value="2">Option 3</option>-->
+<!--                                                                <option value="3">Option 4</option>-->
+<!--                                                            </select>-->
+<!--                                                        </div>-->
+                                                        <div class="col-sm-4 m-b-xs">
+                                                            <div data-toggle="buttons" class="btn-group">
+                                                                <label class="btn btn-sm btn-white"><input type="radio"
+                                                                                                            id="option1"
+                                                                                                            name="options">
+                                                                    Any </label>
+                                                                <label class="btn btn-sm btn-white active">
+                                                                    <input type="radio" checked="checked"
+                                                                                                            id="option2"
+                                                                                                            name="options">
+                                                                    Yes </label>
+                                                                <label class="btn btn-sm btn-white "> <input
+                                                                            type="radio" id="option3" name="options">
+                                                                    No </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="input-group">
+                                                                <input type="text" placeholder="Search Sku" id="search_sku" class="input-sm form-control">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-sm btn-primary" onclick="getRelatedProduct()"> Go!</button> </span></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped" id="related_table">
+                                                            <thead>
+                                                            <tr>
+
+                                                                <th>
+                                                                    <input type="checkbox" id="check_all_related" value="1" class="i-checks">
+                                                                </th>
+                                                                <th>Sku</th>
+                                                                <th>Product Name</th>
+                                                                <th>Category</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="checkbox" value="1" class="i-checks related_product_checked">
+                                                                </td>
+                                                                <td>
+                                                                    Sku
+                                                                </td>
+                                                                <td>
+                                                                    name
+                                                                </td>
+                                                                <td>Category</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -331,7 +410,6 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
 
         $('#category_tree').on("loaded.jstree", function (event, data) {
             var categories = $("#product_category_ids").val();
-            console.log(categories);
             $.each(categories.split(","), function (i, val) {
                 $('#category_tree').jstree('select_node', "#cat_" + val);
             });
@@ -396,6 +474,30 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
             data: {img_id: id, img_name: name},
             success: function (res) {
                 if (res.result == 1) {
+                    toastr['success']('Delete Image successful', 'Success');
+                    element.remove();
+                } else {
+                    toastr['error']('Something wrong. Can\'t remove this image', 'Error');
+                }
+            }
+        });
+    }
+
+    $('#check_all_related').click(function () {
+        var sku = search_sku
+    });
+    function getRelatedProduct() {
+        var page = 1;
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>" + "admin/product/loadRelatedProduct",
+            dataType: 'json',
+            data: {
+                page: page,
+            },
+            success: function (res) {
+                alert(123);
+                if (res.code == 1) {
                     toastr['success']('Delete Image successful', 'Success');
                     element.remove();
                 } else {
