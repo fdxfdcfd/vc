@@ -3,6 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_catalog_category extends MY_Model
 {
+    protected $_entity_id = null;
+    protected $_category_name = null;
+    protected $_parent_id = null;
+    protected $_content = null;
+    protected $_level = null;
+    protected $_is_anchor = null;
+
     public function __construct()
     {
         parent::__construct();
