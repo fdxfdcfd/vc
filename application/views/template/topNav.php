@@ -37,155 +37,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <input id="mobile-button" type="checkbox">
 
                     <ul class="collapse">
-                        <li class="current-menu-item"><a href="#">Home</a>
-                            <ul class="drop-down one-column hover-fade">
-                                <li class="current-menu-item"><a href="index.html">Home Page 1</a></li>
-                                <li><a href="index-2.html">Home Page 2</a></li>
-                                <li><a href="index-3.html">Home Page 3</a></li>
-                                <li><a href="index-4.html">Home Page 4</a></li>
-                                <li><a href="index-5.html">Home Page 5</a></li>
-                                <li><a href="one-page-template.html">One Page Template</a></li>
-                            </ul>
-                        </li>
-
-                        <li><a href="#">Pages</a>
-                            <ul class="drop-down two-column hover-fade">
-                                <li>
-                                    <ul>
-                                        <li><a href="about-us.html">About Us</a></li>
-                                        <li><a href="about-us-2.html">About Us 2</a></li>
-                                        <li><a href="services.html">Services</a></li>
-                                        <li><a href="services-2.html">Services 2</a></li>
-                                        <li><a href="pricing-tables.html">Pricing Tables</a></li>
-                                        <li><a href="pricing-tables-2.html">Pricing Tables 2</a></li>
-                                        <li><a href="contact.html">Contact Us</a></li>
-                                    </ul>
-                                    <ul>
-                                        <li><a href="faq.html">FAQ + sidebar</a></li>
-                                        <li><a href="side-nav.html">Side Navigation</a></li>
-                                        <li><a href="right-sidebar.html">Right Sidebar</a></li>
-                                        <li><a href="left-sidebar.html">Left Sidebar</a></li>
-                                        <li><a href="404.html">404 Page</a></li>
-                                        <li><a href="coming-soon.html">Coming Soon</a></li>
-                                    </ul>
+                        <?php
+                        if (is_array($topNav['child']) || is_object($topNav['child'])):
+                            foreach ($topNav['child'] as $key => $value):
+                                ?>
+                                <li><a href="<?php echo $key?>"><?php echo $value['name']?></a>
+                                    <?php if(count($value['child'])):?>
+                                    <div class="drop-down full-width hover-fade">
+                                        <ul>
+                                            <?php foreach ($value['child'] as $k => $v):?>
+                                                    <li><a href="<?php echo $k?>"><h2><?php echo $v['name']?></h2></a></li>
+                                                    <?php foreach ($v['child'] as $kk => $vv):?>
+                                                    <li><a href="<?php echo $kk?>"><?php echo $vv['name']?></a></li>
+                                                    <?php endforeach;?>
+                                          <?php endforeach;?>
+                                        </ul>
+                                    </div>
+                                    <?php endif;?>
                                 </li>
-                            </ul>
-                        </li>
+                            <?php endforeach;?>
+                        <?php endif;?>
 
-                        <li><a href="#">Portfolio</a>
-                            <div class="drop-down two-column hover-fade">
-                                <ul>
-                                    <li><h2>Without Sidebar</h2></li>
-                                    <li><a href="portfolio-2-columns.html">Portfolio 2 Columns</a></li>
-                                    <li><a href="portfolio-3-columns.html">Portfolio 3 Columns</a></li>
-                                    <li><a href="portfolio-4-columns.html">Portfolio 4 Columns</a></li>
-                                    <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                                </ul>
-                                <ul>
-                                    <li><h2>With Sidebar</h2></li>
-                                    <li><a href="portfolio-2-columns-sidebar.html">Portfolio 2 Columns</a></li>
-                                    <li><a href="portfolio-3-columns-sidebar.html">Portfolio 3 Columns</a></li>
-                                    <li><a href="portfolio-4-columns-sidebar.html">Portfolio 4 Columns</a></li>
-                                    <li><a href="portfolio-single-sidebar.html">Portfolio Single</a></li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li><a href="#">Blog</a>
-                            <ul class="drop-down one-column hover-fade">
-                                <li><a href="#">Without Sidebar</a> <i class="fa fa-angle-right"></i>
-                                    <ul class="drop-down one-column hover-fade">
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="blog-single.html">Blog Single</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">With Sidebar</a> <i class="fa fa-angle-right"></i>
-                                    <ul class="drop-down one-column hover-fade">
-                                        <li><a href="blog-sidebar.html">Blog</a></li>
-                                        <li><a href="blog-single-sidebar.html">Blog Single</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li><a href="#">Shop</a>
-                            <ul class="drop-down one-column hover-fade">
-                                <li><a href="#">Without Sidebar</a> <i class="fa fa-angle-right"></i>
-                                    <ul class="drop-down one-column hover-fade">
-                                        <li><a href="shop-3-columns.html">Shop 3 Columns</a></li>
-                                        <li><a href="shop-4-columns.html">Shop 4 Columns</a></li>
-                                        <li><a href="shop-single.html">Shop Single</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">With Sidebar</a> <i class="fa fa-angle-right"></i>
-                                    <ul class="drop-down one-column hover-fade">
-                                        <li><a href="shop-3-columns-sidebar.html">Shop 3 Columns</a></li>
-                                        <li><a href="shop-4-columns-sidebar.html">Shop 4 Columns</a></li>
-                                        <li><a href="shop-single-sidebar.html">Shop Single</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li><a href="#">Shortcodes</a>
-                            <ul class="drop-down one-column hover-fade">
-                                <li><a href="typography.html">Typography</a></li>
-                                <li><a href="elements.html">Elements</a></li>
-                                <li><a href="columns.html">Columns</a></li>
-                            </ul>
-                        </li>
-
-                        <li><a href="#">Mega Menu</a>
-
-                            <div class="drop-down full-width hover-fade">
-
-                                <ul>
-                                    <li><h2>Features 1</h2></li>
-                                    <li><a href="#">Clean Design</a></li>
-                                    <li><a href="#">40 HTML Pages</a></li>
-                                    <li><a href="#">Responsive Layout</a></li>
-                                    <li><a href="#">Cross-browser</a></li>
-                                    <li><a href="#">Easy to Customize</a></li>
-                                    <li><a href="#">Valid HTML5 Code</a></li>
-                                    <li><a href="#">8 Color Schemes</a></li>
-                                </ul>
-
-                                <ul>
-                                    <li><h2>Features 2</h2></li>
-                                    <li><a href="#">Portfolio Pages</a></li>
-                                    <li><a href="#">Blog Pages</a></li>
-                                    <li><a href="#">Shop Pages</a></li>
-                                    <li><a href="#">About Us Pages</a></li>
-                                    <li><a href="#">Services Pages</a></li>
-                                    <li><a href="#">Contact Us Page</a></li>
-                                    <li><a href="#">FAQ Page</a></li>
-                                </ul>
-
-                                <ul>
-                                    <li><h2>Features 3</h2></li>
-                                    <li><a href="#">Multipage Demo</a></li>
-                                    <li><a href="#">One Page Demo</a></li>
-                                    <li><a href="#">Coming Soon Page</a></li>
-                                    <li><a href="#">Pricing Pages</a></li>
-                                    <li><a href="#">404 Page</a></li>
-                                    <li><a href="#">Left/Right Sidebar</a></li>
-                                    <li><a href="#">Free Icon Fonts</a></li>
-                                </ul>
-
-                                <ul>
-                                    <li><h2>Features 4</h2></li>
-                                    <li><a href="#">Video Support</a></li>
-                                    <li><a href="#">CSS3 Animations</a></li>
-                                    <li><a href="#">Mega Menu</a></li>
-                                    <li><a href="#">Boxed/Wide Layouts</a></li>
-                                    <li><a href="#">Many Shortcodes</a></li>
-                                    <li><a href="#">Contact Form</a></li>
-                                    <li><a href="#">Newsletter Form</a></li>
-                                </ul>
-
-                            </div>
-
-                        </li>
 
                         <li class="login-form"> <i class="fa fa-user"></i>
 

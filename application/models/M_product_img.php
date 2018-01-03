@@ -18,9 +18,7 @@ class M_product_img extends MY_Model
     }
 
     public function loadByProductId($product_id){
-        $where[] = ['eq'=>[
-           'product_id', $product_id
-        ]];
+        $where['eq']['product_id'][] = $product_id;
         return $this->getCollection($where);
     }
 }

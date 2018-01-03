@@ -110,14 +110,10 @@ class Product extends MY_Controller
                 if ($key == 'product_category_ids') {
                     $val = explode(',', $value);
                     foreach ($val as $v) {
-                        $where[] = [
-                            'like' => [$key, $v]
-                        ];
+                        $where['like'][$key][] = $v;
                     }
                 } else {
-                    $where[] = [
-                        'like' => [$key, $value]
-                    ];
+                    $where['like'][$key][] = $value;
                 }
             }
         }

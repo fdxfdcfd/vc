@@ -36,7 +36,7 @@ class MY_Controller extends CI_Controller
             $this->data['header']['css']= [];
             $this->data['footer']['js']= [];
             $this->data['footer']['script']= '';
-            $this->data['topNav']= [];
+            $this->data['topNav']= $this->getTopNav();
             $this->data['botNav']= [];
             $this->data['footer']['messages']['success']= $this->getSuccessMessage();
             $this->data['footer']['messages']['error']= $this->getErrorMessage();
@@ -53,6 +53,14 @@ class MY_Controller extends CI_Controller
         }else{
             return false;
         }
+    }
+
+    protected function getTopNav(){
+        $data= [];
+        $this->load->model('M_catalog_category');
+        $categories = new M_catalog_category();
+        $data =$categories->getMenuHome();
+        return $data;
     }
 
     /**

@@ -21,18 +21,16 @@ class M_catalog_category extends MY_Model
     {
         $root_id = 0;
         $tree='';
-        $tmp= $this->getCategoryByParentId(0);
+        $tmp= $this->getCategoryByParentIdJson(0);
         if(count($tmp)){
             $tree.= $tmp;
         }
         return $tree;
     }
 
-    public function getCategoryByParentId($id)
+    public function getCategoryByParentIdJson($id)
     {
-        $where[] = [
-            'eq' => ['parent_id', $id]
-        ];
+        $where['eq']['parent_id'][] = $id;
         $tmpCategory = $this->getCollection($where);
         $d=[];
         $tmp = '';
@@ -40,12 +38,42 @@ class M_catalog_category extends MY_Model
             $tmp.= "{";
             $tmp.= "id: \"cat_$c->entity_id\",";
             $tmp.= "text: \"$c->category_name\"";
-            $r= $this->getCategoryByParentId($c->entity_id);
+            $r= $this->getCategoryByParentIdJson($c->entity_id);
             if(trim($r) != ''){
                 $tmp.=",children: [ $r ]";
             }
             $tmp.= "},";
         }
         return $tmp;
+    }
+
+    public function getMenuHome(){
+        $data = [];
+        $data = $this->getMenu(0);
+        $data = reset($data);
+        return $data;
+    }
+
+    public function getMenu($parent = 0){
+        $data = [];
+        $tmp = $this->getCategoryByParentId($parent);
+        if (is_array($tmp) || is_object($tmp)) {
+            foreach ($tmp as $t) {
+                $data[$t->entity_id]['name'] = $t->category_name;
+                $data[$t->entity_id]['child'] = $this->getMenu($t->entity_id);
+            }
+        }
+        return $data;
+    }
+    protected function getCategoryByParentId($parent = 0){
+        $categories = new M_catalog_category();
+        $where['eq']['is_active'][] =1;
+        $where['eq']['parent_id'][] =$parent;
+        $query = $categories->getCollection($where);
+        if(count($query)){
+            return $query;
+        }else{
+            return false;
+        }
     }
 }

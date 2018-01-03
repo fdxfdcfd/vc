@@ -112,24 +112,42 @@ class MY_Model extends CI_Model
             $this->db->join($join[0], $join[1]);
         }
         if ($where) {
-            foreach ($where as $w) {
-                $key = key($w);
-                $value= $w[$key];
+            foreach ($where as $key => $value) {
                 if($key==='eq')
                 {
-                    $this->db->where($value[0],$value[1]);
+                    foreach ($value as $k=>$v) {
+                        foreach ($v as $val) {
+                            $this->db->where($k, $val);
+                        }
+                    }
                 }
                 if($key === 'in'){
-                    $this->db->where_in($value[0],$value[1]); // $value[1]= array()
+                    foreach ($value as $k=>$v) {
+                        foreach ($v as $val) {
+                            $this->db->where_in($k, $val);// $v is array
+                        }
+                    }
                 }
                 if($key === 'nin'){
-                    $this->db->where_not_in($value[0],$value[1]); // $value[1]= array()
+                    foreach ($value as $k=>$v) {
+                        foreach ($v as $val) {
+                            $this->db->where_not_in($k, $val);// $v is array
+                        }
+                    }
                 }
                 if($key === 'neq'){
-                    $this->db->where($value[0].' != ',$value[1]); // $value[1]= array()
+                    foreach ($value as $k=>$v) {
+                        foreach ($v as $val) {
+                            $this->db->where($k.' != ', $val);
+                        }
+                    }
                 }
                 if($key === 'like'){
-                    $this->db->like($value[0],$value[1]); // $value[1]= array()
+                    foreach ($value as $k=>$v) {
+                        foreach ($v as $val) {
+                            $this->db->like($k, $val);
+                        }
+                    }
                 }
             }
         }
