@@ -3,26 +3,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Basic Page Needs
+      ================================================== -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--[if ie]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
 
-    <title><?=$title?></title>
+    <title>Adelia HTML Template | Home</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
-    <link href="<?php echo base_url('public/')?>css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo base_url('public/')?>font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <!-- Toastr style -->
-    <link href="<?php echo base_url('public/')?>css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- CSS
+      ================================================== -->
+    <link rel="stylesheet" href="<?php echo base_url('public/')?>css/style.css" />
+    <link rel="stylesheet" href="<?php echo base_url('public/')?>css/colors/orange.css" id="colors" />
+    <link rel="stylesheet" href="<?php echo base_url('public/')?>css/skeleton.css" />
+    <link rel="stylesheet" href="<?php echo base_url('public/')?>css/layout.css" />
+    <link rel="stylesheet" href="<?php echo base_url('public/')?>css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('public/')?>css/animate.css" />
+    <link rel="stylesheet" href="<?php echo base_url('public/')?>js/layerslider/css/layerslider.css" />
+    <link rel="stylesheet" href="<?php echo base_url('public/')?>js/fancybox/jquery.fancybox.css" />
 
-    <!-- Gritter -->
-    <link href="<?php echo base_url('public/')?>js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
-
-    <link href="<?php echo base_url('public/')?>css/animate.css" rel="stylesheet">
-    <link href="<?php echo base_url('public/')?>css/style.css" rel="stylesheet">
-    <script src="<?php echo base_url('public/')?>js/jquery-3.1.1.min.js"></script>
     <?php foreach($css as $c):?>
         <link href="<?php echo base_url('public/css/').$c?>" rel="stylesheet">
     <?php endforeach;?>
-
+    <!-- HTML5 Shiv
+        ================================================== -->
+    <script src="<?php echo base_url('public/')?>js/jquery.modernizr.js"></script>
 </head>

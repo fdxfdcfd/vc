@@ -9,7 +9,7 @@ $userData = $this->session->userdata('currentUser');
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="<?php if(file_exists(base_url('public/img/users/').$this->session->userdata('currentUser')['user_img']))echo base_url('public/img/users/').$userData['user_img']; else echo base_url('public/img/users/')."profile_small.jpg";?>" />
+                            <img alt="image" class="img-circle" src="<?php if(file_exists(base_url('public/admin/img/users/').$this->session->userdata('currentUser')['user_img']))echo base_url('public/admin/img/users/').$userData['user_img']; else echo base_url('public/admin/img/users/')."profile_small.jpg";?>" />
                              </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?php echo $userData['firstname']." ".$userData['lastname'] ?></strong>

@@ -88,7 +88,7 @@ class Product extends MY_Controller
         $this->data['dataSearch'] = $dataSearch;
         $this->data['params'] = $params;
         $this->data['categories'] = $categoris->getAll('menu', 'category_name');
-        $this->template->load('template/master', 'page/admin/v_product_list', $this->data);
+        $this->template->load('template/admin/master', 'page/admin/v_product_list', $this->data);
     }
 
     public function deletePost($id)
@@ -163,7 +163,7 @@ class Product extends MY_Controller
                 $this->session->unset_userdata('product_delete_img');
                 $this->data['product_imgs'] = $imgs;
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
             } else {
                 show_404();
             }
@@ -229,7 +229,7 @@ class Product extends MY_Controller
 
                 $this->data['product_imgs'] = unserialize($this->session->userdata('product_edit_img'));
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
             } else {
                 $data = $this->input->post();
                 if (!isset($data['is_instock'])) {
@@ -303,7 +303,7 @@ class Product extends MY_Controller
             $this->session->unset_userdata('product_edit_img');
             $this->session->unset_userdata('product_delete_img');
             $this->load->helper('form');
-            $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
+            $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
         } else {
             $this->load->helper(array('form'));
             $this->load->library('form_validation');
@@ -366,7 +366,7 @@ class Product extends MY_Controller
 
                 $this->data['product_imgs'] = unserialize($this->session->userdata('product_edit_img'));
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
             } else {
                 $data = $this->input->post();
                 if (!isset($data['is_instock'])) {

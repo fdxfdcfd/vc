@@ -1,56 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<!-- Mainly scripts -->
-<script src="<?php echo base_url('public/') ?>js/bootstrap.min.js"></script>
-<script src="<?php echo base_url('public/') ?>js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="<?php echo base_url('public/') ?>js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-<!---->
-<!--<!-- Custom and plugin javascript -->-->
-<script src="<?php echo base_url('public/') ?>js/inspinia.js"></script>
-<script src="<?php echo base_url('public/') ?>js/plugins/pace/pace.min.js"></script>
-<!-- Toastr -->
-<script src="<?php echo base_url('public/') ?>js/plugins/toastr/toastr.min.js"></script>
-<script>
-    toastr.options = {
-        "closeButton": false,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": false,
-        "positionClass": "toast-top-right",
-        "preventDuplicates": false,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
-    }
-</script>
-<?php foreach($js as $j):?>
-    <script src="<?php echo base_url('public/js/').$j ?>"></script>
-<?php endforeach;?>
-
-
-<script>
-    $(document).ready(function() {
-        <?php foreach ($messages['success'] as $s) {
-        echo "toastr['success']('$s', 'Success');";
-    }
-        ?>
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        <?php foreach ($messages['error'] as $s) {
-        echo "toastr['error']('$s', 'error');";
-    }
-        ?>
-    });
-</script>
-<script>
-    <?php echo $script;?>
-</script>
+<script src="<?php echo base_url('public/')?>js/jquery-1.8.3.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/appear.js"></script>
+<script src="<?php echo base_url('public/')?>js/jquery.easing.1.3.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/layerslider/js/jquerytransit.js"></script>
+<script src="<?php echo base_url('public/')?>js/layerslider/js/layerslider.transitions.js"></script>
+<script src="<?php echo base_url('public/')?>js/layerslider/js/layerslider.kreaturamedia.jquery.js"></script>
+<script src="<?php echo base_url('public/')?>js/jquery.cycle.all.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/jquery.blackandwhite.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/jquery.jcarousel.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/jquery.jflickrfeed.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/fancybox/jquery.fancybox.pack.js"></script>
+<script src="<?php echo base_url('public/')?>js/jquery.touchswipe.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/jquery.easy-pie-chart.js"></script>
+<script src="<?php echo base_url('public/')?>js/config.js"></script>
+<script src="<?php echo base_url('public/')?>js/custom.js"></script>

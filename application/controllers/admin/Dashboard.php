@@ -9,6 +9,6 @@ class Dashboard extends MY_Controller {
         $this->data['breadcrumb'] = [
             ['Tổng quan',base_url('admin/dashboard/index')]
         ];
-        $this->template->load('template/master', 'page/admin/v_dashboard',$this->data);
+        $this->template->load('template/admin/master', 'page/admin/v_dashboard',$this->data);
 	}
 }

@@ -1,123 +1,246 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<div class="row border-bottom">
-    <nav class="navbar navbar-static-top  " role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-            <form role="search" class="navbar-form-custom" action="search_results.html">
-                <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
-                </div>
-            </form>
+<header id="header">
+    <div class="container">
+        <div class="eight columns">
+            <div id="logo"> </div>
+            <!--/ #logo-->
+
         </div>
-        <ul class="nav navbar-top-links navbar-right">
-            <li>
-                <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
-            </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                    <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
-                </a>
-                <ul class="dropdown-menu dropdown-messages">
-                    <li>
-                        <div class="dropdown-messages-box">
-                            <a href="profile.html" class="pull-left">
-                                <img alt="image" class="img-circle" src="<?php echo base_url('public/')?>img/a7.jpg">
-                            </a>
-                            <div class="media-body">
-                                <small class="pull-right">46h ago</small>
-                                <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
-                                <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <div class="dropdown-messages-box">
-                            <a href="profile.html" class="pull-left">
-                                <img alt="image" class="img-circle" src="<?php echo base_url('public/')?>img/a4.jpg">
-                            </a>
-                            <div class="media-body ">
-                                <small class="pull-right text-navy">5h ago</small>
-                                <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
-                                <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <div class="dropdown-messages-box">
-                            <a href="profile.html" class="pull-left">
-                                <img alt="image" class="img-circle" src="<?=base_url('public/')?>img/profile.jpg">
-                            </a>
-                            <div class="media-body ">
-                                <small class="pull-right">23h ago</small>
-                                <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
-                                <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <div class="text-center link-block">
-                            <a href="mailbox.html">
-                                <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
-                            </a>
-                        </div>
-                    </li>
+        <!--/ .columns-->
+
+        <div class="eight columns">
+            <div class="widget widget_contacts">
+                <ul class="social-icons">
+                    <li class="vimeo"><a href="#">Vimeo</a></li>
+                    <li class="skype"><a href="#">Skype</a></li>
+                    <li class="dribble"><a href="#">Dribble</a></li>
+                    <li class="youtube"><a href="#">Youtube</a></li>
+                    <li class="twitter"><a href="#">Twitter</a></li>
+                    <li class="facebook"><a href="#">Facebook</a></li>
+                    <li class="rss"><a href="#">Rss</a></li>
                 </ul>
-            </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                    <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
-                </a>
-                <ul class="dropdown-menu dropdown-alerts">
-                    <li>
-                        <a href="mailbox.html">
-                            <div>
-                                <i class="fa fa-envelope fa-fw"></i> You have 16 messages
-                                <span class="pull-right text-muted small">4 minutes ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="profile.html">
-                            <div>
-                                <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                <span class="pull-right text-muted small">12 minutes ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="grid_options.html">
-                            <div>
-                                <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                <span class="pull-right text-muted small">4 minutes ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <div class="text-center link-block">
-                            <a href="notifications.html">
-                                <strong>See All Alerts</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </li>
+                <!--/ .social-icons -->
 
+            </div>
+        </div>
+        <!--/ .columns-->
 
-            <li>
-                <a href="<?php echo base_url('admin/login/logout')?>">
-                    <i class="fa fa-sign-out"></i> Log out
-                </a>
-            </li>
-        </ul>
+        <div class="clear"></div>
+        <div class="sixteen columns">
+            <div class="menu-container clearfix">
 
-    </nav>
-</div>
+                <nav class="mega-menu">
+
+                    <label for="mobile-button"> <i class="fa fa-bars"></i> </label>
+                    <input id="mobile-button" type="checkbox">
+
+                    <ul class="collapse">
+                        <li class="current-menu-item"><a href="#">Home</a>
+                            <ul class="drop-down one-column hover-fade">
+                                <li class="current-menu-item"><a href="index.html">Home Page 1</a></li>
+                                <li><a href="index-2.html">Home Page 2</a></li>
+                                <li><a href="index-3.html">Home Page 3</a></li>
+                                <li><a href="index-4.html">Home Page 4</a></li>
+                                <li><a href="index-5.html">Home Page 5</a></li>
+                                <li><a href="one-page-template.html">One Page Template</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#">Pages</a>
+                            <ul class="drop-down two-column hover-fade">
+                                <li>
+                                    <ul>
+                                        <li><a href="about-us.html">About Us</a></li>
+                                        <li><a href="about-us-2.html">About Us 2</a></li>
+                                        <li><a href="services.html">Services</a></li>
+                                        <li><a href="services-2.html">Services 2</a></li>
+                                        <li><a href="pricing-tables.html">Pricing Tables</a></li>
+                                        <li><a href="pricing-tables-2.html">Pricing Tables 2</a></li>
+                                        <li><a href="contact.html">Contact Us</a></li>
+                                    </ul>
+                                    <ul>
+                                        <li><a href="faq.html">FAQ + sidebar</a></li>
+                                        <li><a href="side-nav.html">Side Navigation</a></li>
+                                        <li><a href="right-sidebar.html">Right Sidebar</a></li>
+                                        <li><a href="left-sidebar.html">Left Sidebar</a></li>
+                                        <li><a href="404.html">404 Page</a></li>
+                                        <li><a href="coming-soon.html">Coming Soon</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#">Portfolio</a>
+                            <div class="drop-down two-column hover-fade">
+                                <ul>
+                                    <li><h2>Without Sidebar</h2></li>
+                                    <li><a href="portfolio-2-columns.html">Portfolio 2 Columns</a></li>
+                                    <li><a href="portfolio-3-columns.html">Portfolio 3 Columns</a></li>
+                                    <li><a href="portfolio-4-columns.html">Portfolio 4 Columns</a></li>
+                                    <li><a href="portfolio-single.html">Portfolio Single</a></li>
+                                </ul>
+                                <ul>
+                                    <li><h2>With Sidebar</h2></li>
+                                    <li><a href="portfolio-2-columns-sidebar.html">Portfolio 2 Columns</a></li>
+                                    <li><a href="portfolio-3-columns-sidebar.html">Portfolio 3 Columns</a></li>
+                                    <li><a href="portfolio-4-columns-sidebar.html">Portfolio 4 Columns</a></li>
+                                    <li><a href="portfolio-single-sidebar.html">Portfolio Single</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li><a href="#">Blog</a>
+                            <ul class="drop-down one-column hover-fade">
+                                <li><a href="#">Without Sidebar</a> <i class="fa fa-angle-right"></i>
+                                    <ul class="drop-down one-column hover-fade">
+                                        <li><a href="blog.html">Blog</a></li>
+                                        <li><a href="blog-single.html">Blog Single</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">With Sidebar</a> <i class="fa fa-angle-right"></i>
+                                    <ul class="drop-down one-column hover-fade">
+                                        <li><a href="blog-sidebar.html">Blog</a></li>
+                                        <li><a href="blog-single-sidebar.html">Blog Single</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#">Shop</a>
+                            <ul class="drop-down one-column hover-fade">
+                                <li><a href="#">Without Sidebar</a> <i class="fa fa-angle-right"></i>
+                                    <ul class="drop-down one-column hover-fade">
+                                        <li><a href="shop-3-columns.html">Shop 3 Columns</a></li>
+                                        <li><a href="shop-4-columns.html">Shop 4 Columns</a></li>
+                                        <li><a href="shop-single.html">Shop Single</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">With Sidebar</a> <i class="fa fa-angle-right"></i>
+                                    <ul class="drop-down one-column hover-fade">
+                                        <li><a href="shop-3-columns-sidebar.html">Shop 3 Columns</a></li>
+                                        <li><a href="shop-4-columns-sidebar.html">Shop 4 Columns</a></li>
+                                        <li><a href="shop-single-sidebar.html">Shop Single</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#">Shortcodes</a>
+                            <ul class="drop-down one-column hover-fade">
+                                <li><a href="typography.html">Typography</a></li>
+                                <li><a href="elements.html">Elements</a></li>
+                                <li><a href="columns.html">Columns</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#">Mega Menu</a>
+
+                            <div class="drop-down full-width hover-fade">
+
+                                <ul>
+                                    <li><h2>Features 1</h2></li>
+                                    <li><a href="#">Clean Design</a></li>
+                                    <li><a href="#">40 HTML Pages</a></li>
+                                    <li><a href="#">Responsive Layout</a></li>
+                                    <li><a href="#">Cross-browser</a></li>
+                                    <li><a href="#">Easy to Customize</a></li>
+                                    <li><a href="#">Valid HTML5 Code</a></li>
+                                    <li><a href="#">8 Color Schemes</a></li>
+                                </ul>
+
+                                <ul>
+                                    <li><h2>Features 2</h2></li>
+                                    <li><a href="#">Portfolio Pages</a></li>
+                                    <li><a href="#">Blog Pages</a></li>
+                                    <li><a href="#">Shop Pages</a></li>
+                                    <li><a href="#">About Us Pages</a></li>
+                                    <li><a href="#">Services Pages</a></li>
+                                    <li><a href="#">Contact Us Page</a></li>
+                                    <li><a href="#">FAQ Page</a></li>
+                                </ul>
+
+                                <ul>
+                                    <li><h2>Features 3</h2></li>
+                                    <li><a href="#">Multipage Demo</a></li>
+                                    <li><a href="#">One Page Demo</a></li>
+                                    <li><a href="#">Coming Soon Page</a></li>
+                                    <li><a href="#">Pricing Pages</a></li>
+                                    <li><a href="#">404 Page</a></li>
+                                    <li><a href="#">Left/Right Sidebar</a></li>
+                                    <li><a href="#">Free Icon Fonts</a></li>
+                                </ul>
+
+                                <ul>
+                                    <li><h2>Features 4</h2></li>
+                                    <li><a href="#">Video Support</a></li>
+                                    <li><a href="#">CSS3 Animations</a></li>
+                                    <li><a href="#">Mega Menu</a></li>
+                                    <li><a href="#">Boxed/Wide Layouts</a></li>
+                                    <li><a href="#">Many Shortcodes</a></li>
+                                    <li><a href="#">Contact Form</a></li>
+                                    <li><a href="#">Newsletter Form</a></li>
+                                </ul>
+
+                            </div>
+
+                        </li>
+
+                        <li class="login-form"> <i class="fa fa-user"></i>
+
+                            <ul class="drop-down hover-fade">
+                                <li>
+
+                                    <form method="post" action="#">
+                                        <table>
+                                            <tr>
+                                                <td colspan="2"><input type="email" name="email" placeholder="Your email address" required></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"><input type="password" name="password" placeholder="Password" required></td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="#" class="button medium color">SIGN IN</a></td>
+                                                <td><label><input type="checkbox" name="check_box">Keep me signed in </label></td>
+                                            </tr>
+                                        </table>
+                                    </form>
+
+                                </li>
+                            </ul>
+
+                        </li>
+                        <li class="search-bar"> <i class="fa fa-search"></i>
+
+                            <ul class="drop-down hover-fade">
+                                <li>
+
+                                    <form method="post" action="#">
+                                        <table>
+                                            <tr>
+                                                <td><input type="text" name="serach_bar" placeholder="Type Keyword and Hit Enter"></td>
+                                            </tr>
+                                        </table>
+                                    </form>
+
+                                </li>
+                            </ul>
+
+                        </li>
+                    </ul>
+
+                </nav>
+                <!-- nav container end -->
+
+            </div>
+            <!--/ .menu-container-->
+
+        </div>
+        <!--/ .columns-->
+
+    </div>
+    <!--/ .container-->
+
+</header>
+<!--/ #header-->

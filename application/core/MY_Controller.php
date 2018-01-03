@@ -15,21 +15,33 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $currentController= $this->router->fetch_class();
-        if(!$this->getCurrentUserData('admin_user_id') && $currentController != 'login'){
-           redirect('admin/login','index');
+        if($this->uri->segment(1) == "admin"){
+            $currentController= $this->router->fetch_class();
+            if(!$this->getCurrentUserData('admin_user_id') && $currentController != 'login'){
+                redirect('admin/login','index');
+            }
+            $this->data['title']= "VietCaD";
+            $this->data['header']['css']= [];
+            $this->data['footer']['js']= [];
+            $this->data['footer']['script']= '';
+            if($currentController != 'login') {
+                $this->data['leftNav'] = $this->getUserMenu();
+            }
+            $this->data['topNav']= [];
+            $this->data['botNav']= [];
+            $this->data['footer']['messages']['success']= $this->getSuccessMessage();
+            $this->data['footer']['messages']['error']= $this->getErrorMessage();
+        }else{
+            $this->data['title']= "VietCaD";
+            $this->data['header']['css']= [];
+            $this->data['footer']['js']= [];
+            $this->data['footer']['script']= '';
+            $this->data['topNav']= [];
+            $this->data['botNav']= [];
+            $this->data['footer']['messages']['success']= $this->getSuccessMessage();
+            $this->data['footer']['messages']['error']= $this->getErrorMessage();
         }
-        $this->data['title']= "VietCaD";
-        $this->data['header']['css']= [];
-        $this->data['footer']['js']= [];
-        $this->data['footer']['script']= '';
-        if($currentController != 'login') {
-            $this->data['leftNav'] = $this->getUserMenu();
-        }
-        $this->data['topNav']= [];
-        $this->data['botNav']= [];
-        $this->data['footer']['messages']['success']= $this->getSuccessMessage();
-        $this->data['footer']['messages']['error']= $this->getErrorMessage();
+
     }
 
     /**

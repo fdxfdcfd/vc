@@ -18,7 +18,7 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
     <script src="<?php echo base_url('public/js/') . $j ?>"></script>
 <?php endforeach; ?>
 <script>
-    var public_url = '<?= base_url('public/') ?>';
+    var public_url = '<?= base_url('public/admin/') ?>';
 </script>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -225,11 +225,11 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                                             <tr>
                                                 <td>
                                                     <img class="img-lg"
-                                                         src="<?= base_url('public/') ?>img/gallery/<?= $img->product_img_name ?>">
+                                                         src="<?= base_url('public/admin/') ?>img/gallery/<?= $img->product_img_name ?>">
                                                 </td>
                                                 <td>
                                                     <input type="text" class="form-control" disabled
-                                                           value="<?= base_url('public/') ?>img/gallery/<?= $img->product_img_name ?>">
+                                                           value="<?= base_url('public/admin/') ?>img/gallery/<?= $img->product_img_name ?>">
                                                 </td>
                                                 <td>
                                                     <button type="button" onclick="deleteImg(this)"

@@ -15,7 +15,7 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
     <script src="<?php echo base_url('public/js/') . $j ?>"></script>
 <?php endforeach; ?>
 <script>
-    var public_url = '<?= base_url('public/') ?>';
+    var public_url = '<?= base_url('public/admin/') ?>';
 </script>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">

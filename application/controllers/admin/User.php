@@ -73,7 +73,7 @@ class User extends MY_Controller
         $this->data['user_group'] = $userGroup;
         $start_index = ($start_index - 1) * $limit_per_page;
         $this->data['users'] = $user->getCollection(null, null, '*', $limit_per_page, $start_index);
-        $this->template->load('template/master', 'page/admin/v_user_list', $this->data);
+        $this->template->load('template/admin/master', 'page/admin/v_user_list', $this->data);
     }
 
     public function deletePost($field, $id)
@@ -121,7 +121,7 @@ class User extends MY_Controller
                     };
                         $('.chosen-select').chosen({width: \"100%\"});
                 ";
-                $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_user_edit', $this->data);
             } else {
                 show_404();
             }
@@ -187,7 +187,7 @@ class User extends MY_Controller
                     };
                         $('.chosen-select').chosen({width: \"100%\"});
                 ";
-                $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_user_edit', $this->data);
             } else {
                 $data = $this->input->post();
                 $admin_user_id = $data['admin_user_id'];
@@ -239,7 +239,7 @@ class User extends MY_Controller
             $userGroup = $userGroup->getAll('menu', 'user_group_name');
             $this->data['user_group'] = $userGroup;
             $this->load->helper('form');
-            $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
+            $this->template->load('template/admin/master', 'page/admin/v_user_edit', $this->data);
 
         } else {
             $this->load->helper(array('form'));
@@ -300,7 +300,7 @@ class User extends MY_Controller
                 $userGroup = $userGroup->getAll('menu', 'user_group_name');
                 $this->data['user_group'] = $userGroup;
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_user_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_user_edit', $this->data);
             } else {
                 $data = $this->input->post();
                 $admin_user_id = $data['admin_user_id'];

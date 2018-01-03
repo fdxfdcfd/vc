@@ -16,11 +16,11 @@ $CI->load->helper('url');
 
     <title>INSPINIA | 404 Error</title>
 
-    <link href="<?php echo base_url('public/')?>css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo base_url('public/')?>font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="<?php echo base_url('public/admin/')?>css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url('public/admin/')?>font-awesome/css/font-awesome.css" rel="stylesheet">
 
-    <link href="<?php echo base_url('public/')?>css/animate.css" rel="stylesheet">
-    <link href="<?php echo base_url('public/')?>css/style.css" rel="stylesheet">
+    <link href="<?php echo base_url('public/admin/')?>css/animate.css" rel="stylesheet">
+    <link href="<?php echo base_url('public/admin/')?>css/style.css" rel="stylesheet">
 
 </head>
 
@@ -43,8 +43,8 @@ $CI->load->helper('url');
 </div>
 
 <!-- Mainly scripts -->
-<script src="<?php echo base_url('public/')?>js/jquery-3.1.1.min.js"></script>
-<script src="<?php echo base_url('public/')?>js/bootstrap.min.js"></script>
+<script src="<?php echo base_url('public/admin/')?>js/jquery-3.1.1.min.js"></script>
+<script src="<?php echo base_url('public/admin/')?>js/bootstrap.min.js"></script>
 
 </body>
 

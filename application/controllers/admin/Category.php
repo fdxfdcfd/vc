@@ -90,7 +90,7 @@ class Category extends MY_Controller
         $this->load->helper('form');
         //$this->data['dataSearch'] = $dataSearch;
         $this->data['params'] = $params;
-        $this->template->load('template/master', 'page/admin/v_category_list', $this->data);
+        $this->template->load('template/admin/master', 'page/admin/v_category_list', $this->data);
     }
 
     public function deletePost($id)
@@ -157,7 +157,7 @@ class Category extends MY_Controller
                 $this->data['js'][] = 'plugins/dropzone/dropzone.js';
                 $this->data['url'] = 'admin/product/edit/id/' . $id;
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_category_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_category_edit', $this->data);
             } else {
                 show_404();
             }
@@ -223,7 +223,7 @@ class Category extends MY_Controller
 
                 $this->data['product_imgs'] = unserialize($this->session->userdata('product_edit_img'));
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
             } else {
                 $data = $this->input->post();
                 if (!isset($data['is_instock'])) {
@@ -297,7 +297,7 @@ class Category extends MY_Controller
             $this->session->unset_userdata('product_edit_img');
             $this->session->unset_userdata('product_delete_img');
             $this->load->helper('form');
-            $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
+            $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
         } else {
             $this->load->helper(array('form'));
             $this->load->library('form_validation');
@@ -360,7 +360,7 @@ class Category extends MY_Controller
 
                 $this->data['product_imgs'] = unserialize($this->session->userdata('product_edit_img'));
                 $this->load->helper('form');
-                $this->template->load('template/master', 'page/admin/v_product_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
             } else {
                 $data = $this->input->post();
                 if (!isset($data['is_instock'])) {
