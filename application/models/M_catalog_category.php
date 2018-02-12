@@ -6,9 +6,12 @@ class M_catalog_category extends MY_Model
     protected $_entity_id = null;
     protected $_category_name = null;
     protected $_parent_id = null;
+    protected $_category_type = null;
     protected $_content = null;
+    protected $_link_outsite = null;
     protected $_level = null;
     protected $_is_anchor = null;
+    protected $_order = null;
 
     public function __construct()
     {
@@ -69,7 +72,8 @@ class M_catalog_category extends MY_Model
         $categories = new M_catalog_category();
         $where['eq']['is_active'][] =1;
         $where['eq']['parent_id'][] =$parent;
-        $query = $categories->getCollection($where);
+        $order['order']='asc';
+        $query = $categories->getCollection($where,null,'*',null,0,$order);
         if(count($query)){
             return $query;
         }else{

@@ -12,10 +12,10 @@ $is_active = set_value('is_active') == false ? $product->getIsActive() : set_val
 $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
 ?>
 <?php foreach ($css as $c): ?>
-    <link href="<?php echo base_url('public/css/') . $c ?>" rel="stylesheet">
+    <link href="<?php echo base_url('public/admin/css/') . $c ?>" rel="stylesheet">
 <?php endforeach; ?>
 <?php foreach ($js as $j): ?>
-    <script src="<?php echo base_url('public/js/') . $j ?>"></script>
+    <script src="<?php echo base_url('public/admin/js/') . $j ?>"></script>
 <?php endforeach; ?>
 <script>
     var public_url = '<?= base_url('public/admin/') ?>';

@@ -29,68 +29,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
-    <!--    <div class="ibox-content m-b-sm border-bottom">-->
-    <!--        <div class="row">-->
-    <!--            <form action="" class="form">-->
-    <!--                <div class="col-sm-4">-->
-    <!--                    <div class="form-group">-->
-    <!--                        <label class="control-label" for="product_name">Product Name</label>-->
-    <!--                        <input type="text" id="product_name" name="product_name" placeholder="Product Name"-->
-    <!--                               class="form-control" value="--><? //= $product_name ?><!--">-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--                <div class="col-sm-2">-->
-    <!--                    <div class="form-group">-->
-    <!--                        <label class="control-label" for="price">Price</label>-->
-    <!--                        <input type="text" id="price" name="price" placeholder="Price" class="form-control"  value="-->
-    <? //= $price ?><!--">-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--                <div class="col-sm-2">-->
-    <!--                    <div class="form-group">-->
-    <!--                        <label class="control-label" for="qty">Quantity</label>-->
-    <!--                        <input type="text" id="qty" name="qty"  value="-->
-    <? //= $qty ?><!--" placeholder="Quantity"-->
-    <!--                               class="form-control">-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--                <div class="col-sm-4">-->
-    <!--                    <div class="form-group">-->
-    <!--                        <label class="control-label" for="is_instock">Stock</label>-->
-    <!--                        <select name="is_instock" id="is_instock" class="form-control">-->
-    <!--                            <option value="1" selected>In Stock</option>-->
-    <!--                            <option value="0">Out of Stock</option>-->
-    <!--                        </select>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--                <div class="col-sm-4">-->
-    <!--                    <div class="form-group">-->
-    <!--                        <label class="control-label" for="categories">Category</label>-->
-    <!--                        <select name="product_category_ids" id="categories" class="form-control">-->
-    <!--                            <option value="1" selected>Enabled</option>-->
-    <!--                            <option value="0">Disabled</option>-->
-    <!--                        </select>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--                <div class="col-sm-4">-->
-    <!--                    <div class="form-group">-->
-    <!--                        <label class="control-label" for="is_active">Status</label>-->
-    <!--                        <select name="is_active" id="is_active" class="form-control">-->
-    <!--                            <option value="1" selected>Enabled</option>-->
-    <!--                            <option value="0">Disabled</option>-->
-    <!--                        </select>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--                <div class="col-sm-4">-->
-    <!--                    <div class="form-group">-->
-    <!--                        <label class="control-label" for="submit">&nbsp;&nbsp;&nbsp;&nbsp;</label>-->
-    <!--                        <button id="submit" type="submit" class="btn btn-info align-bottom form-control">Search</button>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </form>-->
-    <!--        </div>-->
-    <!---->
-    <!--    </div>-->
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox">
@@ -102,6 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <th>Category Name</th>
                             <th>parent</th>
                             <th>Level</th>
+                            <th>Order</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -126,6 +65,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </td>
                                 <td>
                                     <?= $category->level ?>
+                                </td>
+                                <td>
+                                    <?= $category->order ?>
                                 </td>
                                 <td>
                                     <div class="btn-group">

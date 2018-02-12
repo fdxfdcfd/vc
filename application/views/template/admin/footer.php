@@ -31,7 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 </script>
 <?php foreach($js as $j):?>
-    <script src="<?php echo base_url('public/js/').$j ?>"></script>
+    <script src="<?php echo base_url('public/admin/js/').$j ?>"></script>
 <?php endforeach;?>
 
 

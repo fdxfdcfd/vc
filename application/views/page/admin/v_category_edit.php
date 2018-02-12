@@ -3,16 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $entity_id = set_value('entity_id') == false ? $categories->getEntityId() : set_value('entity_id');
 $category_name = set_value('category') == false ? $categories->getCategoryName() : set_value('category');
 $parent_id = set_value('parent_id') == false ? $categories->getParentId() : set_value('parent_id');
+$category_type = set_value('category_type') == false ? $categories->getCategoryType() : set_value('category_type');
 $content = set_value('content') == false ? $categories->getContent() : set_value('content');
+$link_outsite = set_value('link_outsite ') == false ? $categories->getLinkOutsite() : set_value('link_outsite ');
 $is_anchor = set_value('is_anchor') == false ? $categories->getIsAnchor() : set_value('is_anchor');
 $level = set_value('level') == false ? $categories->getLevel() : set_value('level');
-
+$order = set_value('order') == false ? $categories->getOrder() : set_value('order');
 ?>
 <?php foreach ($css as $c): ?>
-    <link href="<?php echo base_url('public/css/') . $c ?>" rel="stylesheet">
+    <link href="<?php echo base_url('public/admin/css/') . $c ?>" rel="stylesheet">
 <?php endforeach; ?>
 <?php foreach ($js as $j): ?>
-    <script src="<?php echo base_url('public/js/') . $j ?>"></script>
+    <script src="<?php echo base_url('public/admin/js/') . $j ?>"></script>
 <?php endforeach; ?>
 <script>
     var public_url = '<?= base_url('public/admin/') ?>';
@@ -40,10 +42,10 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
 <div class="wrapper wrapper-content animated fadeInRight ecommerce">
     <div class="row">
         <div class="col-lg-12">
-            <form id="form-product" action="<?= $url ?>" method="post">
+            <form id="form-category" action="<?= $url ?>" method="post">
                 <input type="hidden" name="entity_id" id="entity_id" value="<?= $entity_id ?>">
                 <div class="tabs-container">
-                    <button class="btn btn-info pull-right" type="submit">Save product</button>
+                    <button class="btn btn-info pull-right" type="submit">Save Category</button>
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#tab-1"> Product info</a></li>
                         <li class=""><a data-toggle="tab" href="#tab-2"> Data</a></li>
@@ -65,7 +67,8 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
                                                 <div class="col-sm-4">
                                                     <input type="hidden" name="parent_id"
                                                            id="parent_id" value="<?= $parent_id ?>">
-                                                    <button type="button" id="is_root" class="btn btn-success">Is root</button>
+                                                    <button type="button" id="is_root" class="btn btn-success">Is root
+                                                    </button>
                                                     <div id="category_tree">
                                                     </div>
 
@@ -73,27 +76,27 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
                                                 <div class="col-sm-4"></div>
 
                                             </div>
-
-                                            <!--                                    <div class="col-sm-9">-->
-                                            <!--                                        <div class="panel panel-default">-->
-                                            <!--                                            <div class="panel-heading">Category Info</div>-->
-                                            <!--                                            <div class="panel-body">-->
-                                            <!--                                                <div class="form-group"><label class="col-sm-2 control-label">Name:</label>-->
-                                            <!--                                                    <div class="col-sm-10"><input type="text" class="form-control"-->
-                                            <!--                                                                                  placeholder="Product name" name="product_name"-->
-                                            <!--                                                                                  id="product_name"-->
-                                            <!--                                                                                  value="-->
-                                            <? //= $product_name ?><!--" size="50"></div>-->
-                                            <!--                                                </div>-->
-                                            <!--                                            </div>-->
-                                            <!--                                        </div>-->
-                                            <!--                                    </div>-->
                                     </div>
                                     <div class="form-group"><label class="col-sm-2 control-label">Name:</label>
                                         <div class="col-sm-10"><input type="text" class="form-control"
-                                                                      placeholder="Product name" name="product_name"
-                                                                      id="product_name"
+                                                                      placeholder="Category name" name="category_name"
+                                                                      id="category_name"
                                                                       value="<?= $category_name ?>" size="50"></div>
+                                    </div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Category type</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control m-b" name="category_type">
+                                                <option value="1" <?php if ($category_type == 1) echo 'selected'; ?>>
+                                                    Product only
+                                                </option>
+                                                <option value="2" <?php if ($category_type == 2) echo 'selected'; ?>>
+                                                    Static block and product
+                                                </option>
+                                                <option value="3" <?php if ($category_type == 3) echo 'selected'; ?>>
+                                                    Static block
+                                                </option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="form-group"><label class="col-sm-2 control-label">Description:</label>
                                         <div class="col-sm-10">
@@ -105,6 +108,18 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
                                     <textarea style="display: none" name="content" id="content" cols="30" rows="10">
                                     <?= $content ?>
                                     </textarea>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Order:</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control" placeholder="Order" name="order"
+                                                                      id="order"
+                                                                      value="<?= $order ?>" size="50"></div>
+                                    </div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Link out site:</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control" placeholder="Link outsite" name="link_outsite"
+                                                                      id="link_outsite"
+                                                                      value="<?= $link_outsite ?>" size="50"></div>
+                                    </div>
                                 </fieldset>
 
                             </div>
@@ -120,17 +135,6 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
                     </div>
                 </div>
             </form>
-            <form role="form" action="<?= base_url('admin/product/uploadImg') ?>" method="post"
-                  enctype="multipart/form-data"
-                  class="cc-dropzone"
-                  id="cc-dropzone" style="display: none">
-                <div class="row">
-                    <h4>Upload product image </h4>
-                    <div class="fallback">
-                        <input name="file" id="file" type="file"/>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -142,6 +146,9 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
             minHeight: 300
         });
         $(".summernote").on("summernote.blur", function (e) {
+            $("#content").val($('.summernote').summernote('code'));
+        });
+        $('#form-category').submit(function(){
             $("#content").val($('.summernote').summernote('code'));
         });
         //datepiker
@@ -181,7 +188,7 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
             }, 250);
         });
         $('#category_tree').on('changed.jstree', function (e, data) {
-            if($('#category_tree').jstree('get_selected')[0]){
+            if ($('#category_tree').jstree('get_selected')[0]) {
                 var parent = $('#category_tree').jstree('get_selected')[0].substr(4);
                 $("#parent_id").val(parent);
             }
@@ -189,9 +196,9 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
 
         $('#category_tree').on("loaded.jstree", function (event, data) {
             var parent_id = $("#parent_id").val();
-                $('#category_tree').jstree('select_node', "#cat_" + parent_id);
+            $('#category_tree').jstree('select_node', "#cat_" + parent_id);
         });
-        $('#is_root').click(function(){
+        $('#is_root').click(function () {
             $('#category_tree').jstree(true).deselect_all();
             $("#parent_id").val(0);
         });
@@ -202,6 +209,7 @@ $level = set_value('level') == false ? $categories->getLevel() : set_value('leve
     $('#check_all_related').click(function () {
         var sku = search_sku
     });
+
     function getRelatedProduct() {
         var page = 1;
         $.ajax({

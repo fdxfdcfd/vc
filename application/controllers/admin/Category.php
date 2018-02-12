@@ -14,6 +14,10 @@ class Category extends MY_Controller
         $this->load->library('pagination');
     }
 
+    public function index()
+    {
+        redirect('admin/category/categorylist');
+    }
     public function categoryList()
     {
         $dataSearch = [];
@@ -68,7 +72,7 @@ class Category extends MY_Controller
             $config['num_tag_close'] = '</li>';
 
 
-            $config['base_url'] = base_url() . 'admin/product/productlist/';
+            $config['base_url'] = base_url() . 'admin/category/categoryList/';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config['use_page_numbers'] = TRUE;
@@ -80,10 +84,10 @@ class Category extends MY_Controller
             $this->data['link'] = $this->pagination->create_links();
         }
 
-        $this->data['title'] = "Quản lý Sản phẩm";
+        $this->data['title'] = "Quản lý danh mục";
         $this->data['breadcrumb'] = [
             'Home' => base_url('admin/dashboard/index'),
-            'Quản lý Sản phẩm' => base_url('admin/product/productList')
+            'Quản lý danh mục' => base_url('admin/category/categoryList')
         ];
         $this->data['footer']['js'][] = 'plugins/bootbox/bootbox.min.js';
 
@@ -100,7 +104,7 @@ class Category extends MY_Controller
         if ($category->getEntityId()) {
             $category->delete();
             $this->addSuccessMessage('Delete Category successful.');
-            redirect('admin/category/', 'categoryList');
+            redirect('admin/category/categorylist');
         }
     }
 
@@ -130,8 +134,8 @@ class Category extends MY_Controller
                 $this->data['title'] = "Quản lý Danh Mục";
                 $this->data['breadcrumb'] = [
                     'Home' => base_url('admin/dashboard/index'),
-                    'Quản lý Sản phẩm' => base_url('admin/category/categoryList'),
-                    'Cập nhật Sản phẩm' => base_url('admin/category/edit/id/') . $id
+                    'Quản lý danh mục' => base_url('admin/category/categoryList'),
+                    'Cập nhật danh mục' => base_url('admin/category/edit/id/') . $id
 
                 ];
                 $category = new M_catalog_category();
@@ -151,7 +155,7 @@ class Category extends MY_Controller
                 $this->data['js'][] = 'plugins/jsTree/jstree.min.js';
                 $this->data['css'][] = 'plugins/dropzone/dropzone.css';
                 $this->data['js'][] = 'plugins/dropzone/dropzone.js';
-                $this->data['url'] = 'admin/product/edit/id/' . $id;
+                $this->data['url'] = 'admin/category/edit/id/' . $id;
                 $this->load->helper('form');
                 $this->template->load('template/admin/master', 'page/admin/v_category_edit', $this->data);
             } else {
@@ -163,46 +167,30 @@ class Category extends MY_Controller
 
             $config = array(
                 array(
-                    'field' => 'product_name',
-                    'label' => 'Tên sản phẩm',
+                    'field' => 'category_name',
+                    'label' => 'Tên danh mục',
                     'rules' => 'required',
                     'errors' => array(
                         'required' => 'Bạn cần nhập %s.',
                     ),
-                ),
-//                array(
-//                    'field' => 'lastname',
-//                    'label' => 'Họ',
-//                    'rules' => 'required',
-//                    'errors' => array(
-//                        'required' => 'Bạn cần nhập %s.',
-//                    ),
-//                ),
-//                array(
-//                    'field' => 'email',
-//                    'label' => 'Email',
-//                    'rules' => 'required',
-//                    'errors' => array(
-//                        'required' => 'Bạn cần nhập %s.',
-//                    ),
-//                )
+                )
             );
             $this->form_validation->set_rules($config);
 
             if ($this->form_validation->run() == FALSE) {
                 $this->addErrorMessage('You must fill all field required.');
                 $id = $this->uri->segment(4);
-                $this->data['title'] = "Quản lý Sản phẩm";
+                $this->data['title'] = "Quản lý danh mục";
                 $this->data['breadcrumb'] = [
                     'Home' => base_url('admin/dashboard/index'),
-                    'Quản lý Sản phẩm' => base_url('admin/product/productList'),
-                    'Cập nhật Sản phẩm' => base_url('admin/product/edit/id/') . $id
+                    'Quản lý Danh mục' => base_url('admin/category/categoryList'),
+                    'Cập nhật Danh mục' => base_url('admin/category/edit/id/') . $id
 
                 ];
                 $this->data['product'] = $this->input->post();
                 $category = new M_catalog_category();
                 $treeCategory = $category->getCategoryTree();
-                $this->data['categories'] = $category->getAll();
+                $this->data['categories'] = $category;
                 $this->data['treeCategories'] = $treeCategory;
                 $this->data['css'][] = 'plugins/summernote/summernote.css';
                 $this->data['css'][] = 'plugins/summernote/summernote-bs3.css';
@@ -215,47 +203,28 @@ class Category extends MY_Controller
                 $this->data['js'][] = 'plugins/jsTree/jstree.min.js';
                 $this->data['css'][] = 'plugins/dropzone/dropzone.css';
                 $this->data['js'][] = 'plugins/dropzone/dropzone.js';
-                $this->data['url'] = 'admin/product/edit/id/' . $id;
+                $this->data['url'] = 'admin/category/edit/id/' . $id;
 
                 $this->data['product_imgs'] = unserialize($this->session->userdata('product_edit_img'));
                 $this->load->helper('form');
-                $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_category_edit', $this->data);
             } else {
                 $data = $this->input->post();
-                if (!isset($data['is_instock'])) {
-                    $data['is_instock'] = 0;
-                }
+
                 if (!isset($data['is_active'])) {
                     $data['is_active'] = 0;
                 }
-                $product_id = $data['entity_id'];
-                $product = new M_catalog_product();
-                $product->load($product_id);
 
-                $product->setData($data);
-                $product->save();
-                if ($sessionproductImage = unserialize($this->session->userdata('product_edit_img'))) {
-                    foreach ($sessionproductImage as $img) {
-                        $imgModel = new M_product_img();
-                        $imgModel->setData(['product_id' => $product->getEntityId(), 'product_img_name' => $img]);
-                        $imgModel->save();
-                    }
-                }
-                if ($sessionDeleteProductImage = unserialize($this->session->userdata('product_delete_img'))) {
-                    foreach ($sessionDeleteProductImage as $id => $name) {
-                        $imgModel = new M_product_img();
-                        $imgModel->load($id);
-                        $imgModel->delete();
-                        $link = 'public/img/gallery/'.$name;
-                        if(is_file($link)){
-                            unlink($link);
-                        }
-                    }
-                }
-                $this->session->unset_userdata('product_edit_img');
-                $this->session->unset_userdata('product_delete_img');
-                $this->addSuccessMessage('Save Product successful.');
-                redirect('admin/product', 'productList');
+                $data['content'] = $_POST['content'];
+                $data['level'] = $data['parent']+ 1;
+                $category_id = $data['entity_id'];
+                $category = new M_catalog_category();
+                $category->load($category_id);
+
+                $category->setData($data);
+                $category->save();
+                $this->addSuccessMessage('Save Category successful.');
+                redirect('admin/category', 'categorylist');
             }
         }
 
@@ -264,18 +233,17 @@ class Category extends MY_Controller
     public function create()
     {
         if (!$this->input->post()) {
-            $this->data['title'] = "Quản lý Sản phẩm";
+            $this->data['title'] = "Quản lý Danh Mục";
             $this->data['breadcrumb'] = [
                 'Home' => base_url('admin/dashboard/index'),
-                'Quản lý Sản phẩm' => base_url('admin/product/productList'),
-                'Cập nhật Sản phẩm' => base_url('admin/product/create')
+                'Quản lý Danh mục' => base_url('admin/category/categoryList'),
+                'Tạo Danh mục' => base_url('admin/category/create/')
 
             ];
-            $product = new M_catalog_product();
-            $this->data['product'] = $product;
             $category = new M_catalog_category();
-            $treeCategory = $category->getCategoryTree();
-            $this->data['categories'] = $category->getAll();
+            $this->data['categories'] = $category;
+            $cat = new M_catalog_category();
+            $treeCategory = $cat->getCategoryTree();
             $this->data['treeCategories'] = $treeCategory;
             $this->data['css'][] = 'plugins/summernote/summernote.css';
             $this->data['css'][] = 'plugins/summernote/summernote-bs3.css';
@@ -288,58 +256,38 @@ class Category extends MY_Controller
             $this->data['js'][] = 'plugins/jsTree/jstree.min.js';
             $this->data['css'][] = 'plugins/dropzone/dropzone.css';
             $this->data['js'][] = 'plugins/dropzone/dropzone.js';
-            $this->data['url'] = 'admin/product/create';
-            $this->data['product_imgs'] = [];
-            $this->session->unset_userdata('product_edit_img');
-            $this->session->unset_userdata('product_delete_img');
+            $this->data['url'] = 'admin/category/create/';
             $this->load->helper('form');
-            $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
+            $this->template->load('template/admin/master', 'page/admin/v_category_create', $this->data);
         } else {
             $this->load->helper(array('form'));
             $this->load->library('form_validation');
 
             $config = array(
                 array(
-                    'field' => 'product_name',
-                    'label' => 'Tên sản phẩm',
+                    'field' => 'category_name',
+                    'label' => 'Tên danh mục',
                     'rules' => 'required',
                     'errors' => array(
                         'required' => 'Bạn cần nhập %s.',
                     ),
-                ),
-//                array(
-//                    'field' => 'lastname',
-//                    'label' => 'Họ',
-//                    'rules' => 'required',
-//                    'errors' => array(
-//                        'required' => 'Bạn cần nhập %s.',
-//                    ),
-//                ),
-//                array(
-//                    'field' => 'email',
-//                    'label' => 'Email',
-//                    'rules' => 'required',
-//                    'errors' => array(
-//                        'required' => 'Bạn cần nhập %s.',
-//                    ),
-//                )
+                )
             );
             $this->form_validation->set_rules($config);
 
             if ($this->form_validation->run() == FALSE) {
                 $this->addErrorMessage('You must fill all field required.');
                 $id = $this->uri->segment(4);
-                $this->data['title'] = "Quản lý Sản phẩm";
+                $this->data['title'] = "Quản lý danh mục";
                 $this->data['breadcrumb'] = [
                     'Home' => base_url('admin/dashboard/index'),
-                    'Quản lý Sản phẩm' => base_url('admin/product/productList'),
-                    'Cập nhật Sản phẩm' => base_url('admin/product/create/')
+                    'Quản lý danh mục' => base_url('admin/category/categoryList'),
+                    'Tạo danh mục' => base_url('admin/category/create/')
 
                 ];
-                $this->data['product'] = $this->input->post();
+                $this->data['categories'] = $this->input->post();
                 $category = new M_catalog_category();
                 $treeCategory = $category->getCategoryTree();
-                $this->data['categories'] = $category->getAll();
                 $this->data['treeCategories'] = $treeCategory;
                 $this->data['css'][] = 'plugins/summernote/summernote.css';
                 $this->data['css'][] = 'plugins/summernote/summernote-bs3.css';
@@ -352,11 +300,9 @@ class Category extends MY_Controller
                 $this->data['js'][] = 'plugins/jsTree/jstree.min.js';
                 $this->data['css'][] = 'plugins/dropzone/dropzone.css';
                 $this->data['js'][] = 'plugins/dropzone/dropzone.js';
-                $this->data['url'] = 'admin/product/create';
-
-                $this->data['product_imgs'] = unserialize($this->session->userdata('product_edit_img'));
+                $this->data['url'] = 'admin/category/create';
                 $this->load->helper('form');
-                $this->template->load('template/admin/master', 'page/admin/v_product_edit', $this->data);
+                $this->template->load('template/admin/master', 'page/admin/v_category_create', $this->data);
             } else {
                 $data = $this->input->post();
                 if (!isset($data['is_instock'])) {
@@ -365,87 +311,15 @@ class Category extends MY_Controller
                 if (!isset($data['is_active'])) {
                     $data['is_active'] = 0;
                 }
-                $product = new M_catalog_product();
+                $data['content'] = addslashes($data['content']);
+                $data['level'] = $data['parent']+ 1;
+                $category = new M_catalog_category();
 
-                $product->setData($data);
-                $product->save();
-                if ($sessionproductImage = unserialize($this->session->userdata('product_edit_img'))) {
-                    foreach ($sessionproductImage as $img) {
-                        $imgModel = new M_product_img();
-                        $imgModel->setData(['product_id' => $product->getEntityId(), 'product_img_name' => $img]);
-                        $imgModel->save();
-                    }
-                }
-                if ($sessionDeleteProductImage = unserialize($this->session->userdata('product_delete_img'))) {
-                    foreach ($sessionDeleteProductImage as $id => $name) {
-                        $imgModel = new M_product_img();
-                        $imgModel->load($id);
-                        $imgModel->delete();
-
-                    }
-                }
-                $this->session->unset_userdata('product_edit_img');
-                $this->session->unset_userdata('product_delete_img');
-                $this->addSuccessMessage('Save Product successful.');
-                redirect('admin/product', 'productList');
+                $category->setData($data);
+                $category->save();
+                $this->addSuccessMessage('Save Category successful.');
+                redirect('admin/category', 'categoryList');
             }
         }
     }
-
-    public function uploadImg()
-    {
-        $sessionproductImage = unserialize($this->session->userdata('product_edit_img'));
-        $fieldname = 'file';
-        $this->load->library('upload');
-        //upload img
-        $config['upload_path'] = './public/img/gallery';
-        $config['allowed_types'] = 'gif|jpg|png';
-        $config['max_size'] = 20480000;
-        $config['encrypt_name'] = TRUE;
-        $this->upload->initialize($config);
-        if ($this->upload->do_upload($fieldname)) {
-            $upload = $this->upload->data();
-            $sessionproductImage[] = $upload['file_name'];
-            $this->session->set_userdata('product_edit_img', serialize($sessionproductImage));
-            $result = ['code' => 1, 'message' => $upload['file_name']];
-            echo json_encode($result);
-        } else {
-            $result = ['code' => 0, 'message' => $this->upload->display_errors()];
-            echo json_encode($result);
-        }
-    }
-
-    public function deleteImg()
-    {
-        $sessionDeleteProductImage = unserialize($this->session->userdata('product_delete_img'));
-        $sessionproductImage = unserialize($this->session->userdata('product_edit_img'));
-        $params = $this->input->post();
-        if (isset($params['img_id'])) {
-            if ($params['img_id'] != -1) {
-                $sessionDeleteProductImage[$params['img_id']] = $params['img_name'];
-            } else {
-                $sessionproductImage = array_diff($sessionproductImage, array($params['img_name']));
-            }
-            $this->session->set_userdata('product_edit_img', serialize($sessionproductImage));
-            $this->session->set_userdata('product_delete_img', serialize($sessionDeleteProductImage));
-            $result = ['result' => 1, 'message' => 'Success'];
-
-        } else {
-            $result = ['result' => 0, 'message' => 'Image id is not invalid.'];
-        }
-        echo json_encode($result);
-    }
-
-
-    public function loadRelatedProduct(){
-        $sessionRelatedProduct = unserialize($this->session->userdata('related_product_add'));
-//        $sessionDeleteRelatedProduct = unserialize($this->session->userdata('related_product_delete'));
-        $this->session->set_userdata('related_product_add', serialize($sessionRelatedProduct));
-
-        $params= $this->input->post();
-        $result = ['code'=>1,'message'=>'success'];
-        echo json_encode($result);
-    }
-
-
 }

@@ -101,7 +101,7 @@ class MY_Model extends CI_Model
      * @param int $start
      * @return mixed
      */
-    public function getCollection($where = null, $join = null, $select = '*', $limit = null , $start = 0)
+    public function getCollection($where = null, $join = null, $select = '*', $limit = null , $start = 0, $order = null)
     {
         if($limit){
             $this->db->limit($limit, $start);
@@ -149,6 +149,11 @@ class MY_Model extends CI_Model
                         }
                     }
                 }
+            }
+        }
+        if($order){
+            foreach ($order as $key=>$value){
+                $this->db->order_by($key, $value);
             }
         }
         return  $this->db->get()->result();
