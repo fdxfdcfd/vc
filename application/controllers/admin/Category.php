@@ -18,6 +18,7 @@ class Category extends MY_Controller
     {
         redirect('admin/category/categorylist');
     }
+
     public function categoryList()
     {
         $dataSearch = [];
