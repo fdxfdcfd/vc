@@ -404,7 +404,7 @@ class Product extends MY_Controller
         $fieldname = 'file';
         $this->load->library('upload');
         //upload img
-        $config['upload_path'] = './public/img/gallery';
+        $config['upload_path'] = './public/admin/img/gallery';
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = 20480000;
         $config['encrypt_name'] = TRUE;

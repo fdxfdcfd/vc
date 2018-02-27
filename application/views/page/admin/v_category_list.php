@@ -71,7 +71,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="<?php echo base_url("admin/category/edit/") . $category->entity_id ?>"
+                                        <a href="<?php echo base_url("admin/category/edit/id/") . $category->entity_id ?>"
                                            class="btn-white btn btn-xs btn-info" role="button">Edit</a>
                                         <a href2="<?php echo base_url("admin/category/deletePost/") . $category->entity_id ?>"
                                            class="btn-white btn btn-xs btn-danger" id="delete_user"

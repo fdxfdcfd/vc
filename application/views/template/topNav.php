@@ -41,7 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         if (is_array($topNav['child']) || is_object($topNav['child'])):
                             foreach ($topNav['child'] as $key => $value):
                                 ?>
-                                <li><a href="<?php echo base_url('category/index/id/').$key?>"><?php echo $value['name']?></a>
+                                <li><a href="<?php if(!$value['link_outsite']) {echo base_url('category/index/id/').$key;} else{echo $value['link_outsite'];}?>"><?php echo $value['name']?></a>
                                     <?php if(count($value['child'])):?>
                                     <div class="drop-down full-width hover-fade">
                                         <ul>

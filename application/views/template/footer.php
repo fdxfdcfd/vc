@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <script src="<?php echo base_url('public/')?>js/jquery-1.8.3.min.js"></script>
 <script src="<?php echo base_url('public/')?>js/appear.js"></script>
 <script src="<?php echo base_url('public/')?>js/jquery.easing.1.3.min.js"></script>
+<script src="<?php echo base_url('public/')?>js/jquery.isotope.min.js"></script>
 <script src="<?php echo base_url('public/')?>js/layerslider/js/jquerytransit.js"></script>
 <script src="<?php echo base_url('public/')?>js/layerslider/js/layerslider.transitions.js"></script>
 <script src="<?php echo base_url('public/')?>js/layerslider/js/layerslider.kreaturamedia.jquery.js"></script>

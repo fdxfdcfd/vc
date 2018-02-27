@@ -15,7 +15,7 @@ class M_admin_menu extends MY_Model
         $allow = $this->M_user_group->load($userGroupId);
         $menu= false;
         if ($allow && $allow->user_group_permission){
-            $where['in']['admin_menu_id'][] = explode(",",$allow->user_group_permission);
+            $where['in']['admin_menu_id'] = explode(",",$allow->user_group_permission);
             $menu=$this->getCollection($where);
         }
         if($menu){

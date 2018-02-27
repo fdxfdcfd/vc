@@ -109,7 +109,9 @@ class MY_Model extends CI_Model
         $this->db->select($select);
         $this->db->from($this->_tableName);
         if ($join) {
-            $this->db->join($join[0], $join[1]);
+            foreach ($join as $key => $value){
+                $this->db->join($key, $value);
+            }
         }
         if ($where) {
             foreach ($where as $key => $value) {
@@ -123,17 +125,13 @@ class MY_Model extends CI_Model
                 }
                 if($key === 'in'){
                     foreach ($value as $k=>$v) {
-                        foreach ($v as $val) {
-                            $this->db->where_in($k, $val);// $v is array
-                        }
+                            $this->db->where_in($k, $v);// $v is array
                     }
                 }
                 if($key === 'nin'){
                     foreach ($value as $k=>$v) {
-                        foreach ($v as $val) {
-                            $this->db->where_not_in($k, $val);// $v is array
+                            $this->db->where_not_in($k, $v);// $v is array
                         }
-                    }
                 }
                 if($key === 'neq'){
                     foreach ($value as $k=>$v) {
@@ -234,9 +232,9 @@ class MY_Model extends CI_Model
         if(!(strpos($name, 'get')=== false )){
             if($name == 'getData'){
                 if(isset($arguments[0])){
-                    return$this->getData($arguments[0]);
+                    return $this->getData($arguments[0]);
                 }else{
-                    return$this->getData();
+                    return $this->getData();
                 }
 
             }else

@@ -130,7 +130,7 @@ class Category extends MY_Controller
     public function edit()
     {
         if (!$this->input->post()) {
-            $id = $this->uri->segment(4);
+            $id = $this->uri->segment(5);
             if (isset($id)) {
                 $this->data['title'] = "Quản lý Danh Mục";
                 $this->data['breadcrumb'] = [
@@ -157,28 +157,32 @@ class Category extends MY_Controller
                 $this->data['css'][] = 'plugins/dropzone/dropzone.css';
                 $this->data['js'][] = 'plugins/dropzone/dropzone.js';
                 $this->data['url'] = 'admin/category/edit/id/' . $id;
+                $this->data['asign_product'] = $this->getAsignProduct($category);
+                $this->session->set_userdata('asign_product', $this->data['asign_product']);
+                $this->data['asign_product_list'] = $this->getProductListByCategoryId($id,'any');
                 $this->load->helper('form');
                 $this->template->load('template/admin/master', 'page/admin/v_category_edit', $this->data);
             } else {
                 show_404();
             }
         } else {
-            $this->load->helper(array('form'));
-            $this->load->library('form_validation');
+//            $this->load->helper(array('form'));
+//            $this->load->library('form_validation');
 
-            $config = array(
-                array(
-                    'field' => 'category_name',
-                    'label' => 'Tên danh mục',
-                    'rules' => 'required',
-                    'errors' => array(
-                        'required' => 'Bạn cần nhập %s.',
-                    ),
-                )
-            );
-            $this->form_validation->set_rules($config);
+//            $config = array(
+//                array(
+//                    'field' => 'category_name',
+//                    'label' => 'Tên danh mục',
+//                    'rules' => 'required',
+//                    'errors' => array(
+//                        'required' => 'Bạn cần nhập %s.',
+//                    ),
+//                )
+//            );
+//            $this->form_validation->set_rules($config);
 
-            if ($this->form_validation->run() == FALSE) {
+//            if ($this->form_validation->run() == FALSE) {
+            if (FALSE) {
                 $this->addErrorMessage('You must fill all field required.');
                 $id = $this->uri->segment(4);
                 $this->data['title'] = "Quản lý danh mục";
@@ -206,6 +210,7 @@ class Category extends MY_Controller
                 $this->data['js'][] = 'plugins/dropzone/dropzone.js';
                 $this->data['url'] = 'admin/category/edit/id/' . $id;
 
+                $this->data['asign_product'] = $this->getProductListByCategoryId($id,'any','',1,15);
                 $this->data['product_imgs'] = unserialize($this->session->userdata('product_edit_img'));
                 $this->load->helper('form');
                 $this->template->load('template/admin/master', 'page/admin/v_category_edit', $this->data);
@@ -217,11 +222,11 @@ class Category extends MY_Controller
                 }
 
                 $data['content'] = $_POST['content'];
-                $data['level'] = $data['parent']+ 1;
+                $data['level'] = $data['parent_id']+ 1;
                 $category_id = $data['entity_id'];
                 $category = new M_catalog_category();
                 $category->load($category_id);
-
+                $category->saveAsignProduct($this->session->userdata('asign_product'));
                 $category->setData($data);
                 $category->save();
                 $this->addSuccessMessage('Save Category successful.');
@@ -258,8 +263,11 @@ class Category extends MY_Controller
             $this->data['css'][] = 'plugins/dropzone/dropzone.css';
             $this->data['js'][] = 'plugins/dropzone/dropzone.js';
             $this->data['url'] = 'admin/category/create/';
+            $this->data['asign_product'] = [];
+            $this->session->set_userdata('asign_product', $this->data['asign_product']);
+            $this->data['asign_product_list'] = $this->getProductListByCategoryId(0,'any');
             $this->load->helper('form');
-            $this->template->load('template/admin/master', 'page/admin/v_category_create', $this->data);
+            $this->template->load('template/admin/master', 'page/admin/v_category_edit', $this->data);
         } else {
             $this->load->helper(array('form'));
             $this->load->library('form_validation');
@@ -313,7 +321,7 @@ class Category extends MY_Controller
                     $data['is_active'] = 0;
                 }
                 $data['content'] = addslashes($data['content']);
-                $data['level'] = $data['parent']+ 1;
+                $data['level'] = $data['parent_id']+ 1;
                 $category = new M_catalog_category();
 
                 $category->setData($data);
@@ -322,5 +330,64 @@ class Category extends MY_Controller
                 redirect('admin/category', 'categoryList');
             }
         }
+    }
+
+    public function getProductListByCategoryId($categoryId,$type = 'any',$search='', $page = 1, $limit_per_page= 15){
+        $product = new M_catalog_product();
+        $result = [];
+        $limit_per_page = 15;
+        $start_index = $page ? $page : 1;
+
+        if($search){
+            $where['like']['product_name'] = [$search];
+        }else{
+            $where['eq'][1]=[1];
+        }
+        $total_records = $product->getCollectionCount($where, null, '*');
+
+        if ($start_index > ($total_records / $limit_per_page + 1)) {
+            $start_index = 1;
+        }
+        $result['products'] = $product->getCollection($where, null, '*', $limit_per_page, ($start_index - 1) * $limit_per_page);
+        $result['total_records'] = $total_records;
+        $result['total_page'] = $total_records % $limit_per_page == 0 ? $total_records / $limit_per_page : (int)($total_records % $limit_per_page) + 1;
+        $result['current_page'] =$page;
+
+        return $result;
+    }
+    public function getAsignProduct($category){
+        return $category->getAsignProduct();
+    }
+
+
+    public function getAsignProductList(){
+        $data = $this->input->get();
+        $products = $this->getProductListByCategoryId($data['id'],$data['type'],$data['search'],$data['page'],15);
+        $products['code']= 1;
+        echo json_encode($products);
+    }
+
+
+    public function updateSessionAsignProduct(){
+        $productId =$this->input->get('product_id');
+        $checked =$this->input->get('checked')  === 'true'? true: false;
+        $result['code'] = false;
+        $result['message'] = "Nothing";
+        $dataAsignProduct = $this->session->userdata('asign_product');
+        if($checked) {
+            if (!in_array($productId, $dataAsignProduct)) {
+                $dataAsignProduct[] = $productId;
+            }
+        }else{
+            if (($key = array_search($productId, $dataAsignProduct)) !== false) {
+                unset($dataAsignProduct[$key]);
+            }
+        }
+        $result['code'] = true;
+        $result['message'] = "Success";
+        $this->session->set_userdata('asign_product',$dataAsignProduct);
+        $result['asign_product']=  json_encode($this->session->userdata('asign_product'));
+        echo json_encode($result);
+
     }
 }

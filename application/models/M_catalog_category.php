@@ -63,6 +63,7 @@ class M_catalog_category extends MY_Model
         if (is_array($tmp) || is_object($tmp)) {
             foreach ($tmp as $t) {
                 $data[$t->entity_id]['name'] = $t->category_name;
+                $data[$t->entity_id]['link_outsite'] = $t->link_outsite;
                 $data[$t->entity_id]['child'] = $this->getMenu($t->entity_id);
             }
         }
@@ -79,5 +80,29 @@ class M_catalog_category extends MY_Model
         }else{
             return false;
         }
+    }
+    public function getAsignProduct(){
+        $this->db->select('product_id');
+        $this->db->where('category_id',$this->getEntityId());
+        $result = $this->db->get('catalog_category_product')->result_array();
+        $data = [];
+        foreach ($result as $r){
+            $data[] = $r['product_id'];
+        }
+        return $data;
+    }
+    public function saveAsignProduct($arrayProducts){
+        if(count($arrayProducts)) {
+            $this->db->delete('catalog_category_product', array('category_id' => $this->_entity_id));
+            $data = [];
+            foreach ($arrayProducts as $product) {
+                $data [] = array(
+                    'category_id' => $this->_entity_id,
+                    'product_id' => $product
+                );
+            }
+            return $this->db->insert_batch('catalog_category_product', $data);
+        }
+        return true;
     }
 }
