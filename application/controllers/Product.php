@@ -19,6 +19,11 @@ class Product extends MY_Controller
             $product = new M_catalog_product();
             $product->load($id);
             $this->data['product'] = $product;
+            $productImg = new M_product_img();
+            $imgs = $productImg->loadByProductId($product->getEntityId());
+            $this->data['product_imgs'] = $imgs;
+            $categoris = new M_catalog_category();
+            $this->data['categories'] = $categoris->getAll('menu', 'category_name');
         }
         $this->template->load('template/master', 'page/v_product', $this->data);
     }

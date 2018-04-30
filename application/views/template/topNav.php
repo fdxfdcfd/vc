@@ -41,14 +41,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         if (is_array($topNav['child']) || is_object($topNav['child'])):
                             foreach ($topNav['child'] as $key => $value):
                                 ?>
-                                <li><a href="<?php if(!$value['link_outsite']) {echo base_url('category/index/id/').$key;} else{echo $value['link_outsite'];}?>"><?php echo $value['name']?></a>
+                                <li><a href="<?php if(!$value['link_outsite']) {echo base_url('category/index/id/').$key.'.html';} else{echo $value['link_outsite'];}?>"><?php echo $value['name']?></a>
                                     <?php if(count($value['child'])):?>
                                     <div class="drop-down full-width hover-fade">
                                         <ul>
                                             <?php foreach ($value['child'] as $k => $v):?>
-                                                    <li><a href="<?php echo $k?>"><h2><?php echo $v['name']?></h2></a></li>
+                                                    <li><a href="<?php echo $k.'.html'?>"><h2><?php echo $v['name']?></h2></a></li>
                                                     <?php foreach ($v['child'] as $kk => $vv):?>
-                                                    <li><a href="<?php echo $kk?>"><?php echo $vv['name']?></a></li>
+                                                    <li><a href="<?php echo $kk.'.html'?>"><?php echo $vv['name']?></a></li>
                                                     <?php endforeach;?>
                                           <?php endforeach;?>
                                         </ul>

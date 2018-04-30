@@ -1,5 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$baseUrl = base_url('public/');
+$imgs = $product_imgs;
+$price = $product->getPrice();
+$productName = $product->getProductName();
 ?>
 <section id="content">
     <div class="menu-shadow"></div>
@@ -13,18 +17,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="six columns">
             <div class="image-post-slider">
                 <ul>
+                    <?php if(!count($imgs)):?>
+                        <div> <a href="<?php echo $baseUrl?>admin/img/gallery/default_product.jpg" class="single-image zoom-icon"> <img src="<?php echo $baseUrl;?>admin/img/gallery/default_product.jpg" alt="" /> </a> </div>
+                    <?php endif;?>
+                    <?php foreach ($imgs as $img):?>
                     <li>
-                        <div> <a href="images/shop/1.jpg" class="single-image zoom-icon"> <img src="images/shop/1.jpg" alt="" /> </a> </div>
+                        <div> <a href="<?php echo $baseUrl?>admin/img/gallery/<?php echo $img->product_img_name?>" class="single-image zoom-icon"> <img src="<?php echo $baseUrl;?>admin/img/gallery/<?php echo $img->product_img_name?>" alt="" /> </a> </div>
                         <!--/ .slide-->
                     </li>
-                    <li>
-                        <div> <a href="images/shop/2.jpg" class="single-image zoom-icon"> <img src="images/shop/2.jpg" alt="" /> </a> </div>
-                        <!--/ .slide-->
-                    </li>
-                    <li>
-                        <div> <a href="images/shop/4.jpg" class="single-image zoom-icon"> <img src="images/shop/4.jpg" alt="" /> </a> </div>
-                        <!--/ .slide-->
-                    </li>
+                    <?php endforeach;?>
                 </ul>
             </div>
             <!--/ .image-post-slider-->
@@ -33,23 +34,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <!--/ .columns-->
 
         <div class="ten columns product-description">
-            <h2 class="title">Retro Spring Woman Dress</h2>
+            <h2 class="title"><?php echo $productName?></h2>
 <!--            <div class="clearfix rating-stars">-->
 <!--                <i class="fa fa-star"></i>-->
 <!--                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star">-->
 <!--                    -->
 <!--                </i><i class="fa fa-star"></i><span class="reviews"><a href="#">2 reviews</a> / <a href="#">Add a Review</a></span>-->
 <!--            </div>-->
-            <div class="price">$17.00</div>
-            <p> Aliquam hendrit rutrum iaculis nullam ondimentum maluada velit beum donec sit amet
-                tristique erosam amet risus mollis malesuada nulla. Vestibulum ante ipsum primis in
-                faucibus orcluctus et ultrices. Vestibulum ante ipsum primis in
-                faucibus. </p>
-            <ul class="list">
-                <li><i class="fa fa-check-square-o"></i>Porttitor euismod pharetra</li>
-                <li><i class="fa fa-check-square-o"></i>Amet massa posuere pretium vestibulum.</li>
-                <li><i class="fa fa-check-square-o"></i>Vestibulum ante ipsum</li>
-            </ul>
+            <div class="price">
+                <?php
+                if($price){
+                    $currency = 'VND';
+                    echo number_format($price).$currency."<br>";
+                }
+                ?>
+            </div>
+            <p><?php echo $product->getContent()?></p>
+<!--            <ul class="list">-->
+<!--                <li><i class="fa fa-check-square-o"></i>Porttitor euismod pharetra</li>-->
+<!--                <li><i class="fa fa-check-square-o"></i>Amet massa posuere pretium vestibulum.</li>-->
+<!--                <li><i class="fa fa-check-square-o"></i>Vestibulum ante ipsum</li>-->
+<!--            </ul>-->
             <div class="divider-half-line"></div>
 <!--            <div class="addtocart-product">-->
 <!--                <div class="product-amount">-->
@@ -59,7 +64,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!--                <button class="addtocart-bt button color">ADD TO CART <i class="fa fa-shopping-cart"></i></button>-->
 <!--            </div>-->
             <div class="divider-half-line"></div>
-            <div class="categories-product">Categories: <a href="#">Accessories</a>, <a href="#">Dresses</a>, <a href="#">Bags</a></div>
+            <div class="categories-product">Categories:
+                <?php
+                foreach (explode(',',$product->getProductCategoryIds()) as $cate): ?>
+                    <a href="<?php echo $baseUrl.'category/index/id/'.$cate.'.html'?>"><?php echo $categories[$cate]?></a>,
+                <?php endforeach;?>
+            </div>
         </div>
         <!--/ .columns-->
 
@@ -68,7 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="content-tabs">
                 <ul class="tabs-nav clearfix">
                     <li><a href="#tab1">Description</a></li>
-                    <li><a href="#tab2">Reviews (2)</a></li>
+<!--                    <li><a href="#tab2">Reviews (2)</a></li>-->
                 </ul>
                 <!--/ .tabs-nav-->
 
@@ -163,55 +173,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <section id="shop-items" class="shop-items clearfix">
             <h4 class="content-title">Related Products</h4>
             <article class="four columns">
-                <button class="addtocart button color">ADD TO CART <i class="fa fa-shopping-cart"></i></button>
+<!--                <button class="addtocart button color">ADD TO CART <i class="fa fa-shopping-cart"></i></button>-->
                 <div class="shop-img"> <img src="images/shop/1.jpg" alt=""> </div>
                 <!--/ .shop-img-->
 
                 <a class="shop-item-meta" href="shop-single.html">
                     <h6 class="title">Retro Spring Dress</h6>
                     <span class="price">$17.00</span> </a><!--/ .shop-item-meta-->
-
-            </article>
-            <!--/ .columns-->
-
-            <article class="four columns">
-                <button class="addtocart button color">ADD TO CART <i class="fa fa-shopping-cart"></i></button>
-                <div class="shop-img"> <img src="images/shop/2.jpg" alt=""> </div>
-                <!--/ .shop-img-->
-
-                <a class="shop-item-meta" href="shop-single.html">
-                    <h6 class="title">Sexy Summer Dress</h6>
-                    <span class="price color">$23.00</span> </a><!--/ .shop-item-meta-->
-
-            </article>
-            <!--/ .columns-->
-
-            <article class="four columns">
-                <button class="addtocart button color">ADD TO CART <i class="fa fa-shopping-cart"></i></button>
-                <div class="shop-img"> <img src="images/shop/3.jpg" alt=""> </div>
-                <!--/ .shop-img-->
-
-                <div class="item-sale">SALE</div>
-                <!--/ .item-sale-->
-
-                <a class="shop-item-meta" href="shop-single.html">
-                    <h6 class="title">Casual Dress</h6>
-                    <span class="price"><span class="old-price">$27.00</span> $23.00</span> </a><!--/ .shop-item-meta-->
-
-            </article>
-            <!--/ .columns-->
-
-            <article class="four columns">
-                <button class="addtocart button color">ADD TO CART <i class="fa fa-shopping-cart"></i></button>
-                <div class="shop-img"> <img src="images/shop/4.jpg" alt=""> </div>
-                <!--/ .shop-img-->
-
-                <div class="item-new">NEW</div>
-                <!--/ .item-new-->
-
-                <a class="shop-item-meta" href="shop-single.html">
-                    <h6 class="title">White Swimsuit</h6>
-                    <span class="price">$29.00</span> </a><!--/ .shop-item-meta-->
 
             </article>
             <!--/ .columns-->
