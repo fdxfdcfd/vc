@@ -24,6 +24,7 @@ class Product extends MY_Controller
             $this->data['product_imgs'] = $imgs;
             $categoris = new M_catalog_category();
             $this->data['categories'] = $categoris->getAll('menu', 'category_name');
+            $this->data['related_product'] = $product->getRelatedProduct();
         }
         $this->template->load('template/master', 'page/v_product', $this->data);
     }

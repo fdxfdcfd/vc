@@ -33,5 +33,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <?php endforeach;?>
     <!-- HTML5 Shiv
         ================================================== -->
+    <script src="<?php echo base_url('public/')?>js/jquery-1.8.3.min.js"></script>
     <script src="<?php echo base_url('public/')?>js/jquery.modernizr.js"></script>
 </head>

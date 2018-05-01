@@ -4,6 +4,8 @@ $baseUrl = base_url('public/');
 $imgs = $product_imgs;
 $price = $product->getPrice();
 $productName = $product->getProductName();
+$content = $product->getContent();
+$description = $product->getDescription();
 ?>
 <section id="content">
     <div class="menu-shadow"></div>
@@ -49,7 +51,7 @@ $productName = $product->getProductName();
                 }
                 ?>
             </div>
-            <p><?php echo $product->getContent()?></p>
+            <p><?php echo $description?></p>
 <!--            <ul class="list">-->
 <!--                <li><i class="fa fa-check-square-o"></i>Porttitor euismod pharetra</li>-->
 <!--                <li><i class="fa fa-check-square-o"></i>Amet massa posuere pretium vestibulum.</li>-->
@@ -84,8 +86,18 @@ $productName = $product->getProductName();
 
                 <div class="tabs-container">
                     <div class="tab-content" id="tab1">
-                        <p><span class="dropcap">P</span>hasellus vitae mauris justo. Proin erat urna, semper nec ullamcorper semper, adipiscing in purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis placerat eget libero non pretium. In discere repudiandae vel, est no tempor lucilius, te graeco atomorum per. Quo te agam menandri scriptorem, dicta soluta altera nec ei. Vix minim nihil et, cu vidisse scaevola conceptam eum. Per an labores fabellas. Nobis oblique id sit.</p>
-                        <p>Nam case oratio nusquam et, id eum omnesque prodesset. Vel ad iusto ludus maluisset. Graeco inimicus ut sed, ne habeo omnium tractatos pro, sit choro admodum eu. Ex his numquam admodum, adhuc percipit sit ut, molestie necessitatibus eam in. At populo referrentur has, sit suas veritus ne, blandit deserunt ius te.</p>
+                        <?php
+                        if($content){
+                            $fc = $content[0];
+                            $scontent = substr($content,1);
+                        }else{
+                            $fc = '';
+                            $scontent  = '';
+                        }
+
+                        ?>
+                        <p><span class="dropcap"><?php echo $fc?></span><?php echo $scontent?></p>
+                        <div class="clearfix"></div>
                     </div>
                     <!--/ .tab-content -->
 
@@ -170,22 +182,27 @@ $productName = $product->getProductName();
         <!--/ .columns -->
 
         <div class="clear"></div>
+        <?php if($related_product):?>
         <section id="shop-items" class="shop-items clearfix">
             <h4 class="content-title">Related Products</h4>
-            <article class="four columns">
-<!--                <button class="addtocart button color">ADD TO CART <i class="fa fa-shopping-cart"></i></button>-->
-                <div class="shop-img"> <img src="images/shop/1.jpg" alt=""> </div>
-                <!--/ .shop-img-->
-
-                <a class="shop-item-meta" href="shop-single.html">
-                    <h6 class="title">Retro Spring Dress</h6>
-                    <span class="price">$17.00</span> </a><!--/ .shop-item-meta-->
-
-            </article>
-            <!--/ .columns-->
+            <?php foreach ($related_product as $rel):?>
+                <article class="four columns">
+                    <div class="shop-img">
+                        <img src="<?php echo $baseUrl?>admin/img/gallery/<?php echo $rel['product_img'] ?>" alt="<?php echo $rel['product_name']?>" />
+                    </div>
+                    <a class="shop-item-meta" href="<?php echo base_url()?>product/view/id/<?php echo $rel['entity_id'] ?>">
+                        <h6 class="title"><?php echo $rel['product_name']?></h6>
+                        <span class="price">
+                            <?php  $currency = 'VND';
+                            echo number_format($rel['price']).$currency?></span>
+                    </a><!--/ .shop-item-meta-->
+                </article>
+                <!--/ .columns-->
+            <?php endforeach;?>
 
         </section>
         <!--/ .shop-items-->
+        <?php endif;?>
 
     </div>
     <!--/ .container-->

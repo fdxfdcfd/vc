@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $entity_id = set_value('entity_id') == false ? $product->getEntityId() : set_value('entity_id');
 $product_name = set_value('product_name') == false ? $product->getProductName() : set_value('product_name');
+$description = set_value('description') == false ? $product->getDescription() : set_value('description');
 $product_category_ids = set_value('product_category_ids') == false ? $product->getProductCategoryIds() : set_value('product_category_ids');
 $content = set_value('content') == false ? $product->getContent() : set_value('content');
 $price = set_value('price') == false ? $product->getPrice() : set_value('price');
@@ -63,6 +64,12 @@ $sku = set_value('sku') == false ? $product->getSku() : set_value('sku');
                                                                       placeholder="Product name" name="product_name"
                                                                       id="product_name"
                                                                       value="<?= $product_name ?>" size="50"></div>
+                                    </div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Description:</label>
+                                        <div class="col-sm-10"><input type="text" class="form-control"
+                                                                      placeholder="Description" name="description"
+                                                                      id="description"
+                                                                      value="<?= $description ?>" size="50"></div>
                                     </div>
                                     <div class="form-group"><label class="col-sm-2 control-label">Price:</label>
                                         <div class="col-sm-10"><input type="text" class="form-control" name="price"

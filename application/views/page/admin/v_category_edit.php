@@ -101,12 +101,12 @@ $order = set_value('order') == false ? $categories->getOrder() : set_value('orde
                                     <div class="form-group"><label class="col-sm-2 control-label">Description:</label>
                                         <div class="col-sm-10">
                                             <div class="summernote">
-<!--                                                --><?//= $content ?>
+                                                <?php echo $content ?>
                                             </div>
                                         </div>
                                     </div>
-                                    <textarea style="display: none" name="content" id="content" cols="30" rows="10">
-                                    <?= $content ?>
+                                    <textarea style="display: none" name="content" id="ct" cols="30" rows="10">
+                                    <?php echo $content ?>
                                     </textarea>
                                     <div class="form-group"><label class="col-sm-2 control-label">Order:</label>
                                         <div class="col-sm-10">
@@ -249,9 +249,10 @@ $order = set_value('order') == false ? $categories->getOrder() : set_value('orde
         $('.summernote').summernote({
             minHeight: 300
         });
-        $(".summernote").on("summernote.blur", function (e) {
-            $("#content").val($('.summernote').summernote('code'));
+        $(".summernote").on("summernote.change", function (e) {   // callback as jquery custom event
+            $("#ct").html($('.summernote').summernote('code'));
         });
+
         $('#form-category').submit(function(){
             $("#content").val($('.summernote').summernote('code'));
         });
